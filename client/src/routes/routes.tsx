@@ -3,7 +3,7 @@ import {
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
-import { Home } from '../pages';
+import { Signin } from '../pages';
 
 function ErrorPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,14 +24,8 @@ function Routes() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Home/>,
+      element: <Signin/>,
       errorElement: <ErrorPage />,
-      children: [
-        {
-          path: '/:token/:id',
-          element: <Home />,
-        },
-      ],
     },
   ]);
   return <RouterProvider router={router} />;
