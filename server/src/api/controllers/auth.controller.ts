@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from '../../database';
+import { Token, User } from '../../database';
 import { JWT_SECRET } from '../../config';
+import { sendEmail } from '../../utils';
 
 /* Represent a run time controller*/
 class authController {
@@ -75,6 +76,61 @@ class authController {
     } catch (err: any) {
       return res.status(500).json({ message: err.message, success: false  });
     }
+  }
+
+
+  /**
+   * request for password reset
+   * @param req request object
+   * @param res response object
+   */
+  static async passwordResetRequestHandler(req: Request, res: Response){
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    // check if there is a user
+    if (!user){
+      return res.json({ 
+        message: 'User does not exist',
+        success: false,
+      });
+    }
+
+    const token = await Token.findOne({ userId: user._id });
+
+    // if token exists delete
+    if (token){ 
+      await token.deleteOne();
+    }
+
+    const salt = await bcrypt.genSalt();
+
+    if (!JWT_SECRET) {
+      return res.status(500).json({
+        message: 'JWT_SECRET is not defined',
+        success: false
+      });
+    }
+
+    const hash = await bcrypt.hash(salt, JWT_SECRET);
+
+    await new Token({
+      userId: user._id,
+      token: hash,
+      createdAt: Date.now(),
+    }).save();
+
+    const link = `https://aitlin.vercel.app/reset/${salt}/${user._id}`;
+    
+
+    sendEmail(
+      user.email,
+      'Password Reset Request',
+      { name: user.firstName, link: link },
+      './template/requestPassowrdReset.handlebars'
+    );
+
+    res.status(201).json({ message: 'reset email sent', success: true, link });
   }
 }
 

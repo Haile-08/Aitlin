@@ -6,7 +6,10 @@ const authRoutHandler = (router: Router) => {
   router.get('/', authController.testConnection);
 
   // login route
-  router.post('login', authController.loginHandler);
+  router.post('/login', authController.loginHandler);
+
+  // request to reset password
+  router.post('/passwordResetRequest', authController.passwordResetRequestHandler);
 };
 
 export default authRoutHandler;
