@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const __1 = require("..");
+/**
+ * route handler to the express application
+ * @param app express app
+ */
+const expressRouteHandler = (app) => {
+    const router = express_1.default.Router();
+    // Api versioning
+    app.use('/v1', router);
+    // auth router
+    (0, __1.authRoutHandler)(router);
+};
+exports.default = expressRouteHandler;
+//# sourceMappingURL=index.routes.js.map
