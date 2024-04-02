@@ -1,6 +1,7 @@
 import express from 'express';
 import { expressGlobalErrorHandler, expressMiddleWareHandler, serverInitHandler } from './utils';
 import { expressConnectDB } from './config';
+import { expressRouteHandler } from './api';
 
 
 const app = express();
