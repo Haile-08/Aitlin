@@ -10,6 +10,9 @@ const authRoutHandler = (router: Router) => {
 
   // request to reset password
   router.post('/passwordResetRequest', authController.passwordResetRequestHandler);
+
+  // reset password
+  router.post('/resetPassword', authController.passwordResetHandler);
 };
 
 export default authRoutHandler;

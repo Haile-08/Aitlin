@@ -78,7 +78,6 @@ class authController {
     }
   }
 
-
   /**
    * request for password reset
    * @param req request object
@@ -131,6 +130,68 @@ class authController {
     );
 
     res.status(201).json({ message: 'reset email sent', success: true, link });
+  }
+
+  /**
+   * reset password
+   * @param req request object
+   * @param res response object
+   */
+  static async passwordResetHandler(req: Request, res: Response){
+    const { userId, token, password } = req.body;
+
+    const userReset = await Token.findOne({ userId });
+
+    if (!userReset) {
+      return res.json({ 
+        message: 'Invalid or expired password reset token',
+        success: false
+      });
+    }
+    const isValid = await bcrypt.compare(token, userReset.token);
+
+    if (!isValid) {
+      return res.json({ 
+        message: 'Invalid or expired password reset token',
+        success: false
+      });
+    }
+
+    const salt = await bcrypt.genSalt();
+
+    const hash = await bcrypt.hash(password, salt);
+
+
+    await User.updateOne(
+      { _id: userId },
+      { $set: { password: hash } },
+      { new: true }
+    );
+
+    const user = await User.findById({ _id: userId });
+
+    // check if there is a user
+    if (!user){
+      return res.json({ 
+        message: 'User does not exist',
+        success: false,
+      });
+    }
+
+    sendEmail(
+      user.email,
+      'Password Reset Successfully',
+      {
+        name: user.firstName,
+        link: undefined
+      },
+      './template/resetPassword.handlebars'
+    );
+    await userReset.deleteOne();
+    
+    res.status(201).json({ 
+      message: 'reset email sent', 
+      success: true });
   }
 }
 

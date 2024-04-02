@@ -1,4 +1,4 @@
 export interface Payload {
     name: string | null | undefined,
-    link: string,
+    link: string | null | undefined,
 }
