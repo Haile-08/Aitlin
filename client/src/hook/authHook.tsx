@@ -1,22 +1,57 @@
-import axios from 'axios';
+import { resetDataTypes, userDataTypes } from '../@types';
+import axiosBaseURL from '../config/axios';
 
-const fetchData = async (id: string, token: string) =>{
-  const data = {id};
-  await axios.post(
-    'http://localhost:4000/v1/auth', data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+export const loginUser = async (user: userDataTypes) =>{
+  const data = await axiosBaseURL.post(
+    '/v1/login', user, { 
+      withCredentials: true 
     }).then(function (res) {
-    return res;
-  })
+      return res;
+    })
     .then(function (resData) {
-      console.log('result data', resData.data);
+      console.log(resData.data);
       return resData.data;
     })
     .catch(function (err) {
       console.log(err);
     });
+
+    return data;
 };
 
-export default fetchData;
+export const requestPasswordReset = async (email: string) =>{
+  const data = await axiosBaseURL.post(
+    '/v1/passwordResetRequest', {email}, { 
+      withCredentials: true 
+    }).then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      console.log(resData.data);
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+
+    return data;
+};
+
+
+export const passwordReset = async (user: resetDataTypes) =>{
+  const data = await axiosBaseURL.post(
+    '/v1/resetPassword', user, { 
+      withCredentials: true 
+    }).then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      console.log(resData.data);
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+
+    return data;
+};

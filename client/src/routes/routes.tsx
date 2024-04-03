@@ -33,7 +33,7 @@ function Routes() {
       errorElement: <ErrorPage />,
     },
     {
-      path: '/password/reset',
+      path: '/password/reset/:token/:id',
       element: <PasswordReset/>,
       errorElement: <ErrorPage />,
     },

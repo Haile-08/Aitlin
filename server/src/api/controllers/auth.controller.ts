@@ -129,7 +129,10 @@ class authController {
       './template/requestPassowrdReset.handlebars'
     );
 
-    res.status(201).json({ message: 'reset email sent', success: true, link });
+    res.status(201).json({ 
+      message: 'reset email sent', 
+      success: true, 
+      link });
   }
 
   /**
@@ -191,7 +194,8 @@ class authController {
     
     res.status(201).json({ 
       message: 'reset email sent', 
-      success: true });
+      success: true 
+    });
   }
 }
 

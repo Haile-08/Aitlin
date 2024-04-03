@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import check from '../../assets/check.png';
-import { typeProps } from '../../@types';
+import { successPropsType } from '../../@types';
 
-function Success({ link, info }: typeProps) {
+function Success({ link, info }: successPropsType) {
   const navigate = useNavigate();
 
   const handleResetNav = (e: React.MouseEvent<HTMLElement>) => {
