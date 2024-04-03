@@ -37,11 +37,16 @@ function Signin() {
     navigate('/password/request');
   }
 
+  const handleHomeNav = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    navigate('/');
+  }
+
   return (
     <div className="w-dvw h-dvh flex justify-center items-center flex-row">
       <SigninBanner />
       <div className="w-5/6 md:w-2/5 h-dvh flex justify-center items-center flex-col">
-        <img src={logo} alt="logo" className='mb-20'/>
+      <img src={logo} alt="logo" className='mb-20 cursor-pointer' onClick={handleHomeNav}/>
         <div className="w-10/12 flex flex-col">
           <p className='text-3xl font-roboto md:font-semibold mb-10'>Bienvenido a Atend</p>
           <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>

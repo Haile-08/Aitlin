@@ -38,8 +38,8 @@ function Routes() {
       errorElement: <ErrorPage />,
     },
     {
-      path: '/success',
-      element: <Success/>,
+      path: '/password/request/success',
+      element: <Success link={'/'} info={'Email has been sent to you.please reset your password'}/>,
       errorElement: <ErrorPage />,
     },
   ]);

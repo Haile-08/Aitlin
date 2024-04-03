@@ -4,6 +4,7 @@ import { SigninBanner } from "../../components"
 import { zodResolver } from "@hookform/resolvers/zod";
 import logo from '../../assets/logo.svg';
 import emailLogo from '../../assets/email_logo.svg';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpSchema = z.object({
   email: z.string().email(),
@@ -15,6 +16,7 @@ const SignUpSchema = z.object({
 type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
 function PasswordRequest() {
+  const navigate = useNavigate();
 
   const {
     register,
@@ -24,11 +26,16 @@ function PasswordRequest() {
 
   const onSubmit: SubmitHandler<SignUpSchemaType> = (data) => console.log(data);
 
+  const handleHomeNav = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    navigate('/');
+  }
+
   return (
     <div className="w-dvw h-dvh flex justify-center items-center flex-row">
       <SigninBanner />
       <div className="w-5/6 md:w-2/5 h-dvh flex justify-center items-center flex-col">
-        <img src={logo} alt="logo" className='mb-20'/>
+        <img src={logo} alt="logo" className='mb-20 cursor-pointer' onClick={handleHomeNav}/>
         <div className="w-10/12 flex flex-col">
           <p className='text-3xl font-roboto md:font-semibold mb-10'>Restablecer correo electrónico</p>
           <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>
