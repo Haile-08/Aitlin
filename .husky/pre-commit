@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+. "$(dirname -- "$0")/_/husky.sh"
+
+# run time service pre commit
+cd server
+
+npm run lint
+
+cd ..

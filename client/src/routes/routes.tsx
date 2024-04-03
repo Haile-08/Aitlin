@@ -3,7 +3,7 @@ import {
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
-import { Signin } from '../pages';
+import { PasswordRequest, PasswordReset, Signin, Success } from '../pages';
 
 function ErrorPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,6 +25,21 @@ function Routes() {
     {
       path: '/',
       element: <Signin/>,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/password/request',
+      element: <PasswordRequest/>,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/password/reset',
+      element: <PasswordReset/>,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/success',
+      element: <Success/>,
       errorElement: <ErrorPage />,
     },
   ]);
