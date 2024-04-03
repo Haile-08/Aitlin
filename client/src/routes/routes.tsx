@@ -42,6 +42,11 @@ function Routes() {
       element: <Success link={'/'} info={'Email has been sent to you.please reset your password'}/>,
       errorElement: <ErrorPage />,
     },
+    {
+      path: '/password/reset/success',
+      element: <Success link={'/'} info={'Password successfully changed. click on the button to go back.'}/>,
+      errorElement: <ErrorPage />,
+    },
   ]);
   return <RouterProvider router={router} />;
 }

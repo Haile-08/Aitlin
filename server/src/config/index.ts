@@ -11,3 +11,6 @@ export { FROM_EMAIL } from './envConfig';
 
 // db connection
 export { default as expressConnectDB } from './dbConfig';
+
+// cors
+export { default as allowedOrigins } from './allowedOrigin';

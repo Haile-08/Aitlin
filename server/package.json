@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsc && nodemon dist/index.js",
     "lint": "eslint . --ext .ts",
-    "kill": "sudo kill -9 $(sudo lsof -t -i:4000)"
+    "kill": "sudo kill -9 $(sudo lsof -t -i:8000)"
   },
   "author": "",
   "license": "ISC",

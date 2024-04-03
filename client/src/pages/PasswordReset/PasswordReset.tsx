@@ -36,15 +36,25 @@ type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 function PasswordReset() {
   const [isVisible, setVisible] = useState(false);
   const [isVisbleComfirm, setIsVisbleComfirm] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { token, id } = useParams();
   const navigate = useNavigate();
 
   const { mutate, isLoading } = useMutation(passwordReset, {
     onSuccess: (data) => {
       console.log(data)
+      if (!data.success){
+        setIsError(true);
+        setErrorMessage(data.message);
+      }else {
+        navigate('/password/reset/success')
+      }
     },
     onError: () => {
       console.log('error')
+      setIsError(true);
+      setErrorMessage('SYSTEM ERROR');
     },
   });
 
@@ -61,6 +71,8 @@ function PasswordReset() {
       password: data.confirmPassword,
     };
     mutate(user);
+    setErrorMessage('');
+    setIsError(false);
   }
 
   const handleHomeNav = (e: React.MouseEvent<HTMLElement>) => {
@@ -108,6 +120,8 @@ function PasswordReset() {
               </i>
             </div>
             {errors.confirmPassword && <span className='text-error'>{errors.confirmPassword.message}</span>}
+            {isError && <span className='text-error'>{errorMessage}</span>}
+
             <button type="submit" className="h-16 mt-10 flex justify-center items-center font-semibold rounded-lg border border-transparent bg-primary-color hover:bg-primary-on-hover text-white  disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
               Ingresar
             </button>

@@ -7,6 +7,7 @@ import emailLogo from '../../assets/email_logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { requestPasswordReset } from '../../hook';
+import { useState } from 'react';
 
 const SignUpSchema = z.object({
   email: z.string().email(),
@@ -18,15 +19,22 @@ const SignUpSchema = z.object({
 type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
 function PasswordRequest() {
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-
 
   const { mutate, isLoading } = useMutation(requestPasswordReset, {
     onSuccess: (data) => {
       console.log(data)
+      if (!data.success){
+        setIsError(true);
+        setErrorMessage(data.message);
+      }
     },
     onError: () => {
       console.log('error')
+      setIsError(true);
+      setErrorMessage('SYSTEM ERROR');
     },
   });
 
@@ -38,6 +46,8 @@ function PasswordRequest() {
 
   const onSubmit: SubmitHandler<SignUpSchemaType> = (data) => {
     mutate(data.email);
+    setErrorMessage('');
+    setIsError(false);
   }
 
   const handleHomeNav = (e: React.MouseEvent<HTMLElement>) => {
@@ -67,6 +77,7 @@ function PasswordRequest() {
               <input id="inputField" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="Email" {...register("email")} />
             </div>
             {errors.email && <span className='text-error'>{errors.email.message}</span>}
+            {isError && <span className='text-error'>{errorMessage}</span>}
             <button type="submit" className="h-16 mt-10 flex justify-center items-center font-semibold rounded-lg border border-transparent bg-primary-color hover:bg-primary-on-hover text-white  disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
               Reiniciar
             </button>

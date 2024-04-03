@@ -24,14 +24,24 @@ type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
 function Signin() {
   const [isVisible, setVisible] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const { mutate, isLoading } = useMutation(loginUser, {
     onSuccess: (data) => {
       console.log(data)
+      if (!data.success){
+        setIsError(true);
+        setErrorMessage(data.message);
+      } else {
+        navigate('/password/request/success')
+      }
     },
     onError: () => {
       console.log('error')
+      setIsError(true);
+      setErrorMessage('SYSTEM ERROR');
     },
   });
 
@@ -43,6 +53,8 @@ function Signin() {
 
   const onSubmit: SubmitHandler<SignUpSchemaType> = (data) => {
     mutate(data);
+    setErrorMessage('');
+    setIsError(false);
   }
 
   const handleResetNav = (e: React.MouseEvent<HTMLElement>) => {
@@ -90,6 +102,7 @@ function Signin() {
               </i>
             </div>
             {errors.password && <span className='text-error'>{errors.password.message}</span>}
+            {isError && <span className='text-error'>{errorMessage}</span>}
 
             <div className="w-full flex justify-end mt-5 font-roboto font-semibold">
               <p className='cursor-pointer' onClick={handleResetNav}>¿Olvidaste tu contraseña?</p>

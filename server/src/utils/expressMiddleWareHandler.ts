@@ -1,5 +1,6 @@
 import express, { Express } from 'express';
 import cors from 'cors';
+import { allowedOrigins } from '../config';
 
 /**
  * Express server middleware
@@ -7,7 +8,7 @@ import cors from 'cors';
  */
 const expressMiddleWareHandler = (app: Express) =>{
   app.use(express.json());
-  app.use(cors());
+  app.use(cors(allowedOrigins));
 };
 
 export default expressMiddleWareHandler;

@@ -1,12 +1,9 @@
-import mongoose, { ConnectOptions } from 'mongoose';
+import mongoose from 'mongoose';
 import { MONGO_URL } from './envConfig';
 
 const expressConnectDB = async () => {
   try {
-    await mongoose.connect((MONGO_URL as string), {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as ConnectOptions);
+    await mongoose.connect(MONGO_URL as string);
   } catch (err) {
     console.error(err);
   }

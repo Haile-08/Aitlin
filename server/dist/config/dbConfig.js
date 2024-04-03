@@ -16,10 +16,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const envConfig_1 = require("./envConfig");
 const expressConnectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(envConfig_1.MONGO_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        yield mongoose_1.default.connect(envConfig_1.MONGO_URL);
     }
     catch (err) {
         console.error(err);
