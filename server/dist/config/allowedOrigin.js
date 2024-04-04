@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const allowedOrigins = {
-    origin: 'http://localhost:5174',
+    origin: 'https://aitlin.vercel.app',
     credentials: true,
 };
 exports.default = allowedOrigins;
