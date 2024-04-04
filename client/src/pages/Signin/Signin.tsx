@@ -11,6 +11,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { loginUser } from '../../hook';
+import { useDispatch } from 'react-redux';
+import { setLogin } from '../../slice/authSlice';
 
 const SignUpSchema = z.object({
   email: z.string().email(),
@@ -27,6 +29,7 @@ function Signin() {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { mutate, isLoading } = useMutation(loginUser, {
     onSuccess: (data) => {
@@ -35,11 +38,13 @@ function Signin() {
         setIsError(true);
         setErrorMessage(data.message);
       } else {
-        navigate('/password/request/success')
+        dispatch(setLogin({
+          user: data.data.user,
+          token: data.data.token,
+        }));
       }
     },
     onError: () => {
-      console.log('error')
       setIsError(true);
       setErrorMessage('SYSTEM ERROR');
     },

@@ -44,7 +44,7 @@ function Routes() {
     },
     {
       path: '/password/reset/success',
-      element: <Success link={'/'} info={'Password successfully changed. click on the button to go back.'}/>,
+      element: <Success link={'/'} info={'Password successfully changed. click on the button to go back to home page and login.'}/>,
       errorElement: <ErrorPage />,
     },
   ]);

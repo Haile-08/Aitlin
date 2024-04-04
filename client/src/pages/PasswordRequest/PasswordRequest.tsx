@@ -11,10 +11,6 @@ import { useState } from 'react';
 
 const SignUpSchema = z.object({
   email: z.string().email(),
-  password: z
-    .string()
-    .min(3)
-    .max(10)
 });
 type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
@@ -29,10 +25,11 @@ function PasswordRequest() {
       if (!data.success){
         setIsError(true);
         setErrorMessage(data.message);
+      }else {
+        navigate('/password/request/success')
       }
     },
     onError: () => {
-      console.log('error')
       setIsError(true);
       setErrorMessage('SYSTEM ERROR');
     },
@@ -45,6 +42,8 @@ function PasswordRequest() {
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
 
   const onSubmit: SubmitHandler<SignUpSchemaType> = (data) => {
+    console.log(data);
+    console.log('data')
     mutate(data.email);
     setErrorMessage('');
     setIsError(false);

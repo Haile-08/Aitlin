@@ -52,7 +52,6 @@ function PasswordReset() {
       }
     },
     onError: () => {
-      console.log('error')
       setIsError(true);
       setErrorMessage('SYSTEM ERROR');
     },
