@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -17,6 +40,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const database_1 = require("../../database");
 const config_1 = require("../../config");
 const utils_1 = require("../../utils");
+const crypto = __importStar(require("crypto"));
 /* Represent a run time controller*/
 class authController {
     /**
@@ -36,8 +60,6 @@ class authController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { email, password } = req.body;
-                console.log(email);
-                console.log(password);
                 if (!email || !password) {
                     return res.json({
                         message: 'All fields are required',
@@ -107,25 +129,24 @@ class authController {
             if (token) {
                 yield token.deleteOne();
             }
-            const salt = yield bcrypt_1.default.genSalt();
+            const resetToken = crypto.randomBytes(64).toString('hex');
             if (!config_1.JWT_SECRET) {
                 return res.status(500).json({
                     message: 'JWT_SECRET is not defined',
                     success: false
                 });
             }
-            const hash = yield bcrypt_1.default.hash(salt, config_1.JWT_SECRET);
+            const hash = yield bcrypt_1.default.hash(resetToken, Number(10));
             yield new database_1.Token({
                 userId: user._id,
                 token: hash,
                 createdAt: Date.now(),
             }).save();
-            const link = `https://aitlin.vercel.app/reset/${salt}/${user._id}`;
+            const link = `https://aitlin.vercel.app/password/reset/${resetToken}/${user._id}`;
             (0, utils_1.sendEmail)(user.email, 'Password Reset Request', { name: user.firstName, link: link }, './template/requestPassowrdReset.handlebars');
             res.status(201).json({
                 message: 'reset email sent',
                 success: true,
-                link
             });
         });
     }

@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { Token, User } from '../../database';
 import { JWT_SECRET } from '../../config';
 import { sendEmail } from '../../utils';
+import * as crypto from 'crypto';
 
 /* Represent a run time controller*/
 class authController {
@@ -25,9 +26,6 @@ class authController {
     try {
       const { email, password } = req.body;
 
-      console.log(email);
-      console.log(password);
-  
       if (!email || !password) {
         return res.json({ 
           message: 'All fields are required',
@@ -105,7 +103,7 @@ class authController {
       await token.deleteOne();
     }
 
-    const salt = await bcrypt.genSalt();
+    const resetToken = crypto.randomBytes(64).toString('hex');
 
     if (!JWT_SECRET) {
       return res.status(500).json({
@@ -114,7 +112,7 @@ class authController {
       });
     }
 
-    const hash = await bcrypt.hash(salt, JWT_SECRET);
+    const hash = await bcrypt.hash(resetToken, Number(10));
 
     await new Token({
       userId: user._id,
@@ -122,7 +120,7 @@ class authController {
       createdAt: Date.now(),
     }).save();
 
-    const link = `https://aitlin.vercel.app/reset/${salt}/${user._id}`;
+    const link = `https://aitlin.vercel.app/password/reset/${resetToken}/${user._id}`;
     
 
     sendEmail(
@@ -135,7 +133,7 @@ class authController {
     res.status(201).json({ 
       message: 'reset email sent', 
       success: true, 
-      link });
+    });
   }
 
   /**

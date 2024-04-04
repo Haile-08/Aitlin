@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const allowedOrigins = {
-    origin: 'http://localhost:5175',
+    origin: 'http://localhost:5174',
     credentials: true,
 };
 exports.default = allowedOrigins;
