@@ -3,7 +3,7 @@ import {
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
-import { PasswordRequest, PasswordReset, Signin, Success } from '../pages';
+import { AddService, AdminDashboard, PasswordRequest, PasswordReset, Signin, Success } from '../pages';
 
 function ErrorPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,6 +47,16 @@ function Routes() {
       element: <Success link={'/'} info={'Password successfully changed. click on the button to go back to home page and login.'}/>,
       errorElement: <ErrorPage />,
     },
+    {
+      path: '/Admin/Dashboard',
+      element: <AdminDashboard/>,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/Admin/Dashboard/Add/Service',
+      element: <AddService/>,
+      errorElement: <ErrorPage />,
+    }
   ]);
   return <RouterProvider router={router} />;
 }

@@ -42,6 +42,7 @@ function Signin() {
           user: data.data.user,
           token: data.data.token,
         }));
+        navigate('/Admin/Dashboard');
       }
     },
     onError: () => {

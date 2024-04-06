@@ -10,6 +10,7 @@ export default {
         'banner-color': '#F2F6FE',
         'primary-color': '#394180',
         'primary-on-hover': '#313870',
+        'switch-btn': '#4d5597',
         'error': '#e84118',
       }
     },
