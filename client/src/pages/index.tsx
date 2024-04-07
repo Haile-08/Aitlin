@@ -4,3 +4,7 @@ export { default as PasswordReset } from './PasswordReset/PasswordReset';
 export { default as Success } from './Success/Success';
 export { default as AdminDashboard } from './Admin/AdminDashboard/AdminDashboard';
 export { default as AddService } from './Admin/AddService/AddService';
+export { default as Documents } from './Admin/Documents/Documents';
+export { default as Bill } from './Admin/Documents/bill/Bill';
+export { default as Binnacle } from './Admin/Documents/Binnacle/Binnacle';
+export { default as Nurses } from './Admin/Documents/Nurses/ Nurses';

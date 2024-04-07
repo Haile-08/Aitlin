@@ -6,7 +6,7 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const myArray = ["", "", "", "", "", "", "", "", ""];
 
-  const handleAddServiceNav = (e) =>{
+  const handleAddServiceNav = (e: { preventDefault: () => void; }) =>{
     e.preventDefault();
     navigate('/Admin/Dashboard/Add/Service');
   } 

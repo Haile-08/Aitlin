@@ -3,7 +3,7 @@ import {
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
-import { AddService, AdminDashboard, PasswordRequest, PasswordReset, Signin, Success } from '../pages';
+import { AddService, AdminDashboard, Bill, Binnacle, Documents, Nurses, PasswordRequest, PasswordReset, Signin, Success } from '../pages';
 
 function ErrorPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,6 +56,25 @@ function Routes() {
       path: '/Admin/Dashboard/Add/Service',
       element: <AddService/>,
       errorElement: <ErrorPage />,
+    },
+    {
+      path: '/Admin/Dashboard/Documents',
+      element: <Documents/>,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: "bill",
+          element: <Bill />,
+        },
+        {
+          path: "Binnacle",
+          element: <Binnacle />,
+        },
+        {
+          path: "Nurses",
+          element: <Nurses />,
+        },
+      ],
     }
   ]);
   return <RouterProvider router={router} />;
