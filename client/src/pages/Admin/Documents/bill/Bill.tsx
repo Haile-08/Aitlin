@@ -1,7 +1,9 @@
+import { useOutletContext } from "react-router-dom";
 import { InvoiceList } from "../../../../components";
 
 function Bill() {
   const myArray = ["", "", "", "", "", "", "", "", "","", ""];
+  const [setIsOpen] = useOutletContext();
 
   return (
     <>
@@ -19,7 +21,7 @@ function Bill() {
               <input type="search" id="default-search" className="block outline-none w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." required />
               </div>
             </form>
-            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-5 py-2 text-xs md:text-lg m-2 rounded-xl" >
+            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-5 py-2 text-xs md:text-lg m-2 rounded-xl" onClick={()=> setIsOpen(true)}>
               <p>Agregar factura</p>
             </button>
             </div>

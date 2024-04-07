@@ -5,7 +5,7 @@ function ClientList() {
 
   const handleDocumentNav = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    navigate('/Admin/Dashboard/Documents');
+    navigate('/Admin/Dashboard/Documents/bill');
   };
 
   return (

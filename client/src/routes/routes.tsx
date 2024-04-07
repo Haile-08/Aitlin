@@ -3,7 +3,7 @@ import {
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
-import { AddService, AdminDashboard, Bill, Binnacle, Documents, Nurses, PasswordRequest, PasswordReset, Signin, Success } from '../pages';
+import { AddService, AdminDashboard, Bill, Binnacle, ClientDocuments, Documents, ManyClient, Nurses, PasswordRequest, PasswordReset, Signin, SingleBill, SingleClient, Success } from '../pages';
 
 function ErrorPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -75,6 +75,27 @@ function Routes() {
           element: <Nurses />,
         },
       ],
+    },
+    {
+      path: '/Single/Client',
+      element: <SingleClient/>,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: "bill",
+          element: <SingleBill />,
+        },
+      ]
+    },
+    {
+      path: '/Many/Client',
+      element: <ManyClient/>,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/Many/Client/Document',
+      element: <ClientDocuments/>,
+      errorElement: <ErrorPage />,
     }
   ]);
   return <RouterProvider router={router} />;
