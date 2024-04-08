@@ -15,6 +15,8 @@ const expressRouteHandler = (app) => {
     app.use('/v1', router);
     // auth router
     (0, __1.authRoutHandler)(router);
+    // admin router
+    (0, __1.adminRoutHandler)(router);
 };
 exports.default = expressRouteHandler;
 //# sourceMappingURL=index.routes.js.map

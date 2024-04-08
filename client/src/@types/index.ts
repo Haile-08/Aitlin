@@ -13,3 +13,16 @@ export interface resetDataTypes {
     token: string | undefined,
     password: string,
 }
+
+interface clientData {
+    Name: string | undefined,
+    status: string | undefined,
+    Service: string | undefined,
+    email: string | undefined,
+    Notification: boolean | undefined,
+}
+
+export interface client {
+    data: clientData,
+    token: string | undefined,
+}

@@ -126,7 +126,12 @@ class authController {
     sendEmail(
       user.email,
       'Password Reset Request',
-      { name: user.firstName, link: link },
+      {
+        name: user.Name,
+        link: link,
+        email: undefined,
+        password: undefined
+      },
       './template/requestPassowrdReset.handlebars'
     );
 
@@ -186,8 +191,10 @@ class authController {
       user.email,
       'Password Reset Successfully',
       {
-        name: user.firstName,
-        link: undefined
+        name: user.Name,
+        link: undefined,
+        email: undefined,
+        password: undefined
       },
       './template/resetPassword.handlebars'
     );

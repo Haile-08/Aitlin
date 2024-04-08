@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { loginUser } from '../../hook';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLogin } from '../../slice/authSlice';
 
 const SignUpSchema = z.object({
@@ -28,12 +28,14 @@ function Signin() {
   const [isVisible, setVisible] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const user = useSelector((state: any) => state.auth.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  console.log('user selector', user);
+
   const { mutate, isLoading } = useMutation(loginUser, {
     onSuccess: (data) => {
-      console.log(data)
       if (!data.success){
         setIsError(true);
         setErrorMessage(data.message);
@@ -42,7 +44,11 @@ function Signin() {
           user: data.data.user,
           token: data.data.token,
         }));
-        navigate('/Admin/Dashboard');
+        if(data.data.user.type == "admin"){
+          navigate('/Admin/Dashboard');
+        }else {
+          navigate('/Single/Client');
+        }
       }
     },
     onError: () => {

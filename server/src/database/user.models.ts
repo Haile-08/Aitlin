@@ -2,11 +2,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  firstName: {
-    type: String,
-    min: 1,
-  },
-  lastName: {
+  Name: {
     type: String,
     min: 1,
   },
@@ -19,10 +15,18 @@ const userSchema = new Schema({
     type: String,
     min: 8,
   },
-  date: {
+  type: {
     type: String,
-    min: 1,
+    min: 8,
   },
+  ServiceNumber: {
+    type: Number,
+    default: 0,
+  },
+  date: { 
+    type : Date,
+    default: Date.now
+  }
 });
 
 export default mongoose.model('User', userSchema);

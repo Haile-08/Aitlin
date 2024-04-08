@@ -1,9 +1,11 @@
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
 import { AddService, AdminDashboard, Bill, Binnacle, ClientDocuments, Documents, ManyClient, Nurses, PasswordRequest, PasswordReset, Signin, SingleBill, SingleClient, Success } from '../pages';
+import { useSelector } from 'react-redux';
 
 function ErrorPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,6 +23,8 @@ function ErrorPage() {
 }
 
 function Routes() {
+  const token = useSelector((state: any) => state.auth.token);
+
   const router = createBrowserRouter([
     {
       path: '/',
@@ -49,12 +53,12 @@ function Routes() {
     },
     {
       path: '/Admin/Dashboard',
-      element: <AdminDashboard/>,
+      element: token ? <AdminDashboard/> : <AdminDashboard/> ,
       errorElement: <ErrorPage />,
     },
     {
       path: '/Admin/Dashboard/Add/Service',
-      element: <AddService/>,
+      element: token ? <AddService/> : <Navigate to="/" />  ,
       errorElement: <ErrorPage />,
     },
     {

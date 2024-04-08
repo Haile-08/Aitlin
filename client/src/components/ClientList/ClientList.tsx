@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function ClientList() {
+function ClientList({Name, Service, Email, status}) {
   const navigate = useNavigate();
 
   const handleDocumentNav = (e: { preventDefault: () => void; }) => {
@@ -11,13 +11,13 @@ function ClientList() {
   return (
     <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-6 border-b-[1.5px] border-black flex justify-start items-center">
           <div className="ml-2 md:ml-6 w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
-            <p className="text-xl">Lakshya Calhoun</p>
+            <p className="text-xl">{Name}</p>
           </div>
           <div className="w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
-            <p className="text-xs md:text-xl">Aaren Booth</p>
+            <p className="text-xs md:text-xl">{Service}</p>
           </div>
           <div className="w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
-            <p className="text-xs md:text-xl">lakshyacalhoun@gmail.com</p>
+            <p className="text-xs md:text-xl">{Email}</p>
           </div>
           <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
             <div className="relative inline-block">

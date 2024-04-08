@@ -143,7 +143,12 @@ class authController {
                 createdAt: Date.now(),
             }).save();
             const link = `https://aitlin.vercel.app/password/reset/${resetToken}/${user._id}`;
-            (0, utils_1.sendEmail)(user.email, 'Password Reset Request', { name: user.firstName, link: link }, './template/requestPassowrdReset.handlebars');
+            (0, utils_1.sendEmail)(user.email, 'Password Reset Request', {
+                name: user.Name,
+                link: link,
+                email: undefined,
+                password: undefined
+            }, './template/requestPassowrdReset.handlebars');
             res.status(201).json({
                 message: 'reset email sent',
                 success: true,
@@ -184,8 +189,10 @@ class authController {
                 });
             }
             (0, utils_1.sendEmail)(user.email, 'Password Reset Successfully', {
-                name: user.firstName,
-                link: undefined
+                name: user.Name,
+                link: undefined,
+                email: undefined,
+                password: undefined
             }, './template/resetPassword.handlebars');
             yield userReset.deleteOne();
             res.status(201).json({
