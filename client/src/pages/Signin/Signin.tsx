@@ -7,9 +7,9 @@ import emailLogo from '../../assets/email_logo.svg';
 import passwordLogo from '../../assets/password_logo.svg';
 import show from '../../assets/show.png';
 import hide from '../../assets/hide.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { loginUser } from '../../hook';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogin } from '../../slice/authSlice';
@@ -31,6 +31,7 @@ function Signin() {
   const user = useSelector((state: any) => state.auth.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   console.log('user selector', user);
 
@@ -78,6 +79,10 @@ function Signin() {
     e.preventDefault();
     navigate('/');
   }
+
+  useEffect(()=>{
+    queryClient.removeQueries();
+  }, []);
 
   return (
     <div className="w-dvw h-dvh flex justify-center items-center flex-row">

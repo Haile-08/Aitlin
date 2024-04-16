@@ -16,7 +16,6 @@ const serviceSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
     required: true,
   },
   status: {

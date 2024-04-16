@@ -17,7 +17,7 @@ export interface resetDataTypes {
 interface clientData {
     Name: string | undefined,
     status: string | undefined,
-    Service: string | undefined,
+    ServiceData: string | undefined,
     email: string | undefined,
     Notification: boolean | undefined,
 }

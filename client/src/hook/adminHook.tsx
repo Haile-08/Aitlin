@@ -21,9 +21,13 @@ export const addClient = async ({ data, token }: client) => {
     return client;
 };
 
-export const retrieveClients = async (page: number) => {
+export const retrieveClients = async ({page, search, token}: {page: number, search: string, token: string}) => {
   const client = await axiosBaseURL
-    .get(`/v1/admin/client/?page=${page}`)
+    .get(`/v1/admin/service/?search=${search}&page=${page}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(function (res) {
       return res;
     })
@@ -34,5 +38,25 @@ export const retrieveClients = async (page: number) => {
     .catch(function (err) {
       console.log(err);
     });
+  return client;
+};
+
+export const updateStatus = async ({ data, token }: any) => {
+  const client = await axiosBaseURL
+    .put(`/v1/admin/service/status`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+
   return client;
 };

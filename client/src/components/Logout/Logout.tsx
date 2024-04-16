@@ -2,15 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import logout from '../../assets/logout.svg';
 import { useDispatch } from 'react-redux';
 import { setLogout } from '../../slice/authSlice';
+import { useQueryClient } from 'react-query';
 
 function Logout() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const handelLogout = (e: { preventDefault: () => void; }) =>{
     e.preventDefault();
     dispatch(setLogout());
     navigate('/');
+    queryClient.removeQueries();
   }
 
   return (

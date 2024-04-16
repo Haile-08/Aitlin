@@ -53,7 +53,7 @@ function Routes() {
     },
     {
       path: '/Admin/Dashboard',
-      element: token ? <AdminDashboard/> : <AdminDashboard/> ,
+      element: token ? <AdminDashboard/> : <Navigate to="/" /> ,
       errorElement: <ErrorPage />,
     },
     {
@@ -67,15 +67,15 @@ function Routes() {
       errorElement: <ErrorPage />,
       children: [
         {
-          path: "bill",
+          path: "bill/:id",
           element: <Bill />,
         },
         {
-          path: "Binnacle",
+          path: "Binnacle/:id",
           element: <Binnacle />,
         },
         {
-          path: "Nurses",
+          path: "Nurses/:id",
           element: <Nurses />,
         },
       ],

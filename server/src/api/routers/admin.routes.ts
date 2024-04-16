@@ -7,7 +7,11 @@ const adminRoutHandler = (router: Router) => {
   router.post('/admin/add',authMiddleWare, adminController.handleAddClient);
 
   // get all the clients route
-  router.get('/admin/client', authMiddleWare, adminController.handleGetAllClient);
+  router.get('/admin/service', authMiddleWare, adminController.handleGetAllClient);
+
+  // update the status of the service
+  router.put('/admin/service/status', authMiddleWare, adminController.handleServiceStatus);
+
 };
 
 export default adminRoutHandler;
