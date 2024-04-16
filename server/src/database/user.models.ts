@@ -23,10 +23,6 @@ const userSchema = new Schema({
     type: Number,
     default: 0,
   },
-  Notification: {
-    type: Boolean,
-    default: false,
-  },
   date: { 
     type : Date,
     default: Date.now

@@ -22,7 +22,12 @@ function ServiceList({Name, Service, Email, status, id}) {
 
   const handleDocumentNav = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    navigate(`/Admin/Dashboard/Documents/bill/${id}`);
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("id", id);
+    urlParams.set("service", Service);
+    urlParams.set("name", Name);
+    const searchQuery = urlParams.toString();
+    navigate(`/Admin/Dashboard/Documents/bill/?${searchQuery}`);
   };
 
   const handleChange = (e) => {

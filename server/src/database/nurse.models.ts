@@ -14,9 +14,23 @@ const nurseSchema = new Schema({
     type: String,
     min: 1,
   },
+  files: {
+    type: String,
+    min: 1,
+  },
+  fileDate: {
+    type : Date,
+    default: () => {
+      const now = new Date();
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+    }
+  },
   date: { 
     type : Date,
-    default: Date.now
+    default: () => {
+      const now = new Date();
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+    }
   }
 });
 

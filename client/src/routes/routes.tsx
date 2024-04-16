@@ -63,19 +63,19 @@ function Routes() {
     },
     {
       path: '/Admin/Dashboard/Documents',
-      element: <Documents/>,
+      element:token ? <Documents/> : <Navigate to="/" />,
       errorElement: <ErrorPage />,
       children: [
         {
-          path: "bill/:id",
+          path: "bill/",
           element: <Bill />,
         },
         {
-          path: "Binnacle/:id",
+          path: "Binnacle/",
           element: <Binnacle />,
         },
         {
-          path: "Nurses/:id",
+          path: "Nurses/",
           element: <Nurses />,
         },
       ],

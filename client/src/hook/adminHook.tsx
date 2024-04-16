@@ -60,3 +60,44 @@ export const updateStatus = async ({ data, token }: any) => {
 
   return client;
 };
+
+
+export const addServiceData = async ({ data, token, page }: any) => {
+  const client = await axiosBaseURL
+    .post(`/v1/admin/service/${page}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+
+  return client;
+};
+
+export const retrieveService = async ({page, filter, search, token, id}: any) => {
+  const client = await axiosBaseURL
+    .get(`/v1/admin/service/${page}/?search=${search}&filter=${filter}&serviceId=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      console.log(resData.data.blog);
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  return client;
+};

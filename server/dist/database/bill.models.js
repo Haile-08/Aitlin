@@ -22,9 +22,19 @@ const billSchema = new Schema({
         type: String,
         min: 1,
     },
+    fileDate: {
+        type: Date,
+        default: () => {
+            const now = new Date();
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+        }
+    },
     date: {
         type: Date,
-        default: Date.now
+        default: () => {
+            const now = new Date();
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+        }
     }
 });
 exports.default = mongoose_1.default.model('Bill', billSchema);

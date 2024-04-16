@@ -1,8 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import back from '../../assets/back.svg';
 
-function Back() {
+function Back({nav}: {nav: string}) {
+  const navigate = useNavigate();
+
+  const handleNav = () => {
+    navigate(nav);
+  }
   return (
-    <div className='flex justify-center items-center mx-5 py-3.5 px-5 rounded-lg cursor-pointer bg-primary-color'>
+    <div onClick={handleNav} className='flex justify-center items-center mx-5 py-3.5 px-5 rounded-lg cursor-pointer bg-primary-color'>
       <img src={back} alt="back" />
     </div>
   )
