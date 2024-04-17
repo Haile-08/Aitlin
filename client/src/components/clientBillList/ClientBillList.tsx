@@ -1,8 +1,6 @@
 import downloadIcon from '../../assets/download.svg';
 
 function ClientBillList({index, period, comment, id, link}) {
-    console.log("link",link);
-    console.log(`localhost:8000/${link}`);
 
     const handleDownload = async () => {
       try {
