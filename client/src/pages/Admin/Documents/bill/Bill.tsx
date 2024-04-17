@@ -3,13 +3,16 @@ import { BillList, SkeletalLoading } from "../../../../components";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 import { retrieveService } from "../../../../hook/adminHook";
 import empty from '../../../../assets/empty.svg';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OutletContextType = [any, string, string];
+
 function Bill() {
-  const [setIsOpen, filterBool, id] = useOutletContext();
-  const token = useSelector((state: RootState) => state.auth.token);
+  const [setIsOpen, filterBool, id] = useOutletContext() as OutletContextType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const token = useSelector((state: any) => state.auth.token);
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
   const array = Array.from({ length: 9 });
@@ -69,11 +72,12 @@ function Bill() {
             </div>
             <p className="mt-10 font-thin text-3xl">No Result Found</p>
           </div>}
-          {isLoading && array.map((item, index)=>(
+          {isLoading && array.map((_item, index)=>(
             <SkeletalLoading key={index}/>
            ))
           }
           {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
             data?.data.map((bill: any, index: Number)=>(
               <BillList index={Number(index) + 1} period={bill?.period} comment={bill?.comment} id={bill._id}/>
             ))

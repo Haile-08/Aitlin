@@ -1,15 +1,18 @@
 import { useOutletContext } from "react-router-dom";
-import { InvoiceList, NurseList, SkeletalLoading } from "../../../../components";
+import { NurseList, SkeletalLoading } from "../../../../components";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { retrieveService } from "../../../../hook/adminHook";
 import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 import empty from '../../../../assets/empty.svg';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OutletContextType = [any, string, string];
+
 function  Nurses() {
-  const [setIsOpen, filterBool, id] = useOutletContext();  
-  const token = useSelector((state: RootState) => state.auth.token);
+  const [setIsOpen, filterBool, id] = useOutletContext() as OutletContextType;  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const token = useSelector((state: any) => state.auth.token);
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
   const array = Array.from({ length: 9 });
@@ -68,11 +71,12 @@ function  Nurses() {
             </div>
             <p className="mt-10 font-thin text-3xl">No Result Found</p>
           </div>}
-          {isLoading && array.map((item, index)=>(
+          {isLoading && array.map((_item, index)=>(
             <SkeletalLoading key={index}/>
            ))
           }
           {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data?.data.map((nurse: any)=>(
               <NurseList Name={nurse?.Name} Archive={nurse?.Archive} comment={nurse?.comment} id={nurse._id}/>
             ))

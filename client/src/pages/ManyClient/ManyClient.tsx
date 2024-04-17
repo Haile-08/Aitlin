@@ -1,15 +1,16 @@
 import { useSelector } from "react-redux";
 import { ClientServiceList, Logout } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "@reduxjs/toolkit/query";
 import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
 import { retrieveClientServices } from "../../hook/clientHook";
 import empty from "../../assets/empty.svg";
 
 function ManyClient() {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const token = useSelector((state: RootState) => state.auth.token);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useSelector((state: any) => state.auth.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const token = useSelector((state: any) => state.auth.token);
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
@@ -93,6 +94,7 @@ function ManyClient() {
                 <span className="sr-only">Loading...</span>
            </div>}
            {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data?.data.map((service: any)=>(
               <ClientServiceList Name={service?.clientName} Service={service?.serviceName} Email={service?.email} status={service?.status} id={service?._id}/>
             ))

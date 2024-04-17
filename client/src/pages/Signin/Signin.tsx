@@ -28,6 +28,7 @@ function Signin() {
   const [isVisible, setVisible] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = useSelector((state: any) => state.auth.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();

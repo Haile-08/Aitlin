@@ -3,14 +3,15 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { updateStatus } from "../../hook/adminHook";
 import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 
-function ServiceList({Name, Service, Email, status, id, page}) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ServiceList({Name, Service, Email, status, id, page }: any) {
   const [check, setCheck] = useState(status);
-  const token = useSelector((state: RootState) => state.auth.token);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const token = useSelector((state: any) => state.auth.token);
   const navigate = useNavigate();
 
-  const { mutate, isLoading } = useMutation(updateStatus, {
+  const { mutate } = useMutation(updateStatus, {
     onSuccess: (data) => {
       setCheck(data.updatedService.status);
     },
@@ -33,7 +34,7 @@ function ServiceList({Name, Service, Email, status, id, page}) {
     navigate(`/Admin/Dashboard/Documents/bill/?${searchQuery}`);
   };
 
-  const handleChange = (e) => {
+  const handleChange = () => {
     const data = {
       id,
       status: !check,

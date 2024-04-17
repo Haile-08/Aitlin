@@ -3,17 +3,19 @@ import {  ClientBillList } from "../../../components";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 import { retrieveService } from "../../../hook/adminHook";
 import empty from '../../../assets/empty.svg';
 
+type OutletContextType = [boolean, string];
+
 function ClientBill() {
-  const [filterBool, id] = useOutletContext();
-  const token = useSelector((state: RootState) => state.auth.token);
+  const [filterBool, id] = useOutletContext() as OutletContextType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const token = useSelector((state: any) => state.auth.token);
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
 
-  const { data, refetch, isLoading } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["bill", search],
     queryFn: () => retrieveService({page:"bill" ,filter: filterBool, search, token, id}),
   });
@@ -66,6 +68,7 @@ function ClientBill() {
             <p className="mt-10 font-thin text-3xl">No Result Found</p>
           </div>}
           {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
             data?.data.map((bill: any, index: Number)=>(
               <ClientBillList index={index} period={bill?.period} comment={bill?.comment} link={bill?.files} id={bill._id}/>
             ))

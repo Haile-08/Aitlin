@@ -47,7 +47,7 @@ function AdminDashboard() {
         <div className="w-10/12 h-[10%] flex justify-between items-center">
             <p className="font-roboto font-extrabold text-2xl md:text-3xl">Dashboard</p>
             <div className="flex">
-                <p className="mr-4 text-sm md:text-base bg-white rounded-xl shadow-md p-3 font-roboto">{user.Name}</p>
+                <p className="mr-4 text-sm md:text-base bg-white rounded-xl shadow-md p-3 font-roboto">{user?.Name}</p>
                 <Logout/>
             </div>
         </div>
@@ -96,11 +96,12 @@ function AdminDashboard() {
             </div>
             <p className="mt-10 font-thin text-3xl">No Result Found</p>
           </div>}
-          {isLoading && array.map((item, index)=>(
+          {isLoading && array.map((_item, index)=>(
             <SkeletalLoading key={index}/>
            ))
           }
           {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data?.services.map((service: any)=>(
               <ServiceList Name={service?.clientName} Service={service?.serviceName} Email={service?.email} status={service?.status} id={service?._id} page={page}/>
             ))

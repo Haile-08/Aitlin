@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { userRedux } from '../@types';
 
 export interface authState {
-  user: any,
+  user: userRedux | null,
   token: string | null,
 }
 
@@ -15,6 +16,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setLogin: (state, action: PayloadAction<any>) => {
       state.user = action.payload.user;
       state.token = action.payload.token;

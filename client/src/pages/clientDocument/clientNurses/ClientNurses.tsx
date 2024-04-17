@@ -1,19 +1,21 @@
 import { useOutletContext } from "react-router-dom";
-import { ClientNurseList, NurseList } from "../../../components";
+import { ClientNurseList } from "../../../components";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { retrieveService } from "../../../hook/adminHook";
 import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 import empty from '../../../assets/empty.svg';
 
+type OutletContextType = [boolean, string];
+
 function ClientNurses() {
-  const [filterBool, id] = useOutletContext();  
-  const token = useSelector((state: RootState) => state.auth.token);
+  const [filterBool, id] = useOutletContext() as OutletContextType;  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const token = useSelector((state: any) => state.auth.token);
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
 
-  const { data, refetch, isLoading } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["nurse", search],
     queryFn: () => retrieveService({page:"nurses" ,filter: filterBool, search, token, id}),
   });
@@ -67,7 +69,8 @@ function ClientNurses() {
             <p className="mt-10 font-thin text-3xl">No Result Found</p>
           </div>}
           {
-            data?.data.map((nurse: any, index: Number)=>(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data?.data.map((nurse: any)=>(
               <ClientNurseList Name={nurse?.Name} Archive={nurse?.Archive} comment={nurse?.comment} id={nurse._id} link={nurse?.files}/>
             ))
           }

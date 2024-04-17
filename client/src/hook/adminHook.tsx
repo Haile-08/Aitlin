@@ -1,7 +1,7 @@
-import { client } from "../@types";
 import axiosBaseURL from "../config/axios";
 
-export const addClient = async ({ data, token }: client) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const addClient = async ({ data, token }:any) => {
     const client = await axiosBaseURL
       .post(`/v1/admin/add`, data, {
         headers: {
@@ -21,7 +21,8 @@ export const addClient = async ({ data, token }: client) => {
     return client;
 };
 
-export const retrieveClients = async ({page, search, token}: {page: number, search: string, token: string}) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const retrieveClients = async ({page, search, token}: any) => {
   const client = await axiosBaseURL
     .get(`/v1/admin/service/?search=${search}&page=${page}`, {
       headers: {
@@ -41,6 +42,7 @@ export const retrieveClients = async ({page, search, token}: {page: number, sear
   return client;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const updateStatus = async ({ data, token }: any) => {
   const client = await axiosBaseURL
     .put(`/v1/admin/service/status`, data, {
@@ -62,6 +64,7 @@ export const updateStatus = async ({ data, token }: any) => {
 };
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const addServiceData = async ({ data, token, page }: any) => {
   const client = await axiosBaseURL
     .post(`/v1/admin/service/${page}`, data, {
@@ -82,6 +85,7 @@ export const addServiceData = async ({ data, token, page }: any) => {
   return client;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const retrieveService = async ({page, filter, search, token, id}: any) => {
   const client = await axiosBaseURL
     .get(`/v1/admin/service/${page}/?search=${search}&filter=${filter}&serviceId=${id}`, {
@@ -102,6 +106,7 @@ export const retrieveService = async ({page, filter, search, token, id}: any) =>
   return client;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const editServiceData = async ({ data, token, page }: any) => {
   const client = await axiosBaseURL
     .put(`/v1/admin/service/${page}`, data, {

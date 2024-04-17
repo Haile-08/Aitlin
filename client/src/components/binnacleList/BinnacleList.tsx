@@ -2,7 +2,8 @@ import { useState } from 'react';
 import edit from '../../assets/edit.svg'
 import EditDocumentModal from '../editDocumentModal/editDocumentModal';
 
-function BinnacleList({index, period, comment, id}) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function BinnacleList({index, period, comment, id}: any) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

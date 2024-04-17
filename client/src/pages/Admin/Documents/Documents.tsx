@@ -4,18 +4,21 @@ import arrowUp from '../../../assets/arrowUp.svg';
 import { Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 
 function Documents() {
   const [documents, setDocuments] = useState("bill");
   const [filterBool, setFilterBool] = useState(true);
-  const user = useSelector((state: RootState) => state.auth.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useSelector((state: any) => state.auth.user);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const id: string | null = searchParams.get("id");
-  const Service: string | null = searchParams.get("service");
-  const Name: string | null = searchParams.get("name");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const id: any = searchParams.get("id");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Service: any = searchParams.get("service");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Name: any = searchParams.get("name");
 
   const handleBillNav = (e: { preventDefault: () => void; })=>{
     e.preventDefault();

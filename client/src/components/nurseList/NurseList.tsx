@@ -2,7 +2,8 @@ import { useState } from 'react'
 import edit from '../../assets/edit.svg'
 import EditDocumentModal from '../editDocumentModal/editDocumentModal';
 
-function NurseList({ Name, Archive, comment, id}) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function NurseList({ Name, Archive, comment, id}: any) {
   const [isOpen, setIsOpen] = useState(false);
 
     return (

@@ -26,3 +26,19 @@ export interface client {
     data: clientData,
     token: string | undefined,
 }
+
+interface firstService {
+    serviceId: string,
+    serviceName: string,
+    clientName: string,
+}
+
+export interface userRedux {
+    Name: string,
+    email: string,
+    password: string,
+    type: string,
+    ServiceNumber: number,
+    firstService: firstService,
+    date: Date,
+}

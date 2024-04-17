@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
 
-function ClientServiceList({Name, Service, Email, status, id}) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ClientServiceList({Name, Service, Email, status, id}:any) {
   const navigate = useNavigate();
 
   const handleDocumentNav = (e: { preventDefault: () => void; }) => {

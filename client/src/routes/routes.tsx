@@ -23,6 +23,7 @@ function ErrorPage() {
 }
 
 function Routes() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = useSelector((state: any) => state.auth.token);
 
   const router = createBrowserRouter([

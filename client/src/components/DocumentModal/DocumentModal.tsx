@@ -10,7 +10,6 @@ import wordIcon from '../../assets/word.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { RootState } from '@reduxjs/toolkit/query';
 import { useMutation } from 'react-query';
 import { addServiceData } from '../../hook/adminHook';
 
@@ -24,9 +23,12 @@ const addSchema = z.object({
 });
 type SignUpSchemaType = z.infer<typeof addSchema>;
 
-function DocumentModal({setIsOpen, documents, serviceId}) {
-  const [image, setImage] = useState("");
-  const token = useSelector((state: RootState) => state.auth.token);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function DocumentModal({setIsOpen, documents, serviceId}: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [image, setImage] = useState<any>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const token = useSelector((state: any) => state.auth.token);
 
   const {
     register,
@@ -61,6 +63,7 @@ function DocumentModal({setIsOpen, documents, serviceId}) {
     mutate({data, token, page: documents});
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleImage = (e: any) => {
     setImage(e.target.files[0]);
   };
