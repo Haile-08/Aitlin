@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const database_1 = require("../../database");
 const utils_1 = require("../../utils");
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 /* Represent a run time controller*/
 class adminController {
     /**
@@ -48,6 +50,7 @@ class adminController {
                         email,
                         password: passwordHash,
                         type: 'client',
+                        firstService: {},
                     });
                     const service = yield database_1.Service.create({
                         clientId: client._id,
@@ -57,6 +60,11 @@ class adminController {
                         status: true,
                         Notification: Notification || false,
                     });
+                    yield database_1.User.findOneAndUpdate({ _id: client._id }, { firstService: {
+                            serviceId: service._id,
+                            serviceName: service.serviceName,
+                            clientName: service.clientName,
+                        } }, { new: true });
                     (0, utils_1.sendEmail)(client.email, 'Welcome to Aitlin', {
                         name: client.Name,
                         email: client.email,
@@ -165,8 +173,8 @@ class adminController {
             try {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { path } = req.file;
-                if (!period || !comment || !serviceId || !path) {
+                const file = req.file;
+                if (!period || !comment || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -183,15 +191,15 @@ class adminController {
                     serviceId,
                     period,
                     comment,
-                    files: path.split('/')[1],
+                    files: file.path.split('/')[1],
                 });
                 if (service.Notification) {
                     (0, utils_1.sendEmail)(service.email, 'New Binnacle document', {
                         name: service.clientName,
-                        email: undefined,
+                        email: 'binnacle',
                         password: undefined,
                         link: `http://localhost:8000/${blog.files}`
-                    }, './template/newClient.handlebars');
+                    }, './template/documentNotification.handlebars');
                 }
                 return res.status(201).json({
                     message: 'Bill created successfully',
@@ -212,15 +220,16 @@ class adminController {
     static handleAddNewNurses(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { period, comment, serviceId } = req.body;
+                const { format, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { path } = req.file;
-                if (!period || !comment || !serviceId || !path) {
+                const file = req.file;
+                if (!format || !Name || !comment || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
                     });
                 }
+                console.log('format', format);
                 const service = yield database_1.Service.findById(serviceId);
                 if (!service) {
                     return res.json({
@@ -230,17 +239,18 @@ class adminController {
                 }
                 const nurse = yield database_1.Nurse.create({
                     serviceId,
-                    Archive: period,
+                    Name,
+                    Archive: Name + '.' + format.split('/')[1],
                     comment,
-                    files: path.split('/')[1],
+                    files: file.path.split('/')[1],
                 });
                 if (service.Notification) {
                     (0, utils_1.sendEmail)(service.email, 'New nurse document', {
                         name: service.clientName,
-                        email: undefined,
+                        email: 'nurse',
                         password: undefined,
                         link: `http://localhost:8000/${nurse.files}`
-                    }, './template/newClient.handlebars');
+                    }, './template/documentNotification.handlebars');
                 }
                 return res.status(201).json({
                     message: 'Bill created successfully',
@@ -263,8 +273,8 @@ class adminController {
             try {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { path } = req.file;
-                if (!period || !comment || !serviceId || !path) {
+                const file = req.file;
+                if (!period || !comment || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -281,15 +291,15 @@ class adminController {
                     serviceId,
                     period,
                     comment,
-                    files: path.split('/')[1],
+                    files: file.path.split('/')[1],
                 });
                 if (service.Notification) {
                     (0, utils_1.sendEmail)(service.email, 'New bill document', {
                         name: service.clientName,
-                        email: undefined,
+                        email: 'bill',
                         password: undefined,
                         link: `http://localhost:8000/${bill.files}`
-                    }, './template/newClient.handlebars');
+                    }, './template/documentNotification.handlebars');
                 }
                 return res.status(201).json({
                     message: 'Bill created successfully',
@@ -313,12 +323,13 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const searchTerm = req.query.search || '.*';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const filter = req.query.filter || true;
+                const filter = req.query.filter === 'true';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const serviceId = req.query.serviceId;
                 const bills = yield database_1.Bill.find({ comment: { $regex: searchTerm, $options: 'i' }, serviceId });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const billList = bills.map((bill) => bill.toObject());
+                console.log('filter', filter);
                 if (filter) {
                     billList.sort((a, b) => new Date(a.fileDate).getTime() - new Date(b.fileDate).getTime());
                 }
@@ -347,7 +358,7 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const searchTerm = req.query.search || '.*';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const filter = req.query.filter || true;
+                const filter = req.query.filter === 'true';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const serviceId = req.query.serviceId;
                 const blogs = yield database_1.Blog.find({ comment: { $regex: searchTerm, $options: 'i' }, serviceId });
@@ -381,7 +392,7 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const searchTerm = req.query.search || '.*';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const filter = req.query.filter || true;
+                const filter = req.query.filter === 'true';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const serviceId = req.query.serviceId;
                 const nurses = yield database_1.Nurse.find({ comment: { $regex: searchTerm, $options: 'i' }, serviceId });
@@ -398,6 +409,124 @@ class adminController {
                     success: true,
                     data: nurseList,
                 });
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
+    /**
+       * update Bill
+       * @param req request object
+       * @param res response object
+       */
+    static handleUpdateABill(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const { period, comment, serviceId } = req.body;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const file = req.file;
+                if (!period || !comment || !serviceId || !file.path) {
+                    return res.json({
+                        message: 'All fields are required',
+                        success: false
+                    });
+                }
+                const bill = yield database_1.Bill.findById(serviceId);
+                const filePath = path_1.default.join(__dirname, 'public', (bill === null || bill === void 0 ? void 0 : bill.files) || '');
+                if (fs_1.default.existsSync(filePath)) {
+                    fs_1.default.unlinkSync(filePath);
+                    console.log('File removed successfully.');
+                }
+                else {
+                    console.log('File does not exist.');
+                }
+                const now = new Date();
+                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment, period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                if (!updatedBill) {
+                    return res.status(404).json({ message: 'Service not found', success: false });
+                }
+                res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBill });
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
+    /**
+       * update Binnacle
+       * @param req request object
+       * @param res response object
+       */
+    static handleUpdateABinnacle(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const { period, comment, serviceId } = req.body;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const file = req.file;
+                if (!period || !comment || !serviceId || !file.path) {
+                    return res.json({
+                        message: 'All fields are required',
+                        success: false
+                    });
+                }
+                const blog = yield database_1.Blog.findById(serviceId);
+                const filePath = path_1.default.join(__dirname, 'public', (blog === null || blog === void 0 ? void 0 : blog.files) || '');
+                if (fs_1.default.existsSync(filePath)) {
+                    fs_1.default.unlinkSync(filePath);
+                    console.log('File removed successfully.');
+                }
+                else {
+                    console.log('File does not exist.');
+                }
+                const now = new Date();
+                const updatedBlog = yield database_1.Blog.findOneAndUpdate({ _id: serviceId }, { comment, period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                if (!updatedBlog) {
+                    return res.status(404).json({ message: 'Service not found', success: false });
+                }
+                res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBlog });
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
+    /**
+       * update nurse
+       * @param req request object
+       * @param res response object
+       */
+    static handleUpdateANurse(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const { format, Name, comment, serviceId } = req.body;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const file = req.file;
+                if (!format || !Name || !comment || !serviceId || !file.path) {
+                    return res.json({
+                        message: 'All fields are required',
+                        success: false
+                    });
+                }
+                const nurse = yield database_1.Nurse.findById(serviceId);
+                const filePath = path_1.default.join(__dirname, 'public', (nurse === null || nurse === void 0 ? void 0 : nurse.files) || '');
+                console.log('file path', filePath);
+                if (fs_1.default.existsSync(filePath)) {
+                    fs_1.default.unlinkSync(filePath);
+                    console.log('File removed successfully.');
+                }
+                else {
+                    console.log('File does not exist.');
+                }
+                const now = new Date();
+                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment, Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                if (!updatedNurse) {
+                    return res.status(404).json({ message: 'Service not found', success: false });
+                }
+                res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedNurse });
             }
             catch (error) {
                 res.status(500).json({ message: 'Internal server error', success: false });

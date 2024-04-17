@@ -25,7 +25,10 @@ const userSchema = new Schema({
     },
     ServiceNumber: {
         type: Number,
-        default: 0,
+        default: 1,
+    },
+    firstService: {
+        type: Object,
     },
     date: {
         type: Date,

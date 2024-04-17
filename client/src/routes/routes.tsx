@@ -4,19 +4,19 @@ import {
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
-import { AddService, AdminDashboard, Bill, Binnacle, ClientDocuments, Documents, ManyClient, Nurses, PasswordRequest, PasswordReset, Signin, SingleBill, SingleClient, Success } from '../pages';
+import { AddService, AdminDashboard, Bill, Binnacle, ClientBill, ClientBinnacle, ClientDocument, ClientNurses, Documents, ManyClient, Nurses, PasswordRequest, PasswordReset, Signin, Success } from '../pages';
 import { useSelector } from 'react-redux';
+import errorImage from '../assets/error.svg';
 
 function ErrorPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const error: any = useRouteError();
   
   return (
-    <div id="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.message}</i>
+    <div id="error-page" className='w-dvw h-dvh flex justify-center items-center flex-col'>
+      <img src={errorImage} alt="error" className='w-[30%]'/>
+      <p className='font-thin text-3xl mt-7 font-roboto'>
+        Error: {error.statusText || error.message}
       </p>
     </div>
   );
@@ -81,26 +81,29 @@ function Routes() {
       ],
     },
     {
-      path: '/Single/Client',
-      element: <SingleClient/>,
+      path: '/Client',
+      element:token ? <ManyClient/> : <Navigate to="/" />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/Client/Documents',
+      element:token ? <ClientDocument/> : <Navigate to="/" />,
       errorElement: <ErrorPage />,
       children: [
         {
-          path: "bill",
-          element: <SingleBill />,
+          path: "bill/",
+          element: <ClientBill />,
         },
-      ]
+        {
+          path: "Binnacle/",
+          element: <ClientBinnacle />,
+        },
+        {
+          path: "Nurses/",
+          element: <ClientNurses />,
+        },
+      ],
     },
-    {
-      path: '/Many/Client',
-      element: <ManyClient/>,
-      errorElement: <ErrorPage />,
-    },
-    {
-      path: '/Many/Client/Document',
-      element: <ClientDocuments/>,
-      errorElement: <ErrorPage />,
-    }
   ]);
   return <RouterProvider router={router} />;
 }

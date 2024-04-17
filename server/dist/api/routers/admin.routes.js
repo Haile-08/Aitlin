@@ -27,6 +27,12 @@ const adminRoutHandler = (router) => {
     router.get('/admin/service/binnacle', authMiddleWare_1.default, __1.adminController.handleGetAllBinnacle);
     // get all the service bill
     router.get('/admin/service/nurses', authMiddleWare_1.default, __1.adminController.handleGetAllNurse);
+    // update the service bill
+    router.put('/admin/service/bill', authMiddleWare_1.default, multerUpload, __1.adminController.handleUpdateABill);
+    // update the service bill
+    router.put('/admin/service/binnacle', authMiddleWare_1.default, multerUpload, __1.adminController.handleUpdateABinnacle);
+    // update the service bill
+    router.put('/admin/service/nurses', authMiddleWare_1.default, multerUpload, __1.adminController.handleUpdateANurse);
 };
 exports.default = adminRoutHandler;
 //# sourceMappingURL=admin.routes.js.map

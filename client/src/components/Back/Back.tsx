@@ -8,8 +8,8 @@ function Back({nav}: {nav: string}) {
     navigate(nav);
   }
   return (
-    <div onClick={handleNav} className='flex justify-center items-center mx-5 py-3.5 px-5 rounded-lg cursor-pointer bg-primary-color'>
-      <img src={back} alt="back" />
+    <div onClick={handleNav} className='flex justify-center items-center mr-5 py-3 px-4 shadow-sm rounded-xl cursor-pointer bg-primary-color'>
+      <img src={back} alt="back" className='w-2.5' />
     </div>
   )
 }

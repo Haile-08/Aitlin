@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { Bill, Blog, Nurse, Service, User } from '../../database';
 import { sendEmail } from '../../utils';
+import path from 'path';
+import fs from 'fs';
 
 /* Represent a run time controller*/
 class adminController {
@@ -39,6 +41,7 @@ class adminController {
           email,
           password: passwordHash,
           type: 'client',
+          firstService: {},
         });
 
         const service = await Service.create({
@@ -49,6 +52,12 @@ class adminController {
           status: true,
           Notification: Notification || false,
         });
+
+        await User.findOneAndUpdate({_id: client._id}, {firstService: {
+          serviceId: service._id,
+          serviceName: service.serviceName,
+          clientName: service.clientName,
+        }}, { new: true });
 
         sendEmail(
           client.email,
@@ -169,9 +178,9 @@ class adminController {
     try {
       const {period, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { path } : any = req.file;
+      const file : any = req.file;
 
-      if (!period || !comment || !serviceId || !path) {
+      if (!period || !comment || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -190,7 +199,7 @@ class adminController {
         serviceId,
         period,
         comment,
-        files: path.split('/')[1],
+        files: file.path.split('/')[1],
       });
 
       if (service.Notification){
@@ -223,16 +232,18 @@ class adminController {
      */
   static async handleAddNewNurses(req: Request, res: Response) {
     try {
-      const {period, comment, serviceId} = req.body;
+      const {format, Name, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { path } : any = req.file;
+      const file : any = req.file;
 
-      if (!period || !comment || !serviceId || !path) {
+      if (!format || !Name || !comment || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
         });
       }
+
+      console.log('format', format);
       const service = await Service.findById(serviceId);
 
       if (!service) {
@@ -244,9 +255,10 @@ class adminController {
 
       const nurse = await Nurse.create({
         serviceId,
-        Archive: period,
+        Name,
+        Archive: Name + '.' + format.split('/')[1],
         comment,
-        files: path.split('/')[1],
+        files: file.path.split('/')[1],
       });
 
       if (service.Notification){
@@ -281,9 +293,9 @@ class adminController {
     try {
       const {period, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { path } : any = req.file;
+      const file : any = req.file;
 
-      if (!period || !comment || !serviceId || !path) {
+      if (!period || !comment || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -302,7 +314,7 @@ class adminController {
         serviceId,
         period,
         comment,
-        files: path.split('/')[1],
+        files: file.path.split('/')[1],
       });
 
       if (service.Notification){
@@ -339,7 +351,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const searchTerm: any = req.query.search || '.*';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const filter: any = req.query.filter || true;
+      const filter: any = req.query.filter === 'true';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const serviceId: any = req.query.serviceId;
 
@@ -347,6 +359,7 @@ class adminController {
   
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const billList: any[] = bills.map((bill) => bill.toObject());
+      console.log('filter', filter);
 
       if (filter) {
         billList.sort((a, b) => new Date(a.fileDate).getTime() - new Date(b.fileDate).getTime());
@@ -375,7 +388,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const searchTerm: any = req.query.search || '.*';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const filter: any = req.query.filter || true;
+      const filter: any = req.query.filter === 'true';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const serviceId: any = req.query.serviceId;
 
@@ -410,7 +423,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const searchTerm: any = req.query.search || '.*';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const filter: any = req.query.filter || true;
+      const filter: any = req.query.filter === 'true';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const serviceId: any = req.query.serviceId;
 
@@ -430,6 +443,152 @@ class adminController {
         success: true,
         data: nurseList,
       });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', success: false });
+    }
+  }
+
+  /**
+     * update Bill
+     * @param req request object
+     * @param res response object
+     */
+  static async handleUpdateABill(req: Request, res: Response) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const {period, comment, serviceId}: any = req.body;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const file : any = req.file;
+
+      if (!period || !comment || !serviceId || !file.path) {
+        return res.json({ 
+          message: 'All fields are required',
+          success: false
+        });
+      }
+
+      const bill = await Bill.findById(serviceId);
+
+      const filePath = path.join(__dirname, 'public', bill?.files || '');
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log('File removed successfully.');
+      } else {
+        console.log('File does not exist.');
+      }
+
+      const now = new Date();
+
+      const updatedBill = await Bill.findOneAndUpdate(
+        { _id: serviceId },
+        { comment, period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { new: true }
+      );
+
+      if (!updatedBill) {
+        return res.status(404).json({ message: 'Service not found', success: false });
+      }
+
+      res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBill });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', success: false });
+    }
+  }
+
+
+  /**
+     * update Binnacle
+     * @param req request object
+     * @param res response object
+     */
+  static async handleUpdateABinnacle(req: Request, res: Response) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const {period, comment, serviceId}: any = req.body;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const file : any = req.file;
+
+      if (!period || !comment || !serviceId || !file.path) {
+        return res.json({ 
+          message: 'All fields are required',
+          success: false
+        });
+      }
+
+      const blog = await Blog.findById(serviceId);
+
+      const filePath = path.join(__dirname, 'public', blog?.files || '');
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log('File removed successfully.');
+      } else {
+        console.log('File does not exist.');
+      }
+
+      const now = new Date();
+
+      const updatedBlog = await Blog.findOneAndUpdate(
+        { _id: serviceId },
+        { comment, period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { new: true }
+      );
+
+      if (!updatedBlog) {
+        return res.status(404).json({ message: 'Service not found', success: false });
+      }
+
+      res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBlog });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', success: false });
+    }
+  }
+
+  /**
+     * update nurse
+     * @param req request object
+     * @param res response object
+     */
+  static async handleUpdateANurse(req: Request, res: Response) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const {format, Name, comment, serviceId} = req.body;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const file : any = req.file;
+
+      if (!format || !Name || !comment || !serviceId || !file.path) {
+        return res.json({ 
+          message: 'All fields are required',
+          success: false
+        });
+      }
+
+      const nurse = await Nurse.findById(serviceId);
+
+      const filePath = path.join(__dirname, 'public', nurse?.files || '');
+      console.log('file path', filePath);
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log('File removed successfully.');
+      } else {
+        console.log('File does not exist.');
+      }
+
+      const now = new Date();
+
+      const updatedNurse = await Nurse.findOneAndUpdate(
+        { _id: serviceId },
+        { comment, Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { new: true }
+      );
+
+      if (!updatedNurse) {
+        return res.status(404).json({ message: 'Service not found', success: false });
+      }
+
+      res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedNurse });
     } catch (error) {
       res.status(500).json({ message: 'Internal server error', success: false });
     }

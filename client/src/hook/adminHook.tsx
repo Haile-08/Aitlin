@@ -101,3 +101,23 @@ export const retrieveService = async ({page, filter, search, token, id}: any) =>
     });
   return client;
 };
+
+export const editServiceData = async ({ data, token, page }: any) => {
+  const client = await axiosBaseURL
+    .put(`/v1/admin/service/${page}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+
+  return client;
+};

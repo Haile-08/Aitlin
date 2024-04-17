@@ -6,6 +6,10 @@ const nurseSchema = new Schema({
     type: String,
     min: 1,
   },
+  Name: {
+    type: String,
+    min: 1,
+  },
   comment: {
     type: String,
     min: 1,

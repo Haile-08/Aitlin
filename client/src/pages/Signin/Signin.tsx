@@ -48,7 +48,16 @@ function Signin() {
         if(data.data.user.type == "admin"){
           navigate('/Admin/Dashboard');
         }else {
-          navigate('/Single/Client');
+          if (data.data.user.ServiceNumber == 1){
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set("id", data.data.user.firstService.serviceId);
+            urlParams.set("service", data.data.user.firstService.serviceName);
+            urlParams.set("name", data.data.user.firstService.clientName);
+            const searchQuery = urlParams.toString();
+            navigate(`/Client/Documents/bill/?${searchQuery}`);
+          } else {
+            navigate('/Client');
+          }
         }
       }
     },

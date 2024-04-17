@@ -56,20 +56,20 @@ function Documents() {
   return (
     <div className="w-dvw h-dvh bg-banner-color flex justify-start items-center flex-col">
         {isOpen && <DocumentModal setIsOpen={setIsOpen} documents={documents} serviceId={id}/>}
-        <div className="my-5 w-10/12 h-[7%] flex justify-between items-center">
-            <div className="flex justify-center items-center">
+        <div className="mb-10 mt-2 w-10/12 h-[7%] flex justify-between items-center">
+            <div className="flex justify-center items-end">
                 <Back nav={'/Admin/Dashboard'}/>
-                <p className="font-roboto font-extrabold text-2xl md:text-3xl">Ver documentos</p>
+                <p className="font-roboto font-extrabold text-xl md:text-2xl">Ver documentos</p>
             </div>
-            <div className="flex">
-                <p className="mr-4 text-sm md:text-base bg-white rounded-xl shadow-md p-3 font-roboto">{user.Name}</p>
+            <div className="flex ">
+                <p className="mr-4 text-sm md:text-base bg-white rounded-xl shadow-md px-2  py-0 flex justify-center items-center font-light font-roboto">{user.Name}</p>
                 <Logout/>
             </div>
         </div>
         <div className="w-10/12 h-[3%] flex justify-between items-center">
           <div className="flex justify-center items-start flex-col ml-5">
-            <h3 className="font-extrabold font-roboto text-2xl">{Name}</h3>
-            <p className="text-lg mt-1 font-light">{Service}</p>
+            <h3 className="font-extrabold font-roboto text-xl">{Name}</h3>
+            <p className="text-base mt-1 font-normal">{Service}</p>
           </div>
         </div>
         <div className="my-3 w-10/12 h-[5%] flex justify-center items-center">

@@ -1,4 +1,4 @@
-import { ServiceList, Logout } from "../../../components"
+import { ServiceList, Logout, SkeletalLoading } from "../../../components"
 import add from '../../../assets/add.svg';
 import empty from "../../../assets/empty.svg";
 import { useNavigate } from "react-router-dom";
@@ -14,11 +14,12 @@ function AdminDashboard() {
   const user = useSelector((state: RootState) => state.auth.user);
   const token = useSelector((state: RootState) => state.auth.token);
   const [page, setPage] = useState(0);
+  const array = Array.from({ length: 9 });
 
   const { data, isPreviousData, refetch, isLoading } = useQuery({
     queryKey: ["client", page],
     queryFn: () => retrieveClients({page, search, token}),
-    keepPreviousData: true,
+    keepPreviousData: false,
   });
 
   useEffect(() => {
@@ -65,7 +66,7 @@ function AdminDashboard() {
               <input value={search} onChange={(e)=> setSearch(e.target.value)} type="search" id="default-search" className="block outline-none w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." required />
               </div>
             </form>
-            <button className="flex bg-primary-color font-roboto text-white justify-center items-center p-2 text-xs md:text-lg m-2 rounded-xl" onClick={handleAddServiceNav}>
+            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 text-xs md:text-lg m-2 rounded-2xl" onClick={handleAddServiceNav}>
               <img src={add} alt="add" className="mr-3" />
               <p>Agregar nuevo</p>
             </button>
@@ -73,19 +74,19 @@ function AdminDashboard() {
         </div>
         <div className="w-[95%] h-[5%] md:h-[7%] rounded-xl  flex justify-start items-center bg-gray-100">
           <div className="ml-2 md:ml-6 w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl">Cliente</p>
+            <p className="text-xs font-light md:text-xl">Cliente</p>
           </div>
           <div className="w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl">Servicio</p>
+            <p className="text-xs font-light md:text-xl">Servicio</p>
           </div>
           <div className="w-[30%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl">Email</p>
+            <p className="text-xs font-light md:text-xl">Email</p>
           </div>
           <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl">Estatus</p>
+            <p className="text-xs font-light md:text-xl">Estatus</p>
           </div>
           <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl">Action</p>
+            <p className="text-xs font-light md:text-xl">Action</p>
           </div>
         </div>
         <div className="w-[95%] h-[70%] flex items-center justify-start flex-col">
@@ -95,16 +96,13 @@ function AdminDashboard() {
             </div>
             <p className="mt-10 font-thin text-3xl">No Result Found</p>
           </div>}
-          {isLoading && <div className="w-[95%] h-[70%] bg-primary-color flex items-center justify-center absolute rounded-xl top-[10%] left-[8.35%] bg-opacity-20">
-                <svg aria-hidden="true" className="w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-primary-on-hover" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                </svg>
-                <span className="sr-only">Loading...</span>
-           </div>}
+          {isLoading && array.map((item, index)=>(
+            <SkeletalLoading key={index}/>
+           ))
+          }
           {
             data?.services.map((service: any)=>(
-              <ServiceList Name={service?.clientName} Service={service?.serviceName} Email={service?.email} status={service?.status} id={service?._id}/>
+              <ServiceList Name={service?.clientName} Service={service?.serviceName} Email={service?.email} status={service?.status} id={service?._id} page={page}/>
             ))
           }
         </div>

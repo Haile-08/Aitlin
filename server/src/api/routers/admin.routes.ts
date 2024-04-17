@@ -33,6 +33,15 @@ const adminRoutHandler = (router: Router) => {
   
   // get all the service bill
   router.get('/admin/service/nurses', authMiddleWare, adminController.handleGetAllNurse);
+
+  // update the service bill
+  router.put('/admin/service/bill', authMiddleWare, multerUpload, adminController.handleUpdateABill);
+
+  // update the service bill
+  router.put('/admin/service/binnacle', authMiddleWare, multerUpload, adminController.handleUpdateABinnacle);
+  
+  // update the service bill
+  router.put('/admin/service/nurses', authMiddleWare, multerUpload, adminController.handleUpdateANurse);
 };
 
 export default adminRoutHandler;

@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import { adminRoutHandler, authRoutHandler } from '..';
+import { adminRoutHandler, authRoutHandler, clientRoutHandler } from '..';
 
 /**
  * route handler to the express application
@@ -17,6 +17,9 @@ const expressRouteHandler = (app: Express) => {
 
   // admin router
   adminRoutHandler(router);
+
+  // client router
+  clientRoutHandler(router);
 };
 
 export default expressRouteHandler;
