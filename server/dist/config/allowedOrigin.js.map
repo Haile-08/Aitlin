@@ -1,1 +1,1 @@
-{"version":3,"file":"allowedOrigin.js","sourceRoot":"","sources":["../../src/config/allowedOrigin.ts"],"names":[],"mappings":";;AAAA,MAAM,cAAc,GAAG;IACrB,MAAM,EAAE,uBAAuB;IAC/B,WAAW,EAAE,IAAI;CAClB,CAAC;AAEF,kBAAe,cAAc,CAAC"}
+{"version":3,"file":"allowedOrigin.js","sourceRoot":"","sources":["../../src/config/allowedOrigin.ts"],"names":[],"mappings":";;AAAA,MAAM,cAAc,GAAG;IACrB,MAAM,EAAE,2BAA2B;IACnC,WAAW,EAAE,IAAI;CAClB,CAAC;AAEF,kBAAe,cAAc,CAAC"}
