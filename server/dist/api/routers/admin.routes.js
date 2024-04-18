@@ -13,6 +13,8 @@ const adminRoutHandler = (router) => {
     router.post('/admin/add', authMiddleWare_1.default, __1.adminController.handleAddClient);
     // get all the clients route
     router.get('/admin/service', authMiddleWare_1.default, __1.adminController.handleGetAllClient);
+    // get all the clients route
+    router.get('/admin/service/get', authMiddleWare_1.default, __1.adminController.handleGetASingleService);
     // update the status of the service
     router.put('/admin/service/status', authMiddleWare_1.default, __1.adminController.handleServiceStatus);
     // add a new bill

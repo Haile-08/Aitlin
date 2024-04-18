@@ -148,6 +148,29 @@ class adminController {
   }
 
   /**
+     * get all clients
+     * @param req request object
+     * @param res response object
+     */
+  static async handleGetASingleService(req: Request, res: Response) {
+    try{
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const serviceId: any = req.query.serviceId || '';
+
+      const services = await Service.find({ _id: serviceId });
+
+      res.status(200).json({
+        message: 'Services fetched successfully',
+        success: true,
+        data: services,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error', success: false });
+    }
+  }
+
+  /**
      * update the service status
      * @param req request object
      * @param res response object
@@ -260,7 +283,7 @@ class adminController {
               name: service.clientName,
               email: 'binnacle',
               password: undefined,
-              link: `http://localhost:5173/${blog.files}`
+              link: `https://aitlin.vercel.app/${blog.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -374,7 +397,7 @@ class adminController {
               name: service.clientName,
               email: 'nurse',
               password: undefined,
-              link: `http://localhost:5173/${nurse.files}`
+              link: `https://aitlin.vercel.app/${nurse.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -482,7 +505,7 @@ class adminController {
               name: service.clientName,
               email: 'bill',
               password: undefined,
-              link: `http://localhost:5173/${bill.files}`
+              link: `https://aitlin.vercel.app/${bill.files}`
             },
             './template/documentNotification.handlebars'
           );

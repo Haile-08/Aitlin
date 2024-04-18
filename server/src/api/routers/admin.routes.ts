@@ -13,6 +13,9 @@ const adminRoutHandler = (router: Router) => {
   // get all the clients route
   router.get('/admin/service', authMiddleWare, adminController.handleGetAllClient);
 
+  // get all the clients route
+  router.get('/admin/service/get', authMiddleWare, adminController.handleGetASingleService);
+
   // update the status of the service
   router.put('/admin/service/status', authMiddleWare, adminController.handleServiceStatus);
 

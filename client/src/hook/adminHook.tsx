@@ -126,3 +126,25 @@ export const editServiceData = async ({ data, token, page }: any) => {
 
   return client;
 };
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const retrieveASingleService = async ({serviceId, token}: any) => {
+  const client = await axiosBaseURL
+    .get(`/v1/admin/service/get/?serviceId=${serviceId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      console.log(resData.data.blog);
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  return client;
+};

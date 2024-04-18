@@ -4,12 +4,16 @@ import arrowUp from '../../assets/arrowUp.svg';
 import { Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useQuery } from "react-query";
+import { retrieveASingleService } from "../../hook/adminHook";
 
 function ClientDocument() {
     const [documents, setDocuments] = useState("bill");
     const [filterBool, setFilterBool] = useState(true);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const user = useSelector((state: any) => state.auth.user);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const token = useSelector((state: any) => state.auth.token);
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,6 +22,15 @@ function ClientDocument() {
     const Service: any = searchParams.get("service");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Name: any = searchParams.get("name");
+
+    const { data } = useQuery({
+      queryKey: ["service", id],
+      queryFn: () => retrieveASingleService({serviceId: id, token}),
+      keepPreviousData: true,
+    });
+    const billArchive = data?.data[0].billArchive;
+    const blogArchive = data?.data[0].blogArchive;
+    const nurseArchive = data?.data[0].nurseArchive;
   
     const handleBillNav = (e: { preventDefault: () => void; })=>{
       e.preventDefault();
@@ -87,7 +100,7 @@ function ClientDocument() {
             </div>
           </div>
           <div className="w-10/12 bg-white h-[78%] rounded-xl flex justify-start items-center flex-col shadow-md">
-            <Outlet context={[filterBool, id]}/>
+            <Outlet context={[filterBool, id, billArchive, blogArchive, nurseArchive]}/>
           </div>
       </div>
     )

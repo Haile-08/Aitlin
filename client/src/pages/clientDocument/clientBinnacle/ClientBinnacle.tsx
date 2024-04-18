@@ -6,10 +6,11 @@ import { useQuery, useQueryClient } from "react-query";
 import { retrieveService } from "../../../hook/adminHook";
 import empty from '../../../assets/empty.svg';
 
-type OutletContextType = [boolean, string];
+type OutletContextType = [boolean, string, string, string, string];
 
 function ClientBinnacle() {
-    const [filterBool, id] = useOutletContext() as OutletContextType;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [filterBool, id, _billArchive, blogArchive, _nurseArchive] = useOutletContext() as OutletContextType;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = useSelector((state: any) => state.auth.token);
     const [search, setSearch] = useState("");
@@ -19,6 +20,27 @@ function ClientBinnacle() {
       queryKey: ["Binnacle", search],
       queryFn: () => retrieveService({page:"Binnacle" ,filter: filterBool, search, token, id}),
     });
+
+    const handleDownload = async () => {
+      try {
+          const response = await fetch(`https://aitlin.onrender.com/Archive/${blogArchive}`);
+          const blob = await response.blob();
+  
+          // Create a URL for the blob
+          const blobUrl = window.URL.createObjectURL(blob);
+  
+          // Create a temporary link element
+          const tempLink = document.createElement('a');
+          tempLink.href = blobUrl;
+          tempLink.setAttribute('download', blogArchive); // Set the filename for download
+          tempLink.click();
+  
+          // Clean up by revoking the blob URL after the download is complete
+          window.URL.revokeObjectURL(blobUrl);
+      } catch (error) {
+          console.error('Error downloading file:', error);
+      }
+    };
 
     useEffect(() => {
       queryClient.removeQueries();
@@ -41,7 +63,7 @@ function ClientBinnacle() {
                 <input value={search} onChange={(e)=> setSearch(e.target.value)} type="search" id="default-search" className="block outline-none w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." required />
                 </div>
               </form>
-              <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-5 py-2 text-xs md:text-lg m-2 rounded-xl">
+              <button onClick={handleDownload} className="flex bg-primary-color font-roboto text-white justify-center items-center px-5 py-2 text-xs md:text-lg m-2 rounded-xl">
                 <p>Descargar</p>
               </button>
               </div>

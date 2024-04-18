@@ -144,6 +144,29 @@ class adminController {
         });
     }
     /**
+       * get all clients
+       * @param req request object
+       * @param res response object
+       */
+    static handleGetASingleService(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const serviceId = req.query.serviceId || '';
+                const services = yield database_1.Service.find({ _id: serviceId });
+                res.status(200).json({
+                    message: 'Services fetched successfully',
+                    success: true,
+                    data: services,
+                });
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
+    /**
        * update the service status
        * @param req request object
        * @param res response object
@@ -233,7 +256,7 @@ class adminController {
                             name: service.clientName,
                             email: 'binnacle',
                             password: undefined,
-                            link: `http://localhost:5173/${blog.files}`
+                            link: `https://aitlin.vercel.app/${blog.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -322,7 +345,7 @@ class adminController {
                             name: service.clientName,
                             email: 'nurse',
                             password: undefined,
-                            link: `http://localhost:5173/${nurse.files}`
+                            link: `https://aitlin.vercel.app/${nurse.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -405,7 +428,7 @@ class adminController {
                             name: service.clientName,
                             email: 'bill',
                             password: undefined,
-                            link: `http://localhost:5173/${bill.files}`
+                            link: `https://aitlin.vercel.app/${bill.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -559,7 +582,46 @@ class adminController {
                 if (!updatedBill) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
-                res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBill });
+                const service = yield database_1.Service.findById(serviceId);
+                const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.billArchive) ? service === null || service === void 0 ? void 0 : service.billArchive : 'none.pdf');
+                if (fs_1.default.existsSync(updateFilePath)) {
+                    fs_1.default.unlinkSync(updateFilePath);
+                }
+                const billFiles = yield database_1.Bill.find({ serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                billFiles.map((bill) => {
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.files);
+                });
+                const id = (0, uuid4_1.default)();
+                const zipFileName = id + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                // Check if the target directory exists, create it if it doesn't
+                if (!fs_1.default.existsSync('public/Archive')) {
+                    fs_1.default.mkdirSync('public/Archive', { recursive: true });
+                }
+                yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { billArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    console.log('Archive created successfully.');
+                    res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBill });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    throw err;
+                });
             }
             catch (error) {
                 res.status(500).json({ message: 'Internal server error', success: false });
@@ -598,7 +660,46 @@ class adminController {
                 if (!updatedBlog) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
-                res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBlog });
+                const service = yield database_1.Service.findById(serviceId);
+                const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.blogArchive) ? service === null || service === void 0 ? void 0 : service.blogArchive : 'none.pdf');
+                if (fs_1.default.existsSync(updateFilePath)) {
+                    fs_1.default.unlinkSync(updateFilePath);
+                }
+                const blogFiles = yield database_1.Blog.find({ serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                blogFiles.map((blog) => {
+                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files);
+                });
+                const id = (0, uuid4_1.default)();
+                const zipFileName = id + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                // Check if the target directory exists, create it if it doesn't
+                if (!fs_1.default.existsSync('public/Archive')) {
+                    fs_1.default.mkdirSync('public/Archive', { recursive: true });
+                }
+                yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { blogArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    console.log('Archive created successfully.');
+                    res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBlog });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    throw err;
+                });
             }
             catch (error) {
                 res.status(500).json({ message: 'Internal server error', success: false });
@@ -624,8 +725,7 @@ class adminController {
                     });
                 }
                 const nurse = yield database_1.Nurse.findById(serviceId);
-                const filePath = path_1.default.join(__dirname, 'public', (nurse === null || nurse === void 0 ? void 0 : nurse.files) || '');
-                console.log('file path', filePath);
+                const filePath = path_1.default.join('dist/public', (nurse === null || nurse === void 0 ? void 0 : nurse.files) || '');
                 if (fs_1.default.existsSync(filePath)) {
                     fs_1.default.unlinkSync(filePath);
                     console.log('File removed successfully.');
@@ -634,11 +734,50 @@ class adminController {
                     console.log('File does not exist.');
                 }
                 const now = new Date();
-                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment, Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment, Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedNurse) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
-                res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedNurse });
+                const service = yield database_1.Service.findById(serviceId);
+                const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
+                if (fs_1.default.existsSync(updateFilePath)) {
+                    fs_1.default.unlinkSync(updateFilePath);
+                }
+                const nurseFiles = yield database_1.Nurse.find({ serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                nurseFiles.map((nurse) => {
+                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files);
+                });
+                const id = (0, uuid4_1.default)();
+                const zipFileName = id + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                // Check if the target directory exists, create it if it doesn't
+                if (!fs_1.default.existsSync('public/Archive')) {
+                    fs_1.default.mkdirSync('public/Archive', { recursive: true });
+                }
+                yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { nurseArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    console.log('Archive created successfully.');
+                    res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedNurse });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    throw err;
+                });
             }
             catch (error) {
                 res.status(500).json({ message: 'Internal server error', success: false });
