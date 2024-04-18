@@ -17,6 +17,8 @@ const database_1 = require("../../database");
 const utils_1 = require("../../utils");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+const archiver_1 = __importDefault(require("archiver"));
+const uuid4_1 = __importDefault(require("uuid4"));
 /* Represent a run time controller*/
 class adminController {
     /**
@@ -191,23 +193,62 @@ class adminController {
                     serviceId,
                     period,
                     comment,
-                    files: file.path.split('/')[1],
+                    files: file.path.split('/')[2],
                 });
-                if (service.Notification) {
-                    (0, utils_1.sendEmail)(service.email, 'New Binnacle document', {
-                        name: service.clientName,
-                        email: 'binnacle',
-                        password: undefined,
-                        link: `https://aitlin.vercel.app/${blog.files}`
-                    }, './template/documentNotification.handlebars');
+                const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.blogArchive) ? service === null || service === void 0 ? void 0 : service.blogArchive : 'none.pdf');
+                if (fs_1.default.existsSync(filePath)) {
+                    fs_1.default.unlinkSync(filePath);
                 }
-                return res.status(201).json({
-                    message: 'Bill created successfully',
-                    success: true,
-                    data: blog,
+                const blogFiles = yield database_1.Blog.find({ serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                blogFiles.map((blog) => {
+                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files);
+                });
+                const id = (0, uuid4_1.default)();
+                const zipFileName = id + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                // Check if the target directory exists, create it if it doesn't
+                if (!fs_1.default.existsSync('public/Archive')) {
+                    fs_1.default.mkdirSync('public/Archive', { recursive: true });
+                }
+                yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { blogArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    console.log('Archive created successfully.');
+                    if (service.Notification) {
+                        (0, utils_1.sendEmail)(service.email, 'New Binnacle document', {
+                            name: service.clientName,
+                            email: 'binnacle',
+                            password: undefined,
+                            link: `http://localhost:5173/${blog.files}`
+                        }, './template/documentNotification.handlebars');
+                    }
+                    return res.status(201).json({
+                        message: 'Bill created successfully',
+                        success: true,
+                        data: blog,
+                    });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    throw err;
                 });
             }
             catch (error) {
+                console.log(error);
                 res.status(500).json({ message: 'Internal server error', success: false });
             }
         });
@@ -229,7 +270,6 @@ class adminController {
                         success: false
                     });
                 }
-                console.log('format', format);
                 const service = yield database_1.Service.findById(serviceId);
                 if (!service) {
                     return res.json({
@@ -242,20 +282,58 @@ class adminController {
                     Name,
                     Archive: Name + '.' + format.split('/')[1],
                     comment,
-                    files: file.path.split('/')[1],
+                    files: file.path.split('/')[2],
                 });
-                if (service.Notification) {
-                    (0, utils_1.sendEmail)(service.email, 'New nurse document', {
-                        name: service.clientName,
-                        email: 'nurse',
-                        password: undefined,
-                        link: `https://aitlin.vercel.app/${nurse.files}`
-                    }, './template/documentNotification.handlebars');
+                const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
+                if (fs_1.default.existsSync(filePath)) {
+                    fs_1.default.unlinkSync(filePath);
                 }
-                return res.status(201).json({
-                    message: 'Bill created successfully',
-                    success: true,
-                    data: nurse,
+                const nurseFiles = yield database_1.Nurse.find({ serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                nurseFiles.map((nurse) => {
+                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files);
+                });
+                const id = (0, uuid4_1.default)();
+                const zipFileName = id + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                // Check if the target directory exists, create it if it doesn't
+                if (!fs_1.default.existsSync('public/Archive')) {
+                    fs_1.default.mkdirSync('public/Archive', { recursive: true });
+                }
+                yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { nurseArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    console.log('Archive created successfully.');
+                    if (service.Notification) {
+                        (0, utils_1.sendEmail)(service.email, 'New nurse document', {
+                            name: service.clientName,
+                            email: 'nurse',
+                            password: undefined,
+                            link: `http://localhost:5173/${nurse.files}`
+                        }, './template/documentNotification.handlebars');
+                    }
+                    return res.status(201).json({
+                        message: 'Bill created successfully',
+                        success: true,
+                        data: nurse,
+                    });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    throw err;
                 });
             }
             catch (error) {
@@ -291,20 +369,54 @@ class adminController {
                     serviceId,
                     period,
                     comment,
-                    files: file.path.split('/')[1],
+                    files: file.path.split('/')[2],
                 });
-                if (service.Notification) {
-                    (0, utils_1.sendEmail)(service.email, 'New bill document', {
-                        name: service.clientName,
-                        email: 'bill',
-                        password: undefined,
-                        link: `https://aitlin.vercel.app/${bill.files}`
-                    }, './template/documentNotification.handlebars');
+                const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
+                if (fs_1.default.existsSync(filePath)) {
+                    fs_1.default.unlinkSync(filePath);
                 }
-                return res.status(201).json({
-                    message: 'Bill created successfully',
-                    success: true,
-                    data: bill,
+                const billFiles = yield database_1.Bill.find({ serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                billFiles.map((bill) => {
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.files);
+                });
+                const id = (0, uuid4_1.default)();
+                const zipFileName = id + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { billArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    console.log('Archive created successfully.');
+                    if (service.Notification) {
+                        (0, utils_1.sendEmail)(service.email, 'New bill document', {
+                            name: service.clientName,
+                            email: 'bill',
+                            password: undefined,
+                            link: `http://localhost:5173/${bill.files}`
+                        }, './template/documentNotification.handlebars');
+                    }
+                    return res.status(201).json({
+                        message: 'Bill created successfully',
+                        success: true,
+                        data: bill,
+                    });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    throw err;
                 });
             }
             catch (error) {

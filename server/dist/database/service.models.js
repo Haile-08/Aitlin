@@ -26,6 +26,18 @@ const serviceSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    billArchive: {
+        type: String,
+        default: '',
+    },
+    nurseArchive: {
+        type: String,
+        default: '',
+    },
+    blogArchive: {
+        type: String,
+        default: '',
+    },
     Notification: {
         type: Boolean,
         default: false,

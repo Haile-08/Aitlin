@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { addClient } from '../../../hook/adminHook';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpSchema = z.object({
     Name: z.string().min(1),
@@ -19,6 +20,7 @@ function AddService() {
   const [notification, setNotification] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = useSelector((state: any) => state.auth.token);
@@ -35,6 +37,7 @@ function AddService() {
           setIsError(true);
           setErrorMessage(data.message);
         }
+        navigate('/Admin/Dashboard');
     },
     onError: () => {
       console.log('error');

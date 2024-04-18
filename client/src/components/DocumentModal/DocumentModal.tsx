@@ -7,6 +7,7 @@ import pdfIcon from '../../assets/pdf.png';
 import excelIcon from '../../assets/excel.png';
 import powerpointIcon from '../../assets/powerpoint.png';
 import wordIcon from '../../assets/word.png';
+import xmlIcon from '../../assets/xml.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -105,7 +106,7 @@ function DocumentModal({setIsOpen, documents, serviceId}: any) {
                         <input 
                             id="fileInput"
                             type="file"
-                            accept='.xlsx, .xls, .pdf, .doc, .docx, .ppt, .pptx'
+                            accept='.xlsx, .xls, .pdf, .doc, .docx, .ppt, .pptx, .xml'
                             onChange={handleImage} 
                             className="hidden"
                         />
@@ -119,6 +120,17 @@ function DocumentModal({setIsOpen, documents, serviceId}: any) {
                         </div>
                         <div className="w-full h-[50%] flex justify-center items-center" >
                             <img src={pdfIcon} alt="pdf" className='w-9'/>
+                        </div>
+                    </div>}
+        
+                    {image?.type == "application/xml" || image?.type == "text/xml" &&  <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                        <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
+                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
+                                <img src={closeModal} alt="close" className='w-3 '/>
+                            </div>
+                        </div>
+                        <div className="w-full h-[50%] flex justify-center items-center" >
+                            <img src={xmlIcon} alt="pdf" className='w-9'/>
                         </div>
                     </div>}
                     {image?.type == "application/msword" || image?.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
@@ -151,6 +163,7 @@ function DocumentModal({setIsOpen, documents, serviceId}: any) {
                             <img src={powerpointIcon} alt="pdf" className='w-9'/>
                         </div>
                     </div>}
+                    
                 </div>
                 <div className="mt-3 w-full flex justify-start items-center">
                     <button type='submit' className="mr-2 flex items-center justify-center px-10 py-3 bg-primary-color text-white font-roboto rounded-2xl border-2 border-primary-color shadow-sm">Guardar</button>
