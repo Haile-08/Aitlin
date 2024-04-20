@@ -42,14 +42,19 @@ const sendEmail = (email, subject, payload, template) => __awaiter(void 0, void 
         };
         // Send email
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        transporter.sendMail(options(), (error, info) => {
-            if (error) {
-                console.log(error);
-            }
-            else {
-                console.log('email sent');
-            }
+        const res = yield new Promise((resolve, reject) => {
+            transporter.sendMail(options(), (error, info) => {
+                if (error) {
+                    console.error(error);
+                    resolve(false); // Reject the promise
+                }
+                else {
+                    console.log('Email sent:', info.response);
+                    resolve(true); // Resolve the promise
+                }
+            });
         });
+        return res;
     }
     catch (error) {
         return error;

@@ -6,13 +6,14 @@ import { useSelector } from "react-redux";
 import {  useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { retrieveClients } from "../../../hook/adminHook";
-import { RootState } from "../../../stores/store";
 
 function AdminDashboard() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.auth.user);
-  const token = useSelector((state: RootState) => state.auth.token);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useSelector((state: any) => state.auth.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const token = useSelector((state: any) => state.auth.token);
   const [page, setPage] = useState(0);
   const array = Array.from({ length: 9 });
 

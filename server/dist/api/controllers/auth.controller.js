@@ -142,7 +142,7 @@ class authController {
                 token: hash,
                 createdAt: Date.now(),
             }).save();
-            const link = `http://localhost:5173/password/reset/${resetToken}/${user._id}`;
+            const link = `https://aitlin.vercel.app/password/reset/${resetToken}/${user._id}`;
             (0, utils_1.sendEmail)(user.email, 'Password Reset Request', {
                 name: user.Name,
                 link: link,

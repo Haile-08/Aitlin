@@ -88,7 +88,7 @@ function DocumentModal({setIsOpen, documents, serviceId}: any) {
                 <img src={close} alt="close" className='cursor-pointer' onClick={()=>setIsOpen(false)}/>
             </div>
             <div className="mt-2 w-[95%] h-[5%] flex justify-center items-center font-roboto font-semibold text-2xl">
-                <p>Agregar factura</p>
+                <p>Agregar {documents == 'bill'? 'Factura':documents == 'binnacle'? 'Bitácora':'Enfermeras'}</p>
             </div>
             <form className='mt-3 w-[95%] h-[70%] flex flex-col justify-center items-start' onSubmit={handleSubmit(onSubmit)} >
                 <div className='w-full mb-5'>

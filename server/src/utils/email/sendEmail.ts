@@ -32,13 +32,19 @@ const sendEmail = async (email: string, subject: string, payload: Payload, templ
 
     // Send email
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    transporter.sendMail(options(), (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('email sent');
-      }
+    const res = await new Promise<boolean>((resolve, reject) => {
+      transporter.sendMail(options(), (error, info) => {
+        if (error) {
+          console.error(error);
+          resolve(false); // Reject the promise
+        } else {
+          console.log('Email sent:', info.response);
+          resolve(true); // Resolve the promise
+        }
+      });
     });
+
+    return res;
   } catch (error) {
     return error;
   }

@@ -9,7 +9,7 @@ function BinnacleList({index, period, comment, id}: any) {
   return (
     <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-6 border-b-[1.5px] border-black border-opacity-40 flex justify-start items-center">
         
-        {isOpen && <EditDocumentModal setIsOpen={setIsOpen}  documents={"bill"} serviceId={id}/>}
+        {isOpen && <EditDocumentModal setIsOpen={setIsOpen}  documents={"binnacle"} serviceId={id}/>}
         <div className="ml-2 md:ml-6 w-[25%] h-[90%] flex justify-start items-center font-roboto font-light">
           <p className="opacity-50 font-roboto font-light text-xs md:text-xl">Log {index}</p>
         </div>
