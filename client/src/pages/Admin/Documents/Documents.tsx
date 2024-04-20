@@ -88,7 +88,7 @@ function Documents() {
           </div>
         </div>
         <div className="w-[95%] md:w-10/12 bg-white h-[73%] md:h-[75%] rounded-xl flex justify-start items-center flex-col shadow-md">
-          <Outlet context={[setIsOpen, filterBool, id]}/>
+          <Outlet context={[setIsOpen, isOpen, filterBool, id]}/>
         </div>
     </div>
   )

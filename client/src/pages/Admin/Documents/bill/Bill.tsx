@@ -8,10 +8,10 @@ import empty from '../../../../assets/empty.svg';
 import add from '../../../../assets/add.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OutletContextType = [any, string, string];
+type OutletContextType = [any, any, string, string];
 
 function Bill() {
-  const [setIsOpen, filterBool, id] = useOutletContext() as OutletContextType;
+  const [setIsOpen, isOpen, filterBool, id] = useOutletContext() as OutletContextType;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = useSelector((state: any) => state.auth.token);
   const [search, setSearch] = useState("");
@@ -26,17 +26,17 @@ function Bill() {
   useEffect(() => {
     queryClient.removeQueries();
     refetch();
-  }, [filterBool]);
+  }, [filterBool, isOpen]);
 
 
   console.log("data", data);
 
   return (
     <>
-          <div className="w-[95%] h-[15%] md:h-[10%]  flex justify-between items-center flex-row">
-            <p className="font-roboto font-extrabold text-xl md:text-3xl">Facturas</p>
-            <div className="flex ml-16 md:ml-0">
-            <form className="w-[70%] m-0 md:w-[60%] md:mx-auto flex items-center justify-center" >   
+      <div className="w-[95%] h-[15%] md:h-[10%]  flex justify-between items-center flex-row">
+          <p className="font-roboto font-extrabold text-xl md:text-3xl">Facturas</p>
+          <div className="flex ml-16 md:ml-0">
+          <form className="w-[70%] m-0 md:w-[60%] md:mx-auto flex items-center justify-center" >   
               <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
               <div className="relative">
                 <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">

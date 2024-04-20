@@ -8,10 +8,10 @@ import empty from '../../../../assets/empty.svg';
 import add from '../../../../assets/add.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OutletContextType = [any, string, string];
+type OutletContextType = [any, any, string, string];
 
 function  Nurses() {
-  const [setIsOpen, filterBool, id] = useOutletContext() as OutletContextType;  
+  const [setIsOpen, isOpen ,filterBool, id] = useOutletContext() as OutletContextType;  
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = useSelector((state: any) => state.auth.token);
   const [search, setSearch] = useState("");
@@ -26,7 +26,7 @@ function  Nurses() {
   useEffect(() => {
     queryClient.removeQueries();
     refetch();
-  }, [filterBool]);
+  }, [filterBool, isOpen]);
 
   console.log("data", data);
 

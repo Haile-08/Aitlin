@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { store } from '../stores/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persister, store } from '../stores/store';
 import { Provider } from 'react-redux';
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
@@ -21,7 +22,9 @@ function AppProvider({ children }: any) {
     <>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
-          {children}
+          <PersistGate loading={null} persistor={persister}>
+            {children}
+          </PersistGate>
         </Provider>
       </QueryClientProvider>
     </>
