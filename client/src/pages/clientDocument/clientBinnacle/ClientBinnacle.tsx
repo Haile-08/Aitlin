@@ -1,10 +1,11 @@
 import {  useOutletContext } from "react-router-dom";
-import { ClientBinnacleList} from "../../../components";
+import { ClientBinnacleList, SkeletalLoading} from "../../../components";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { retrieveService } from "../../../hook/adminHook";
 import empty from '../../../assets/empty.svg';
+import downloadIcon from '../../../assets/download.svg';
 
 type OutletContextType = [boolean, string, string, string, string];
 
@@ -15,15 +16,16 @@ function ClientBinnacle() {
     const token = useSelector((state: any) => state.auth.token);
     const [search, setSearch] = useState("");
     const queryClient = useQueryClient();
+    const array = Array.from({ length: 9 });
 
-    const { data, refetch} = useQuery({
+    const { data, refetch, isLoading} = useQuery({
       queryKey: ["Binnacle", search],
       queryFn: () => retrieveService({page:"Binnacle" ,filter: filterBool, search, token, id}),
     });
 
     const handleDownload = async () => {
       try {
-          const response = await fetch(`https://aitlin.onrender.com/Archive/${blogArchive}`);
+          const response = await fetch(`http://localhost:8000/Archive/${blogArchive}`);
           const blob = await response.blob();
   
           // Create a URL for the blob
@@ -49,10 +51,10 @@ function ClientBinnacle() {
 
     return (
       <>
-        <div className="w-[95%] h-[15%] md:h-[10%]  flex justify-between items-center flex-col md:flex-row">
-              <p className="font-roboto font-extrabold text-2xl md:text-3xl">Bitácoras</p>
-              <div className="flex">
-              <form className="max-w-md mx-auto flex items-center justify-center" >   
+        <div className="w-[95%] h-[15%] md:h-[10%]  flex justify-between items-center flex-row">
+              <p className="font-roboto font-extrabold text-xl md:text-3xl">Bitácoras</p>
+              <div className="flex ml-16 md:ml-0">
+              <form className="w-[70%] m-0 md:w-[60%] md:mx-auto flex items-center justify-center" >   
                 <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -64,7 +66,8 @@ function ClientBinnacle() {
                 </div>
               </form>
               <button onClick={handleDownload} className="flex bg-primary-color font-roboto text-white justify-center items-center px-5 py-2 text-xs md:text-lg m-2 rounded-xl">
-                <p>Descargar</p>
+                <p className="hidden md:flex">Descargar</p>
+                <img src={downloadIcon} alt="add" className="flex md:hidden py-2"/>
               </button>
               </div>
             </div>
@@ -72,10 +75,10 @@ function ClientBinnacle() {
               <div className="ml-2 md:ml-6 w-[25%] h-[90%] flex justify-start items-center font-roboto font-medium">
                 <p className="text-xs md:text-xl">Bitácoras</p>
               </div>
-              <div className="w-[30%] h-[90%] flex justify-start items-center font-roboto font-medium">
+              <div className="w-[50%] md:w-[30%] h-[90%] flex justify-start items-center font-roboto font-medium">
                 <p className="text-xs md:text-xl">Periodo</p>
               </div>
-              <div className="w-[50%] h-[90%] flex justify-start items-center font-roboto font-medium">
+              <div className="w-[50%] h-[90%] hidden md:flex justify-start items-center font-roboto font-medium">
                 <p className="text-xs md:text-xl">Comentario</p>
               </div>
               <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-medium">
@@ -88,7 +91,11 @@ function ClientBinnacle() {
                 <img src={empty} alt="empty" className="w-60"/>
               </div>
             <p className="mt-10 font-thin text-3xl">No Result Found</p>
-          </div>}
+            </div>}
+            {isLoading && array.map((_item, index)=>(
+              <SkeletalLoading key={index}/>
+             ))
+            }
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
               data?.data.map((binnacle: any, index: Number)=>(

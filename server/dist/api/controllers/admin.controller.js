@@ -256,7 +256,7 @@ class adminController {
                             name: service.clientName,
                             email: 'binnacle',
                             password: undefined,
-                            link: `https://aitlin.vercel.app/${blog.files}`
+                            link: `http://localhost:5173/${blog.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -345,7 +345,7 @@ class adminController {
                             name: service.clientName,
                             email: 'nurse',
                             password: undefined,
-                            link: `https://aitlin.vercel.app/${nurse.files}`
+                            link: `http://localhost:5173/${nurse.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -428,7 +428,7 @@ class adminController {
                             name: service.clientName,
                             email: 'bill',
                             password: undefined,
-                            link: `https://aitlin.vercel.app/${bill.files}`
+                            link: `http://localhost:5173/${bill.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({

@@ -51,7 +51,7 @@ function AdminDashboard() {
                 <Logout/>
             </div>
         </div>
-      <div className="w-10/12 bg-white h-[87%] rounded-xl flex justify-start items-center flex-col shadow-md">
+      <div className="w-full md:w-10/12 bg-white h-[90%] md:h-[87%] rounded-none md:rounded-xl flex justify-start items-center flex-col shadow-md">
         <div className="w-[95%] h-[15%] md:h-[10%]  flex justify-between items-center flex-col md:flex-row">
             <p className="font-roboto font-extrabold text-2xl md:text-3xl">Servicio</p>
             <div className="flex">
@@ -66,26 +66,26 @@ function AdminDashboard() {
               <input value={search} onChange={(e)=> setSearch(e.target.value)} type="search" id="default-search" className="block outline-none w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." required />
               </div>
             </form>
-            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 text-xs md:text-lg m-2 rounded-2xl" onClick={handleAddServiceNav}>
-              <img src={add} alt="add" className="mr-3" />
-              <p>Agregar nuevo</p>
+            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 md:px-4 md:py-3 text-xs md:text-lg m-2 rounded-2xl" onClick={handleAddServiceNav}>
+              <img src={add} alt="add" className="mr-0 md:mr-3" />
+              <p className="hidden md:flex">Agregar nuevo</p>
             </button>
             </div>
         </div>
         <div className="w-[95%] h-[5%] md:h-[7%] rounded-xl  flex justify-start items-center bg-gray-100">
-          <div className="ml-2 md:ml-6 w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="ml-2 md:ml-6 w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Cliente</p>
           </div>
-          <div className="w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Servicio</p>
           </div>
-          <div className="w-[30%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="hidden md:flex w-[30%] h-[90%] justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Email</p>
           </div>
-          <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="w-[20%] md:w-[15%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Estatus</p>
           </div>
-          <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="w-[20%] md:w-[15%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Action</p>
           </div>
         </div>

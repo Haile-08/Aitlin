@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import eye from '../../assets/show.png'
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,20 +18,23 @@ function ClientServiceList({Name, Service, Email, status, id}:any) {
 
     return (
         <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-6 border-b-[1.5px] border-black border-opacity-50 flex justify-start items-center">
-              <div className="ml-2 md:ml-6 w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
+              <div className="ml-2 md:ml-6 w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
                 <p className="opacity-50 font-roboto font-light">{Name}</p>
               </div>
-              <div className="w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
+              <div className="w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
                 <p className="opacity-50 font-roboto font-light">{Service}</p>
               </div>
-              <div className="w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
+              <div className="w-[30%] h-[90%] hidden md:flex justify-start items-center font-roboto font-light">
                 <p className="opacity-50 font-roboto font-light">{Email}</p>
               </div>
               <div className="w-[15%] h-[90%] flex justify-start items-center opacity-50 font-roboto font-light">
                 {status? <p>Activo</p>: <p>Inactivo</p>}
               </div>
-              <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
-                <button className="text-white bg-primary-color px-3 py-1 rounded-xl" onClick={handleDocumentNav}>Ver documentos</button>   
+              <div className="w-[20%] md:w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
+                <button className="text-white bg-primary-color hidden md:flex px-3 py-1 md:px-6 md:py-2 rounded-xl text-xs md:text-xl"  onClick={handleDocumentNav}>Ver documentos</button>   
+                <button className="text-white bg-white md:bg-primary-color flex md:hidden  rounded-xl text-xs md:text-xl" onClick={handleDocumentNav}>
+                  <img src={eye} alt="eye" className="w-[64%]" />  
+                </button>
               </div>
             </div>
       )

@@ -8,7 +8,7 @@ function Back({nav}: {nav: string}) {
     navigate(nav);
   }
   return (
-    <div onClick={handleNav} className='flex justify-center items-center mr-5 py-3 px-4 shadow-sm rounded-xl cursor-pointer bg-primary-color'>
+    <div onClick={handleNav} className='flex justify-center items-center mr-2 md:mr-5 py-3 px-4 shadow-sm rounded-xl cursor-pointer bg-primary-color'>
       <img src={back} alt="back" className='w-2.5' />
     </div>
   )

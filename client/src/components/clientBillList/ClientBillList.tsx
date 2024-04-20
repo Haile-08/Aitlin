@@ -5,7 +5,7 @@ function ClientBillList({index, period, comment, link}: any) {
 
     const handleDownload = async () => {
       try {
-          const response = await fetch(`https://aitlin.onrender.com/${link}`);
+          const response = await fetch(`http://localhost:8000/${link}`);
           const blob = await response.blob();
 
           // Create a URL for the blob
@@ -29,10 +29,10 @@ function ClientBillList({index, period, comment, link}: any) {
         <div className="ml-2 md:ml-6 w-[25%] h-[90%] flex justify-start items-center font-roboto font-light">
           <p className="opacity-50 font-roboto font-light">Invoice {index}</p>
         </div>
-        <div className="w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
+        <div className="w-[50%] md:w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
           <p className="opacity-50 font-roboto font-light">{period}</p>
         </div>
-        <div className="w-[50%] h-[90%] flex justify-start items-center font-roboto font-light">
+        <div className="w-[50%] h-[90%] hidden md:flex justify-start items-center font-roboto font-light">
           <p className="opacity-50 font-roboto font-light">{comment}</p>
         </div>
         <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">

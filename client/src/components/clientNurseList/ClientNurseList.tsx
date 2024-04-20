@@ -4,7 +4,7 @@ import downloadIcon from '../../assets/download.svg';
 function ClientNurseList({ Name, Archive, comment, link}: any) {
   const handleDownload = async () => {
     try {
-        const response = await fetch(`https://aitlin.onrender.com/${link}`);
+        const response = await fetch(`http://localhost:8000/${link}`);
         const blob = await response.blob();
 
         // Create a URL for the blob
@@ -25,13 +25,13 @@ function ClientNurseList({ Name, Archive, comment, link}: any) {
 
     return (
     <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-6 border-b-[1.5px] border-black border-opacity-40 flex justify-start items-center">
-        <div className="ml-2 md:ml-6 w-[25%] h-[90%] flex justify-start items-center font-roboto font-light">
+        <div className="ml-2 md:ml-6 w-[35%] md:w-[25%] h-[90%] flex justify-start items-center font-roboto font-light">
           <p className="opacity-50 font-roboto font-light">{Name}</p>
         </div>
-        <div className="w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
+        <div className="w-[40%] md:w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
           <p className="opacity-50 font-roboto font-light">{Archive}</p>
         </div>
-        <div className="w-[50%] h-[90%] flex justify-start items-center font-roboto font-light">
+        <div className="w-[50%] h-[90%] hidden md:flex justify-start items-center font-roboto font-light">
           <p className="opacity-50 font-roboto font-light">{comment}</p>
         </div>
         <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">

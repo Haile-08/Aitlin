@@ -59,8 +59,8 @@ function Documents() {
   return (
     <div className="w-dvw h-dvh bg-banner-color flex justify-start items-center flex-col">
         {isOpen && <DocumentModal setIsOpen={setIsOpen} documents={documents} serviceId={id}/>}
-        <div className="mb-10 mt-2 w-10/12 h-[7%] flex justify-between items-center">
-            <div className="flex justify-center items-end">
+        <div className="mb-10 mt-2 w-[90%] md:w-10/12 h-[7%] flex justify-between items-center">
+            <div className="flex justify-center items-center">
                 <Back nav={'/Admin/Dashboard'}/>
                 <p className="font-roboto font-extrabold text-xl md:text-2xl">Ver documentos</p>
             </div>
@@ -69,25 +69,25 @@ function Documents() {
                 <Logout/>
             </div>
         </div>
-        <div className="w-10/12 h-[3%] flex justify-between items-center">
-          <div className="flex justify-center items-start flex-col ml-5">
-            <h3 className="font-extrabold font-roboto text-xl">{Name}</h3>
-            <p className="text-base mt-1 font-normal">{Service}</p>
+        <div className="w-[95%] md:w-10/12 h-[3%] flex justify-between items-center">
+          <div className="flex justify-center items-start flex-col ml-3 md:ml-5">
+            <h3 className="font-extrabold font-roboto text-base md:text-xl">{Name}</h3>
+            <p className="text-sm md:text-base mt-1 font-normal">{Service}</p>
           </div>
         </div>
-        <div className="my-3 w-10/12 h-[5%] flex justify-center items-center">
-          <div className=" w-[70%] flex items-center justify-end">
-            <button className={`mx-5 flex items-center justify-center px-10 py-2 ${documents == 'bill'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'bill'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBillNav}>Factura</button>
-            <button className={`mx-5 flex items-center justify-center px-10 py-2 ${documents == 'binnacle'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'binnacle'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBinnacleNav}>Bitácora</button>
-            <button className={`mx-5 flex items-center justify-center px-10 py-2 ${documents == 'Nurses'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'Nurses'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleNursesNav}>Enfermeras</button>
+        <div className="my-3 w-[100%] md:w-10/12 mt-8 md:mt-0 h-[5%] flex justify-center items-center">
+          <div className="w-[70%] flex items-center justify-end">
+            <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'bill'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'bill'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBillNav}>Factura</button>
+            <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'binnacle'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'binnacle'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBinnacleNav}>Bitácora</button>
+            <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'Nurses'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'Nurses'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleNursesNav}>Enfermeras</button>
             </div>
-          <div className="flex justify-end items-center w-[30%] cursor-pointer" onClick={()=> setFilterBool(!filterBool)}>
-            <p className="mx-3 font-semibold text-primary-color ">{filterBool? "Más reciente" : "Menos reciente"}</p>
-            <img src={arrowUp} alt="filter" />
-            <img src={arrowDown} alt="filter" />
+          <div className="flex justify-end items-center ml-2 md:ml-0 w-[20%] md:w-[30%] cursor-pointer" onClick={()=> setFilterBool(!filterBool)}>
+            <p className="mx-2 md:mx-3 font-semibold text-primary-color ">{filterBool? "Más reciente" : "Menos reciente"}</p>
+            <img src={arrowUp} alt="filter" className="hidden md:flex" />
+            <img src={arrowDown} alt="filter" className="hidden md:flex"/>
           </div>
         </div>
-        <div className="w-10/12 bg-white h-[75%] rounded-xl flex justify-start items-center flex-col shadow-md">
+        <div className="w-[95%] md:w-10/12 bg-white h-[73%] md:h-[75%] rounded-xl flex justify-start items-center flex-col shadow-md">
           <Outlet context={[setIsOpen, filterBool, id]}/>
         </div>
     </div>

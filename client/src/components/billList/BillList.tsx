@@ -11,13 +11,13 @@ function BillList({index, period, comment, id}: any) {
         
         {isOpen && <EditDocumentModal setIsOpen={setIsOpen}  documents={"bill"} serviceId={id}/>}
         <div className="ml-2 md:ml-6 w-[25%] h-[90%] flex justify-start items-center font-roboto font-light">
-          <p className="opacity-50 font-roboto font-light">Invoice {index}</p>
+          <p className="opacity-50 font-roboto font-light text-xs md:text-xl">Invoice {index}</p>
         </div>
-        <div className="w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
-          <p className="opacity-50 font-roboto font-light">{period}</p>
+        <div className="w-[50%] md:w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
+          <p className="opacity-50 font-roboto font-light text-xs md:text-xl">{period}</p>
         </div>
-        <div className="w-[50%] h-[90%] flex justify-start items-center font-roboto font-light">
-          <p className="opacity-50 font-roboto font-light">{comment}</p>
+        <div className="w-[50%] h-[90%] hidden md:flex justify-start items-center font-roboto font-light">
+          <p className="opacity-50 font-roboto font-light text-xs md:text-xl">{comment}</p>
         </div>
         <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
           <button className="text-white bg-primary-color px-3 py-3 rounded-xl"  onClick={()=> setIsOpen(!isOpen)}>
