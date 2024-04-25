@@ -20,6 +20,7 @@ const addSchema = z.object({
     comment: z
       .string()
       .min(3)
+      .optional()
 });
 type SignUpSchemaType = z.infer<typeof addSchema>;
 
@@ -56,7 +57,9 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
       }else {
         data.append("period", res.period);
       }
-      data.append("comment", res.comment);
+      if(res.comment){
+        data.append("comment", res.comment);
+      }
       data.append("serviceId", serviceId);
       if(documents === "Nurses"){
         data.append("format", image.type);

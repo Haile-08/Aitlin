@@ -1,5 +1,5 @@
 const allowedOrigins = {
-  origin: 'https://aitlin.vercel.app',
+  origin: 'http://localhost:5173',
   credentials: true,
 };
   

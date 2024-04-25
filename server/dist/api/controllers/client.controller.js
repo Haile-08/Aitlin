@@ -13,10 +13,10 @@ const database_1 = require("../../database");
 /* Represent a client controller*/
 class clientController {
     /**
-       * test the express api
-       * @param req request object
-       * @param res response object
-       */
+      * test the express api
+      * @param req request object
+      * @param res response object
+      */
     static handleGetAllService(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -37,6 +37,51 @@ class clientController {
                     success: true,
                     data: serviceList,
                     hasMore: endIndex < services.length,
+                });
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
+    /**
+      * get all notification
+      * @param req request object
+      * @param res response object
+      */
+    static handleGetAllNotification(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const clientId = req.query.clientId || '';
+                const notifications = yield database_1.Notification.find({ clientId: clientId, read: false });
+                res.status(200).json({
+                    message: 'notifications fetched successfully',
+                    success: true,
+                    data: notifications,
+                });
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
+    /**
+      * get all notification
+      * @param req request object
+      * @param res response object
+      */
+    static handleUpdateNotification(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.body;
+                const updatedNotification = yield database_1.Notification.findOneAndUpdate({ _id: id }, { $set: { read: true } }, { new: true });
+                res.status(200).json({
+                    message: 'notifications updated successfully',
+                    success: true,
+                    data: updatedNotification,
                 });
             }
             catch (err) {

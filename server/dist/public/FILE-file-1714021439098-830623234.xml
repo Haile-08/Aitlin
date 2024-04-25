@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<A2BBkConfirmation>
+<Booking ref='F1448010'>
+<Version>1.0</Version>
+<Booking_Status>OR</Booking_Status>
+<Company>Hoppa</Company>
+<Booking_date>14/11/2023</Booking_date>
+<Customer_name>MS Catherine Hardy</Customer_name>
+<CustomerMobile>+447801233778</CustomerMobile>
+<NumberOfVehicles>1</NumberOfVehicles>
+<Vehicle>Private transfer (1  -4 people)</Vehicle>
+<TransferType>RETURN</TransferType>
+<Journey1>
+<StartingPointType>AP</StartingPointType>
+<From>Thessaloniki Airport (Macedonia) (SKG)</From>
+<To>Nea Moudania</To>
+<Date>23/03/2024</Date>
+<Time>1810</Time>
+<GatewayFrom>LGW</GatewayFrom>
+<GatewayTo>LGW</GatewayTo>
+<GatewayInfo>EZY8243</GatewayInfo>
+<PickupDate></PickupDate>
+<PickupTime></PickupTime>
+<J1SearchByPickupTime>No</J1SearchByPickupTime>
+</Journey1>
+<Journey2>
+<StartingPointType>RT</StartingPointType>
+<From>Nea Moudania</From>
+<To>Thessaloniki Airport (Macedonia) (SKG)</To>
+<Date>30/03/2024</Date>
+<Time>1855</Time>
+<GatewayFrom>LGW</GatewayFrom>
+<GatewayTo>LGW</GatewayTo>
+<GatewayInfo>EZY8244</GatewayInfo>
+<PickupDate>30/03/2024</PickupDate>
+<PickupTime>1610</PickupTime>
+<J2SearchByPickupTime>No</J2SearchByPickupTime>
+</Journey2>
+<SpecificLocation>Ikos Oceania</SpecificLocation>
+<AdditionalAddressInfo1></AdditionalAddressInfo1>
+<AdditionalAddressInfo2></AdditionalAddressInfo2>
+<Passengers>3</Passengers>
+<Adults>2</Adults>
+<Children>0</Children>
+<Infants>1</Infants>
+<Children_Age></Children_Age>
+<Requests></Requests>
+<Price>98</Price>
+<Agency></Agency>
+<Extras></Extras>
+</Booking>
+</A2BBkConfirmation>

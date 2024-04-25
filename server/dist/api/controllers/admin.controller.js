@@ -200,7 +200,7 @@ class adminController {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!period || !comment || !serviceId || !file.path) {
+                if (!period || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -216,9 +216,18 @@ class adminController {
                 const blog = yield database_1.Blog.create({
                     serviceId,
                     period,
-                    comment,
+                    comment: comment || '',
                     files: file.path.split('/')[2],
                 });
+                if (service.Notification) {
+                    yield database_1.Notification.create({
+                        clientId: service.clientId,
+                        serviceId,
+                        link: `http://localhost:5173/${blog.files}`,
+                        type: 'binnacle',
+                        read: false,
+                    });
+                }
                 const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.blogArchive) ? service === null || service === void 0 ? void 0 : service.blogArchive : 'none.pdf');
                 if (fs_1.default.existsSync(filePath)) {
                     fs_1.default.unlinkSync(filePath);
@@ -257,7 +266,7 @@ class adminController {
                             name: service.clientName,
                             email: 'binnacle',
                             password: undefined,
-                            link: `https://aitlin.vercel.app/${blog.files}`
+                            link: `http://localhost:5173/${blog.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -288,7 +297,7 @@ class adminController {
                 const { format, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!format || !Name || !comment || !serviceId || !file.path) {
+                if (!format || !Name || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -305,9 +314,18 @@ class adminController {
                     serviceId,
                     Name,
                     Archive: Name + '.' + format.split('/')[1],
-                    comment,
+                    comment: comment || '',
                     files: file.path.split('/')[2],
                 });
+                if (service.Notification) {
+                    yield database_1.Notification.create({
+                        clientId: service.clientId,
+                        serviceId,
+                        link: `http://localhost:5173/${nurse.files}`,
+                        type: 'nurse',
+                        read: false,
+                    });
+                }
                 const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
                 if (fs_1.default.existsSync(filePath)) {
                     fs_1.default.unlinkSync(filePath);
@@ -346,7 +364,7 @@ class adminController {
                             name: service.clientName,
                             email: 'nurse',
                             password: undefined,
-                            link: `https://aitlin.vercel.app/${nurse.files}`
+                            link: `http://localhost:5173/${nurse.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -376,7 +394,7 @@ class adminController {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!period || !comment || !serviceId || !file.path) {
+                if (!period || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -392,9 +410,18 @@ class adminController {
                 const bill = yield database_1.Bill.create({
                     serviceId,
                     period,
-                    comment,
+                    comment: comment || '',
                     files: file.path.split('/')[2],
                 });
+                if (service.Notification) {
+                    yield database_1.Notification.create({
+                        clientId: service.clientId,
+                        serviceId,
+                        link: `http://localhost:5173/${bill.files}`,
+                        type: 'bill',
+                        read: false,
+                    });
+                }
                 const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
                 if (fs_1.default.existsSync(filePath)) {
                     fs_1.default.unlinkSync(filePath);
@@ -429,7 +456,7 @@ class adminController {
                             name: service.clientName,
                             email: 'bill',
                             password: undefined,
-                            link: `https://aitlin.vercel.app/${bill.files}`
+                            link: `http://localhost:5173/${bill.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -563,7 +590,7 @@ class adminController {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!period || !comment || !serviceId || !file.path) {
+                if (!period || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -579,11 +606,20 @@ class adminController {
                     console.log('File does not exist.');
                 }
                 const now = new Date();
-                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment, period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedBill) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
                 const service = yield database_1.Service.findById(serviceId);
+                if (service === null || service === void 0 ? void 0 : service.Notification) {
+                    yield database_1.Notification.create({
+                        clientId: service.clientId,
+                        serviceId,
+                        link: `http://localhost:5173/${bill === null || bill === void 0 ? void 0 : bill.files}`,
+                        type: 'bill',
+                        read: false,
+                    });
+                }
                 const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.billArchive) ? service === null || service === void 0 ? void 0 : service.billArchive : 'none.pdf');
                 if (fs_1.default.existsSync(updateFilePath)) {
                     fs_1.default.unlinkSync(updateFilePath);
@@ -641,7 +677,7 @@ class adminController {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!period || !comment || !serviceId || !file.path) {
+                if (!period || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -657,11 +693,20 @@ class adminController {
                     console.log('File does not exist.');
                 }
                 const now = new Date();
-                const updatedBlog = yield database_1.Blog.findOneAndUpdate({ _id: serviceId }, { comment, period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedBlog = yield database_1.Blog.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedBlog) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
                 const service = yield database_1.Service.findById(serviceId);
+                if (service === null || service === void 0 ? void 0 : service.Notification) {
+                    yield database_1.Notification.create({
+                        clientId: service.clientId,
+                        serviceId,
+                        link: `http://localhost:5173/${blog === null || blog === void 0 ? void 0 : blog.files}`,
+                        type: 'binnacle',
+                        read: false,
+                    });
+                }
                 const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.blogArchive) ? service === null || service === void 0 ? void 0 : service.blogArchive : 'none.pdf');
                 if (fs_1.default.existsSync(updateFilePath)) {
                     fs_1.default.unlinkSync(updateFilePath);
@@ -719,7 +764,7 @@ class adminController {
                 const { format, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!format || !Name || !comment || !serviceId || !file.path) {
+                if (!format || !Name || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -735,11 +780,20 @@ class adminController {
                     console.log('File does not exist.');
                 }
                 const now = new Date();
-                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment, Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedNurse) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
                 const service = yield database_1.Service.findById(serviceId);
+                if (service === null || service === void 0 ? void 0 : service.Notification) {
+                    yield database_1.Notification.create({
+                        clientId: service.clientId,
+                        serviceId,
+                        link: `http://localhost:5173/${nurse === null || nurse === void 0 ? void 0 : nurse.files}`,
+                        type: 'nurse',
+                        read: false,
+                    });
+                }
                 const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
                 if (fs_1.default.existsSync(updateFilePath)) {
                     fs_1.default.unlinkSync(updateFilePath);

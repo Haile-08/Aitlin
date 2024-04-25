@@ -13,3 +13,4 @@ export { default as ClientBillList } from './clientBillList/ClientBillList';
 export { default as ClientBinnacleList } from './clientBinnacleList/ClientBinnacleList';
 export { default as ClientNurseList } from './clientNurseList/ClientNurseList';
 export { default as SkeletalLoading } from './SkeletalLoading/SkeletalLoading';
+export { default as NotificationData } from './Notification/Notification';

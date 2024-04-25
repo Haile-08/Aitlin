@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { Bill, Blog, Nurse, Service, User } from '../../database';
+import { Bill, Blog, Nurse, Service, User, Notification } from '../../database';
 import { sendEmail } from '../../utils';
 import path from 'path';
 import fs from 'fs';
@@ -206,7 +206,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
-      if (!period || !comment || !serviceId || !file.path) {
+      if (!period || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -224,10 +224,19 @@ class adminController {
       const blog = await Blog.create({
         serviceId,
         period,
-        comment,
+        comment: comment || '',
         files: file.path.split('/')[2],
       });
 
+      if (service.Notification){
+        await Notification.create({
+          clientId: service.clientId,
+          serviceId,
+          link: `${blog.files}`,
+          type: 'binnacle',
+          read: false,
+        });
+      }
       const filePath = path.join('dist/public/Archive', service?.blogArchive ? service?.blogArchive : 'none.pdf');
 
       if (fs.existsSync(filePath)) {
@@ -284,7 +293,7 @@ class adminController {
               name: service.clientName,
               email: 'binnacle',
               password: undefined,
-              link: `https://aitlin.vercel.app/${blog.files}`
+              link: `http://localhost:5173/${blog.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -317,7 +326,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
-      if (!format || !Name || !comment || !serviceId || !file.path) {
+      if (!format || !Name || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -337,9 +346,19 @@ class adminController {
         serviceId,
         Name,
         Archive: Name + '.' + format.split('/')[1],
-        comment,
+        comment: comment || '',
         files: file.path.split('/')[2],
       });
+
+      if (service.Notification){
+        await Notification.create({
+          clientId: service.clientId,
+          serviceId,
+          link: `${nurse.files}`,
+          type: 'nurse',
+          read: false,
+        });
+      }
 
 
       const filePath = path.join('dist/public/Archive', service?.nurseArchive ? service?.nurseArchive : 'none.pdf');
@@ -398,7 +417,7 @@ class adminController {
               name: service.clientName,
               email: 'nurse',
               password: undefined,
-              link: `https://aitlin.vercel.app/${nurse.files}`
+              link: `http://localhost:5173/${nurse.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -431,7 +450,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
-      if (!period || !comment || !serviceId || !file.path) {
+      if (!period || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -449,9 +468,19 @@ class adminController {
       const bill = await Bill.create({
         serviceId,
         period,
-        comment,
+        comment: comment || '',
         files: file.path.split('/')[2],
       });
+
+      if (service.Notification){
+        await Notification.create({
+          clientId: service.clientId,
+          serviceId,
+          link: `${bill.files}`,
+          type: 'bill',
+          read: false,
+        });
+      }
 
       const filePath = path.join('dist/public/Archive', service?.nurseArchive ? service?.nurseArchive : 'none.pdf');
 
@@ -506,7 +535,7 @@ class adminController {
               name: service.clientName,
               email: 'bill',
               password: undefined,
-              link: `https://aitlin.vercel.app/${bill.files}`
+              link: `http://localhost:5173/${bill.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -647,7 +676,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
-      if (!period || !comment || !serviceId || !file.path) {
+      if (!period || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -669,7 +698,7 @@ class adminController {
 
       const updatedBill = await Bill.findOneAndUpdate(
         { _id: serviceId },
-        { comment, period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { comment: comment || '', period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
         { new: true }
       );
 
@@ -678,6 +707,16 @@ class adminController {
       }
 
       const service = await Service.findById(serviceId);
+
+      if (service?.Notification){
+        await Notification.create({
+          clientId: service.clientId,
+          serviceId,
+          link: `${bill?.files}`,
+          type: 'bill',
+          read: false,
+        });
+      }
 
       const updateFilePath = path.join('dist/public/Archive', service?.billArchive ? service?.billArchive : 'none.pdf');
 
@@ -751,7 +790,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
-      if (!period || !comment || !serviceId || !file.path) {
+      if (!period || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -773,7 +812,7 @@ class adminController {
 
       const updatedBlog = await Blog.findOneAndUpdate(
         { _id: serviceId },
-        { comment, period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { comment: comment || '', period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
         { new: true }
       );
 
@@ -782,6 +821,16 @@ class adminController {
       }
       
       const service = await Service.findById(serviceId);
+
+      if (service?.Notification){
+        await Notification.create({
+          clientId: service.clientId,
+          serviceId,
+          link: `${blog?.files}`,
+          type: 'binnacle',
+          read: false,
+        });
+      }
 
       const updateFilePath = path.join('dist/public/Archive', service?.blogArchive ? service?.blogArchive : 'none.pdf');
 
@@ -854,7 +903,7 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
-      if (!format || !Name || !comment || !serviceId || !file.path) {
+      if (!format || !Name || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -876,7 +925,7 @@ class adminController {
 
       const updatedNurse = await Nurse.findOneAndUpdate(
         { _id: serviceId },
-        { comment, Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { comment: comment || '', Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
         { new: true }
       );
 
@@ -885,6 +934,16 @@ class adminController {
       }
 
       const service = await Service.findById(serviceId);
+
+      if (service?.Notification){
+        await Notification.create({
+          clientId: service.clientId,
+          serviceId,
+          link: `${nurse?.files}`,
+          type: 'nurse',
+          read: false,
+        });
+      }
 
       const updateFilePath = path.join('dist/public/Archive', service?.nurseArchive ? service?.nurseArchive : 'none.pdf');
 

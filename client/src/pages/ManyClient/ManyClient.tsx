@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useSelector } from "react-redux";
-import { ClientServiceList, Logout, SkeletalLoading } from "../../components";
+import { ClientServiceList, Logout, NotificationData, SkeletalLoading } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
-import { retrieveClientServices } from "../../hook/clientHook";
+import { retrieveClientNotification, retrieveClientServices } from "../../hook/clientHook";
 import empty from "../../assets/empty.svg";
+import notify from '../../assets/notify.png';
+import closeflat from '../../assets/closeflat.png';
 
 function ManyClient() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,6 +17,7 @@ function ManyClient() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const array = Array.from({ length: 9 });
 
   const { data, isPreviousData, refetch, isLoading } = useQuery({
@@ -21,10 +25,22 @@ function ManyClient() {
     queryFn: () => retrieveClientServices({page, clientId: user._id, search, token}),
     keepPreviousData: true,
   });
+  const notification = useQuery({
+    queryKey: ["client", user._id],
+    queryFn: () => retrieveClientNotification({clientId: user._id, token}),
+    staleTime: 20000 ,
+  });
 
   useEffect(() => {
     refetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  console.log("Notification", notification.data);
+
+  useEffect(()=>{
+    notification.refetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[isNotificationOpen]);
 
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -35,13 +51,36 @@ function ManyClient() {
     refetch();
   }
 
-  console.log(data);
-
   return (
     <div className="w-dvw h-dvh bg-banner-color flex justify-start items-center flex-col ">
+        {isNotificationOpen&& <div className="w-dvw h-dvh flex justify-end items-center  absolute z-40" >
+          <div className="h-dvh w-1/4 md:w-3/4 bg-primary-color bg-opacity-20 " onClick={()=>setIsNotificationOpen(false)}></div>
+          <div className="h-dvh w-3/4 md:w-1/4 bg-white flex items-center flex-col">
+            <div className="flex items-center justify-between w-[80%] mt-5 mb-10">
+              <p className="text-2xl font-bold font-roboto">Notification</p>
+              <img src={closeflat} alt="close" className="w-4 cursor-pointer" onClick={()=>setIsNotificationOpen(false)}/>
+            </div>
+            <div className="h-[90%] w-full flex justify-start flex-col items-center scrollbar scrollbar-track-white scrollbar-thin scrollbar-thumb-primary-color">
+            {notification?.data?.data?.map((notify: any)=>(
+              <NotificationData type={notify.type} link={notify.link} id={notify._id}/>
+            ))}
+            </div>
+          </div>
+        </div>}
         <div className="w-[95%] md:w-10/12 h-[10%] flex justify-between items-center">
             <p className="font-roboto font-extrabold text-2xl md:text-3xl">Dashboard</p>
             <div className="flex">
+                <div className="mr-5 flex justify-center items-center">
+                  {notification?.data?.data.length == 0? 
+                  <div className="w-6 h-full flex justify-center items-start">
+                    <p className="w-6 rounded-full flex justify-center items-center text-white bg-white"></p>
+                  </div>
+                  :  <div className="w-6 h-full flex justify-center items-start">
+                      <p className="w-5 h-5 text-xs rounded-full flex justify-center items-center text-white bg-primary-color">{notification?.data?.data.length}</p>
+                </div>
+                  }
+                  <img src={notify} alt="notification" className="h-8 cursor-pointer" onClick={()=>setIsNotificationOpen(true)}/>
+                </div>
                 <p className="mr-4 text-sm md:text-base bg-white rounded-xl shadow-md p-3 font-roboto">{user.Name}</p>
                 <Logout/>
             </div>
