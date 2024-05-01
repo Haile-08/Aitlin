@@ -223,7 +223,7 @@ class adminController {
                     yield database_1.Notification.create({
                         clientId: service.clientId,
                         serviceId,
-                        link: `http://localhost:5173/${blog.files}`,
+                        link: `${blog.files}`,
                         type: 'binnacle',
                         read: false,
                     });
@@ -321,7 +321,7 @@ class adminController {
                     yield database_1.Notification.create({
                         clientId: service.clientId,
                         serviceId,
-                        link: `http://localhost:5173/${nurse.files}`,
+                        link: `${nurse.files}`,
                         type: 'nurse',
                         read: false,
                     });
@@ -417,7 +417,7 @@ class adminController {
                     yield database_1.Notification.create({
                         clientId: service.clientId,
                         serviceId,
-                        link: `http://localhost:5173/${bill.files}`,
+                        link: `${bill.files}`,
                         type: 'bill',
                         read: false,
                     });
@@ -615,7 +615,7 @@ class adminController {
                     yield database_1.Notification.create({
                         clientId: service.clientId,
                         serviceId,
-                        link: `http://localhost:5173/${bill === null || bill === void 0 ? void 0 : bill.files}`,
+                        link: `${bill === null || bill === void 0 ? void 0 : bill.files}`,
                         type: 'bill',
                         read: false,
                     });
@@ -702,7 +702,7 @@ class adminController {
                     yield database_1.Notification.create({
                         clientId: service.clientId,
                         serviceId,
-                        link: `http://localhost:5173/${blog === null || blog === void 0 ? void 0 : blog.files}`,
+                        link: `${blog === null || blog === void 0 ? void 0 : blog.files}`,
                         type: 'binnacle',
                         read: false,
                     });
@@ -789,7 +789,7 @@ class adminController {
                     yield database_1.Notification.create({
                         clientId: service.clientId,
                         serviceId,
-                        link: `http://localhost:5173/${nurse === null || nurse === void 0 ? void 0 : nurse.files}`,
+                        link: `${nurse === null || nurse === void 0 ? void 0 : nurse.files}`,
                         type: 'nurse',
                         read: false,
                     });

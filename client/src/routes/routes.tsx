@@ -4,7 +4,7 @@ import {
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
-import { AddService, AdminDashboard, Bill, Binnacle, ClientBill, ClientBinnacle, ClientDocument, ClientNurses, Documents, ManyClient, Nurses, PasswordRequest, PasswordReset, Signin, Success } from '../pages';
+import { AddService, AdminDashboard, Bill, Binnacle, ClientBill, ClientBinnacle, ClientDocument, ClientNurses, Documents, ManyClient, MassUpload, Nurses, PasswordRequest, PasswordReset, ServiceData, Signin, Success, UploadDocument, UploadLoader } from '../pages';
 import { useSelector } from 'react-redux';
 import errorImage from '../assets/error.svg';
 
@@ -56,6 +56,25 @@ function Routes() {
       path: '/Admin/Dashboard',
       element: token ? <AdminDashboard/> : <Navigate to="/" /> ,
       errorElement: <ErrorPage />,
+    },
+    {
+      path: '/Admin/Dashboard/Mass',
+      element: token ? <MassUpload/> : <Navigate to="/" /> ,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: "upload/",
+          element: <UploadDocument />,
+        },
+        {
+          path: "document/",
+          element: <ServiceData />,
+        },
+        {
+          path: "loading/",
+          element: <UploadLoader />,
+        },
+      ]
     },
     {
       path: '/Admin/Dashboard/Add/Service',

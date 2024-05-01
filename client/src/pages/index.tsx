@@ -14,3 +14,8 @@ export { default as ClientDocument } from './clientDocument/ClientDocument';
 export { default as ClientBill } from './clientDocument/clientBill/ClientBill';
 export { default as ClientBinnacle } from './clientDocument/clientBinnacle/ClientBinnacle';
 export { default as ClientNurses } from './clientDocument/clientNurses/ClientNurses';
+export { default as MassUpload } from './Admin/MassUpload/MassUpload';
+
+export { default as ServiceData } from './Admin/MassUpload/serviceData/ServiceData';
+export { default as UploadDocument } from './Admin/MassUpload/uploadDocument/UploadDocument';
+export { default as UploadLoader } from './Admin/MassUpload/uploadLoader/UploadLoader';

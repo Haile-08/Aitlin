@@ -7,6 +7,7 @@ import pdfIcon from '../../assets/pdf.png';
 import excelIcon from '../../assets/excel.png';
 import powerpointIcon from '../../assets/powerpoint.png';
 import wordIcon from '../../assets/word.png';
+import xmlIcon from '../../assets/xml.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -125,6 +126,16 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
                         <img src={pdfIcon} alt="pdf" className='w-9'/>
                     </div>
                 </div>}
+                {image?.type == "application/xml" || image?.type == "text/xml" &&  <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                        <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
+                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
+                                <img src={closeModal} alt="close" className='w-3 '/>
+                            </div>
+                        </div>
+                        <div className="w-full h-[50%] flex justify-center items-center" >
+                            <img src={xmlIcon} alt="pdf" className='w-9'/>
+                        </div>
+                    </div>}
                 {image?.type == "application/msword" || image?.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
                         <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>

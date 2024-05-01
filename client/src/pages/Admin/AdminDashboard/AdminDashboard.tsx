@@ -1,6 +1,7 @@
 import { ServiceList, Logout, SkeletalLoading } from "../../../components"
 import add from '../../../assets/add.svg';
 import empty from "../../../assets/empty.svg";
+import batch from '../../../assets/uploadMany.png';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {  useEffect, useState } from "react";
@@ -32,6 +33,11 @@ function AdminDashboard() {
     navigate('/Admin/Dashboard/Add/Service');
   }
 
+  const handleMassUpload = (e: { preventDefault: () => void; }) =>{
+    e.preventDefault();
+    navigate('/Admin/Dashboard/Mass/Upload');
+  }
+
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
@@ -40,8 +46,6 @@ function AdminDashboard() {
     navigate(`/Admin/Dashboard/?${searchQuery}`);
     refetch();
   }
-
-  console.log(data);
 
   return (
     <div className="w-dvw h-dvh bg-banner-color flex justify-start items-center flex-col ">
@@ -70,6 +74,10 @@ function AdminDashboard() {
             <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 md:px-4 md:py-3 text-xs md:text-lg m-2 rounded-2xl" onClick={handleAddServiceNav}>
               <img src={add} alt="add" className="mr-0 md:mr-3" />
               <p className="hidden md:flex">Agregar nuevo</p>
+            </button>
+            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 md:px-4 md:py-3 text-xs md:text-lg m-2 rounded-2xl" onClick={handleMassUpload}>
+              <img src={batch} alt="add" className="h-5 mr-0 md:mr-3" />
+              <p className="hidden md:flex">Carga masiva</p>
             </button>
             </div>
         </div>

@@ -24,6 +24,8 @@ function AddService() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = useSelector((state: any) => state.auth.token);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useSelector((state: any) => state.auth.user);
 
   const {
     register,
@@ -63,7 +65,7 @@ function AddService() {
         <div className="w-10/12 h-[10%] flex justify-between items-center">
             <p className="font-roboto font-extrabold text-xl md:text-3xl">Nuevo servicio</p>
             <div className="flex">
-                <p className="mr-4 text-sm md:text-base bg-white rounded-xl shadow-md p-3 font-roboto">Haile Melaku</p>
+                <p className="mr-4 text-sm md:text-base bg-white rounded-xl shadow-md p-3 font-roboto">{user?.Name}</p>
                 <Logout/>
             </div>
         </div>

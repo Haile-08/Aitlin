@@ -14,3 +14,4 @@ export { default as ClientBinnacleList } from './clientBinnacleList/ClientBinnac
 export { default as ClientNurseList } from './clientNurseList/ClientNurseList';
 export { default as SkeletalLoading } from './SkeletalLoading/SkeletalLoading';
 export { default as NotificationData } from './Notification/Notification';
+export { default as DocumentsList } from './DocumentsList/DocumentsList';
