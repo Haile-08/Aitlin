@@ -5,11 +5,11 @@ import { DocumentsList } from '../../../../components';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OutletContextType = [any, any, any, any];
+type OutletContextType = [any, any];
 
 function UploadDocument() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [uploadedFiles, setUploadedFiles, documentsInfoList, setDocumentsInfoList] = useOutletContext() as OutletContextType;
+  const [uploadedFiles, setUploadedFiles] = useOutletContext() as OutletContextType;
   const navigate = useNavigate();
   const { getRootProps, getInputProps } = useDropzone({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

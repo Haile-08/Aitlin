@@ -394,6 +394,10 @@ class adminController {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
+                console.log('period', period);
+                console.log('comment', comment);
+                console.log('service id', serviceId);
+                console.log('path', file);
                 if (!period || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
@@ -469,8 +473,10 @@ class adminController {
                 archive.on('error', err => {
                     throw err;
                 });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             }
             catch (error) {
+                console.log('error message', error === null || error === void 0 ? void 0 : error.message);
                 res.status(500).json({ message: 'Internal server error', success: false });
             }
         });

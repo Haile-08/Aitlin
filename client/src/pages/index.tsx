@@ -18,4 +18,3 @@ export { default as MassUpload } from './Admin/MassUpload/MassUpload';
 
 export { default as ServiceData } from './Admin/MassUpload/serviceData/ServiceData';
 export { default as UploadDocument } from './Admin/MassUpload/uploadDocument/UploadDocument';
-export { default as UploadLoader } from './Admin/MassUpload/uploadLoader/UploadLoader';

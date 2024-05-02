@@ -4,7 +4,7 @@ import {
   RouterProvider,
   useRouteError,
 } from 'react-router-dom';
-import { AddService, AdminDashboard, Bill, Binnacle, ClientBill, ClientBinnacle, ClientDocument, ClientNurses, Documents, ManyClient, MassUpload, Nurses, PasswordRequest, PasswordReset, ServiceData, Signin, Success, UploadDocument, UploadLoader } from '../pages';
+import { AddService, AdminDashboard, Bill, Binnacle, ClientBill, ClientBinnacle, ClientDocument, ClientNurses, Documents, ManyClient, MassUpload, Nurses, PasswordRequest, PasswordReset, ServiceData, Signin, Success, UploadDocument } from '../pages';
 import { useSelector } from 'react-redux';
 import errorImage from '../assets/error.svg';
 
@@ -69,10 +69,6 @@ function Routes() {
         {
           path: "document/",
           element: <ServiceData />,
-        },
-        {
-          path: "loading/",
-          element: <UploadLoader />,
         },
       ]
     },

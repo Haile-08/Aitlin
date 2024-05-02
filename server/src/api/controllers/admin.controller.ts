@@ -450,6 +450,11 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
+      console.log('period', period);
+      console.log('comment', comment);
+      console.log('service id', serviceId);
+      console.log('path', file);
+
       if (!period || !serviceId || !file.path) {
         return res.json({ 
           message: 'All fields are required',
@@ -551,7 +556,9 @@ class adminController {
       archive.on('error', err => {
         throw err;
       });
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log('error message', error?.message);
       res.status(500).json({ message: 'Internal server error', success: false });
     }
   }

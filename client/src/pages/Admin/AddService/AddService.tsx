@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Logout } from '../../../components'
+import { Back, Logout } from '../../../components'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -62,8 +62,11 @@ function AddService() {
 
   return (
     <div className="w-dvw h-dvh bg-banner-color flex justify-start items-center flex-col ">
-        <div className="w-10/12 h-[10%] flex justify-between items-center">
-            <p className="font-roboto font-extrabold text-xl md:text-3xl">Nuevo servicio</p>
+        <div className="w-[90%] h-[10%] flex justify-between items-center">
+            <div className="flex">
+                <Back nav={"/Admin/Dashboard"}/>
+                <p className="font-roboto font-extrabold text-xl md:text-3xl">Nuevo servicio</p>
+            </div>
             <div className="flex">
                 <p className="mr-4 text-sm md:text-base bg-white rounded-xl shadow-md p-3 font-roboto">{user?.Name}</p>
                 <Logout/>
