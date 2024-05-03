@@ -98,8 +98,8 @@ function ClientBinnacle() {
             }
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
-              data?.data.map((binnacle: any, index: Number)=>(
-                <ClientBinnacleList index={index} period={binnacle?.period} comment={binnacle?.comment} link={binnacle?.files} id={binnacle._id}/>
+              data?.data.map((binnacle: any)=>(
+                <ClientBinnacleList index={binnacle?.logNumber} period={binnacle?.period} comment={binnacle?.comment} link={binnacle?.files} id={binnacle._id}/>
               ))
             }
             </div>

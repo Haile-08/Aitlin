@@ -221,10 +221,14 @@ class adminController {
         });
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const lastValue: any = await Blog.find().sort([['_id', -1]]).limit(1).exec();
+
       const blog = await Blog.create({
         serviceId,
         period,
         comment: comment || '',
+        logNumber: lastValue[0]? lastValue[0]?.logNumber + 1: 0,
         files: file.path.split('/')[2],
       });
 
@@ -470,10 +474,14 @@ class adminController {
         });
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const lastValue: any = await Bill.find().sort([['_id', -1]]).limit(1).exec();
+      
       const bill = await Bill.create({
         serviceId,
         period,
         comment: comment || '',
+        invoiceNumber: lastValue[0]? lastValue[0]?.invoiceNumber + 1: 0,
         files: file.path.split('/')[2],
       });
 

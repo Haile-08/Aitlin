@@ -79,8 +79,8 @@ function Binnacle() {
            ))}
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
-              data?.data.map((binnacle: any, index: Number)=>(
-                <BinnacleList index={Number(index) + 1} period={binnacle?.period} comment={binnacle?.comment} id={binnacle._id}/>
+              data?.data.map((binnacle: any)=>(
+                <BinnacleList index={binnacle?.logNumber} period={binnacle?.period} comment={binnacle?.comment} id={binnacle._id}/>
               ))
             }
             </div>

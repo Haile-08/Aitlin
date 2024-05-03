@@ -45,10 +45,13 @@ function ServiceList({Name, Service, Email, status, id, page }: any) {
 
   return (
     <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-5 md:py-6 border-b-[1.5px]  border-black md:border-black border-opacity-40 flex justify-start items-center">
-          <div className="ml-2 md:ml-6 w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
+          <div className="ml-2 md:ml-6 w-[40%] md:w-[25%] h-[90%] flex justify-start items-center font-roboto font-light">
+            <p className="opacity-50 break-all font-roboto font-light text-xs md:text-xl">{id}</p>
+          </div>
+          <div className="ml-1 md:ml-4 w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-light">
             <p className="opacity-50 break-all font-roboto font-light text-xs md:text-xl">{Name}</p>
           </div>
-          <div className="w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
+          <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-light">
             <p className="opacity-50 break-all font-roboto font-light text-xs md:text-xl">{Service}</p>
           </div>
           <div className="hidden md:flex w-[30%] h-[90%] justify-start items-center font-roboto font-light">

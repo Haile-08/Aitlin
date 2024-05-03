@@ -18,6 +18,10 @@ const blogSchema = new Schema({
         type: String,
         min: 1,
     },
+    logNumber: {
+        type: Number,
+        default: 0,
+    },
     files: {
         type: String,
         min: 1,

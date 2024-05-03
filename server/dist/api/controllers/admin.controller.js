@@ -196,6 +196,7 @@ class adminController {
        */
     static handleAddNewBinnacle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -213,10 +214,13 @@ class adminController {
                         success: false,
                     });
                 }
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const lastValue = yield database_1.Blog.find().sort([['_id', -1]]).limit(1).exec();
                 const blog = yield database_1.Blog.create({
                     serviceId,
                     period,
                     comment: comment || '',
+                    logNumber: lastValue[0] ? ((_a = lastValue[0]) === null || _a === void 0 ? void 0 : _a.logNumber) + 1 : 0,
                     files: file.path.split('/')[2],
                 });
                 if (service.Notification) {
@@ -390,6 +394,7 @@ class adminController {
        */
     static handleAddNewBill(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
                 const { period, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -411,10 +416,13 @@ class adminController {
                         success: false,
                     });
                 }
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const lastValue = yield database_1.Bill.find().sort([['_id', -1]]).limit(1).exec();
                 const bill = yield database_1.Bill.create({
                     serviceId,
                     period,
                     comment: comment || '',
+                    invoiceNumber: lastValue[0] ? ((_a = lastValue[0]) === null || _a === void 0 ? void 0 : _a.invoiceNumber) + 1 : 0,
                     files: file.path.split('/')[2],
                 });
                 if (service.Notification) {

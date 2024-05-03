@@ -18,6 +18,10 @@ const billSchema = new Schema({
         type: String,
         min: 1,
     },
+    invoiceNumber: {
+        type: Number,
+        default: 0,
+    },
     files: {
         type: String,
         min: 1,

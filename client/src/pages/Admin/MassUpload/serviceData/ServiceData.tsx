@@ -168,7 +168,7 @@ function ServiceData() {
             <span className="sr-only">Loading...</span>
         </div>}
       <p className='text-2xl font-roboto font-light mb-10'>Service info List Document</p>
-      <div {...getRootProps()} className='w-[55%] h-3/4 outline-dashed flex justify-center items-center flex-col cursor-pointer outline-primary-color rounded-md outline-3'>
+      <div {...getRootProps()} className='w-full md:w-[55%] h-3/4 outline-dashed flex justify-center items-center flex-col cursor-pointer outline-primary-color rounded-md outline-3'>
         <input {...getInputProps()} id="fileInput" accept='.xlsx, .xls, .pdf, .doc, .docx, .ppt, .pptx, .xml' />
         <img src={upload} alt="upload" />
         <p className='font-roboto font-light mt-5 opacity-35'>Drag and drop files here or click to browse.</p>
@@ -180,10 +180,10 @@ function ServiceData() {
       </div>
       <div className="w-[90%] h-[20%] flex justify-end items-center">
         <button onClick={handleNavBack} className="flex bg-primary-color font-roboto text-white justify-center items-center px-8 py-3 md:px-8 md:py-3 text-xs md:text-lg m-2 rounded-2xl">
-            <p className="hidden md:flex">Back</p>
+            <p className="flex">Back</p>
         </button>
         <button onClick={handleSubmit} className="flex bg-primary-color font-roboto text-white justify-center items-center px-8 py-3 md:px-8 md:py-3 text-xs md:text-lg m-2 rounded-2xl">
-            <p className="hidden md:flex">upload</p>
+            <p className="flex">upload</p>
         </button>
       </div>
     </div>

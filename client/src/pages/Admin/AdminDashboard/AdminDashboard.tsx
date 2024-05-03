@@ -82,10 +82,13 @@ function AdminDashboard() {
             </div>
         </div>
         <div className="w-[95%] h-[5%] md:h-[7%] rounded-xl  flex justify-start items-center bg-gray-100">
-          <div className="ml-2 md:ml-6 w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="ml-1 md:ml-4 w-[40%] md:w-[25%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+            <p className="text-xs font-light md:text-xl">identificación del servicio</p>
+          </div>
+          <div className="ml-1 md:ml-4 w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Cliente</p>
           </div>
-          <div className="w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Servicio</p>
           </div>
           <div className="hidden md:flex w-[30%] h-[90%] justify-start items-center font-roboto font-semibold">

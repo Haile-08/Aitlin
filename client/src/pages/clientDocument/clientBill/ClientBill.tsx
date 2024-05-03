@@ -98,8 +98,8 @@ function ClientBill() {
           }
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
-            data?.data.map((bill: any, index: Number)=>(
-              <ClientBillList index={index} period={bill?.period} comment={bill?.comment} link={bill?.files} id={bill._id}/>
+            data?.data.map((bill: any)=>(
+              <ClientBillList index={bill?.invoiceNumber} period={bill?.period} comment={bill?.comment} link={bill?.files} id={bill._id}/>
             ))
           }
           </div>
