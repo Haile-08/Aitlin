@@ -25,7 +25,7 @@ function ClientBinnacle() {
 
     const handleDownload = async () => {
       try {
-          const response = await fetch(`http://localhost:8000/Archive/${blogArchive}`);
+          const response = await fetch(`https://aitlin.onrender.com/Archive/${blogArchive}`);
           const blob = await response.blob();
   
           // Create a URL for the blob

@@ -15,7 +15,7 @@ type OutletContextType = [any, any, any, any];
 
 function ServiceData() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [uploadedFiles, setUploadedFiles] = useOutletContext() as OutletContextType;
+  const [uploadedFiles, _setUploadedFiles] = useOutletContext() as OutletContextType;
   const [doc, setDoc] : any = useState([]);
   const [documentsInfoList, setDocumentsInfoList] = useState([]);
   const navigate = useNavigate();

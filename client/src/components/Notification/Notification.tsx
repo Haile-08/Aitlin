@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 const handleDownload = async (link: string, filename: string) => {
     try {
-        const response = await fetch(`http://localhost:8000/${link}`);
+        const response = await fetch(`https://aitlin.onrender.com/${link}`);
         const blob = await response.blob();
 
         // Create a URL for the blob

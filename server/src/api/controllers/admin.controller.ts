@@ -297,7 +297,7 @@ class adminController {
               name: service.clientName,
               email: 'binnacle',
               password: undefined,
-              link: `http://localhost:5173/${blog.files}`
+              link: `https://aitlin.vercel.app/${blog.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -421,7 +421,7 @@ class adminController {
               name: service.clientName,
               email: 'nurse',
               password: undefined,
-              link: `http://localhost:5173/${nurse.files}`
+              link: `https://aitlin.vercel.app/${nurse.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -548,7 +548,7 @@ class adminController {
               name: service.clientName,
               email: 'bill',
               password: undefined,
-              link: `http://localhost:5173/${bill.files}`
+              link: `https://aitlin.vercel.app/${bill.files}`
             },
             './template/documentNotification.handlebars'
           );
