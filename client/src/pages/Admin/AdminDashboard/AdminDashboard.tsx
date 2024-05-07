@@ -71,11 +71,11 @@ function AdminDashboard() {
               <input value={search} onChange={(e)=> setSearch(e.target.value)} type="search" id="default-search" className="block outline-none w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." required />
               </div>
             </form>
-            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 md:px-4 md:py-3 text-xs md:text-lg m-2 rounded-2xl" onClick={handleAddServiceNav}>
+            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 md:px-4 md:py-2 text-xs md:text-lg m-2 rounded-2xl" onClick={handleAddServiceNav}>
               <img src={add} alt="add" className="mr-0 md:mr-3" />
               <p className="hidden md:flex">Agregar nuevo</p>
             </button>
-            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 md:px-4 md:py-3 text-xs md:text-lg m-2 rounded-2xl" onClick={handleMassUpload}>
+            <button className="flex bg-primary-color font-roboto text-white justify-center items-center px-4 py-3 md:px-4 md:py-2 text-xs md:text-lg m-2 rounded-2xl" onClick={handleMassUpload}>
               <img src={batch} alt="add" className="h-5 mr-0 md:mr-3" />
               <p className="hidden md:flex">Carga masiva</p>
             </button>
