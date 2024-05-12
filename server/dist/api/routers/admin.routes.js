@@ -35,6 +35,12 @@ const adminRoutHandler = (router) => {
     router.put('/admin/service/binnacle', authMiddleWare_1.default, multerUpload, __1.adminController.handleUpdateABinnacle);
     // update the service bill
     router.put('/admin/service/nurses', authMiddleWare_1.default, multerUpload, __1.adminController.handleUpdateANurse);
+    // delete a bill
+    router.delete('/admin/service/bill/:id', authMiddleWare_1.default, __1.adminController.handleDeleteBill);
+    // delete a bill
+    router.delete('/admin/service/binnacle/:id', authMiddleWare_1.default, __1.adminController.handleDeleteBinnacle);
+    // delete a bill
+    router.delete('/admin/service/nurses/:id', authMiddleWare_1.default, __1.adminController.handleDeleteNurse);
 };
 exports.default = adminRoutHandler;
 //# sourceMappingURL=admin.routes.js.map

@@ -27,7 +27,6 @@ class clientController {
                 const clientId = req.query.clientId || '';
                 const servicePerPage = 9;
                 const services = yield database_1.Service.find({ serviceName: { $regex: searchTerm, $options: 'i' }, clientId: clientId });
-                console.log('data', services);
                 const startIndex = pageNum * servicePerPage;
                 const endIndex = startIndex + servicePerPage;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

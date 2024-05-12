@@ -6,6 +6,9 @@ const blogSchema = new Schema({
     type: String,
     min: 1,
   },
+  Name: {
+    type: String,
+  },
   period: {
     type: String,
     min: 1,
@@ -13,10 +16,6 @@ const blogSchema = new Schema({
   comment: {
     type: String,
     min: 1,
-  },
-  logNumber: {
-    type: Number,
-    default: 0,
   },
   files: {
     type: String,

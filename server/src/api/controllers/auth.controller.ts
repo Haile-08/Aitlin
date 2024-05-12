@@ -128,6 +128,7 @@ class authController {
       'Password Reset Request',
       {
         name: user.Name,
+        serviceName: undefined,
         link: link,
         email: undefined,
         password: undefined
@@ -192,6 +193,7 @@ class authController {
       'Password Reset Successfully',
       {
         name: user.Name,
+        serviceName: undefined,
         link: undefined,
         email: undefined,
         password: undefined

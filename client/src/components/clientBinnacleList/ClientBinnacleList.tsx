@@ -1,7 +1,7 @@
 import downloadIcon from '../../assets/download.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function ClientBinnacleList({index, period, comment, link}: any) {
+function ClientBinnacleList({Name, period, comment, link}: any) {
 
   const handleDownload = async () => {
     try {
@@ -27,7 +27,7 @@ function ClientBinnacleList({index, period, comment, link}: any) {
     return (
       <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-6 border-b-[1.5px] border-black border-opacity-40 flex justify-start items-center">
       <div className="ml-2 md:ml-6 w-[25%] h-[90%] flex justify-start items-center font-roboto font-light">
-        <p className="opacity-50 font-roboto font-light">Log {index}</p>
+        <p className="opacity-50 font-roboto font-light">{Name}</p>
       </div>
       <div className="w-[50%] md:w-[30%] h-[90%] flex justify-start items-center font-roboto font-light">
         <p className="opacity-50 font-roboto font-light">{period}</p>

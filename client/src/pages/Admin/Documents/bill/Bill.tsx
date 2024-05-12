@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {  useOutletContext } from "react-router-dom";
 import { BillList, SkeletalLoading } from "../../../../components";
 import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import { retrieveService } from "../../../../hook/adminHook";
+import { deleteBill, retrieveService } from "../../../../hook/adminHook";
 import empty from '../../../../assets/empty.svg';
 import add from '../../../../assets/add.svg';
 
@@ -23,11 +24,29 @@ function Bill() {
     queryFn: () => retrieveService({page:"bill" ,filter: filterBool, search, token, id}),
   });
 
+  const { mutateAsync } = useMutation(deleteBill, {
+    onSuccess: () => {
+    },
+    onError: () => {
+      console.log("error");
+    },
+  });
+
+   const deleteItem = async (id: string) => {
+    try {
+      await mutateAsync({ id, token });
+      await queryClient.removeQueries(); // This may not be necessary, as refetching should already update the cache
+      await refetch();
+      console.log("Refetch executed");
+    } catch (error) {
+      console.log("Error in deleteItem:", error);
+    }
+   }
+
   useEffect(() => {
     queryClient.removeQueries();
     refetch();
   }, [filterBool, isOpen]);
-
 
   console.log("data", data);
 
@@ -81,7 +100,7 @@ function Bill() {
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
             data?.data.map((bill: any)=>(
-              <BillList index={bill?.invoiceNumber} period={bill?.period} comment={bill?.comment} id={bill._id}/>
+              <BillList Name={bill?.Name} refetch={refetch} deleteItem={deleteItem} period={bill?.period} comment={bill?.comment} id={bill._id}/>
             ))
           }
           </div>

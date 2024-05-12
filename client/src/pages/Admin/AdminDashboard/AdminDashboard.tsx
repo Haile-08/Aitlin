@@ -5,7 +5,7 @@ import batch from '../../../assets/uploadMany.png';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {  useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { retrieveClients } from "../../../hook/adminHook";
 
 function AdminDashboard() {
@@ -17,6 +17,7 @@ function AdminDashboard() {
   const token = useSelector((state: any) => state.auth.token);
   const [page, setPage] = useState(0);
   const array = Array.from({ length: 9 });
+  const queryClient = useQueryClient();
 
   const { data, isPreviousData, refetch, isLoading } = useQuery({
     queryKey: ["client", page],
@@ -25,8 +26,9 @@ function AdminDashboard() {
   });
 
   useEffect(() => {
+    queryClient.removeQueries();
     refetch();
-  }, []);
+  }, [search]);
 
   const handleAddServiceNav = (e: { preventDefault: () => void; }) =>{
     e.preventDefault();

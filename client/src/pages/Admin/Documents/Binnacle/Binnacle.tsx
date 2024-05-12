@@ -2,8 +2,8 @@ import {  useOutletContext } from "react-router-dom";
 import { BinnacleList, SkeletalLoading } from "../../../../components";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import { retrieveService } from "../../../../hook/adminHook";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteBinnacle, retrieveService } from "../../../../hook/adminHook";
 import empty from '../../../../assets/empty.svg';
 import add from '../../../../assets/add.svg';
 
@@ -22,6 +22,25 @@ function Binnacle() {
       queryKey: ["Binnacle", search],
       queryFn: () => retrieveService({page:"Binnacle" ,filter: filterBool, search, token, id}),
     });
+
+    const { mutateAsync } = useMutation(deleteBinnacle, {
+      onSuccess: () => {
+      },
+      onError: () => {
+        console.log("error");
+      },
+    });
+  
+     const deleteItem = async (id: string) => {
+      try {
+        await mutateAsync({ id, token });
+        await queryClient.removeQueries(); // This may not be necessary, as refetching should already update the cache
+        await refetch();
+        console.log("Refetch executed");
+      } catch (error) {
+        console.log("Error in deleteItem:", error);
+      }
+     }
 
     useEffect(() => {
       queryClient.removeQueries();
@@ -80,7 +99,7 @@ function Binnacle() {
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
               data?.data.map((binnacle: any)=>(
-                <BinnacleList index={binnacle?.logNumber} period={binnacle?.period} comment={binnacle?.comment} id={binnacle._id}/>
+                <BinnacleList Name={binnacle?.Name} refetch={refetch} deleteItem={deleteItem} period={binnacle?.period} comment={binnacle?.comment} id={binnacle._id}/>
               ))
             }
             </div>

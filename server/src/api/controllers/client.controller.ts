@@ -18,8 +18,6 @@ class clientController {
   
       const servicePerPage: number = 9;
       const services = await Service.find({ serviceName: { $regex: searchTerm, $options: 'i' },clientId: clientId });
-
-      console.log('data', services);
   
       const startIndex = pageNum * servicePerPage;
       const endIndex = startIndex + servicePerPage;

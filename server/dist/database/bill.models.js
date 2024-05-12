@@ -10,6 +10,9 @@ const billSchema = new Schema({
         type: String,
         min: 1,
     },
+    Name: {
+        type: String,
+    },
     period: {
         type: String,
         min: 1,
@@ -17,10 +20,6 @@ const billSchema = new Schema({
     comment: {
         type: String,
         min: 1,
-    },
-    invoiceNumber: {
-        type: Number,
-        default: 0,
     },
     files: {
         type: String,

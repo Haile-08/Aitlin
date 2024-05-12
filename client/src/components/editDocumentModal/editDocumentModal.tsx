@@ -19,18 +19,19 @@ const addSchema = z.object({
       .string()
       .min(3),
     comment: z
-      .string()
-      .min(3)
-      .optional()
+    .string()
+    .min(3)
+    .optional()
+    .nullable().or(z.literal('')),
 });
 type SignUpSchemaType = z.infer<typeof addSchema>;
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
+function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [image, setImage] = useState<any>("");
+    const [file, setFile] = useState<any>("");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = useSelector((state: any) => state.auth.token);
   
@@ -44,6 +45,7 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
       onSuccess: (data) => {
         console.log(data)
         setIsOpen(false);
+        refetch();
       },
       onError: () => {
         console.log("error")
@@ -52,10 +54,11 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
   
     const onSubmit: SubmitHandler<SignUpSchemaType> = (res) => {
       const data = new FormData();
-      data.append("file", image);
+      data.append("file", file);
       if(documents === "Nurses"){
         data.append("Name", res.period);
       }else {
+        data.append("Name", file?.name?.split(".")[0]);
         data.append("period", res.period);
       }
       if(res.comment){
@@ -63,7 +66,7 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
       }
       data.append("serviceId", serviceId);
       if(documents === "Nurses"){
-        data.append("format", image.type);
+        data.append("format", file?.name);
       }
   
       mutate({data, token, page: documents});
@@ -71,11 +74,11 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
   
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleImage = (e: any) => {
-      setImage(e.target.files[0]);
+      setFile(e.target.files[0]);
     };
   
     const handleClose = () =>{
-      setImage("");
+      setFile("");
     }
 
   return (
@@ -116,7 +119,7 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
                     />
                     <img src={dir} alt="folder" />   
                 </label>
-                {image?.type === "application/pdf" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file?.type === "application/pdf" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
                         <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
                             <img src={closeModal} alt="close" className='w-3 '/>
@@ -126,7 +129,7 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
                         <img src={pdfIcon} alt="pdf" className='w-9'/>
                     </div>
                 </div>}
-                {image?.type == "application/xml" || image?.type == "text/xml" &&  <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file?.type == "application/xml" || file?.type == "text/xml" &&  <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                         <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
                             <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
                                 <img src={closeModal} alt="close" className='w-3 '/>
@@ -136,7 +139,7 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
                             <img src={xmlIcon} alt="pdf" className='w-9'/>
                         </div>
                     </div>}
-                {image?.type == "application/msword" || image?.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file?.type == "application/msword" || file?.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
                         <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
                             <img src={closeModal} alt="close" className='w-3 '/>
@@ -146,7 +149,7 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
                         <img src={wordIcon} alt="pdf" className='w-9'/>
                     </div>
                 </div>}
-                {image?.type == "application/vnd.ms-excel" || image?.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file?.type == "application/vnd.ms-excel" || file?.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
                         <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
                             <img src={closeModal} alt="close" className='w-3 '/>
@@ -156,7 +159,7 @@ function EditDocumentModal({setIsOpen, documents, serviceId }: any) {
                         <img src={excelIcon} alt="pdf" className='w-9'/>
                     </div>
                 </div>}
-                {image?.type == "application/vnd.ms-powerpoint" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file?.type == "application/vnd.ms-powerpoint" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
                         <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
                             <img src={closeModal} alt="close" className='w-3 '/>

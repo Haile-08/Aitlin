@@ -1,8 +1,8 @@
 import { useOutletContext } from "react-router-dom";
 import { NurseList, SkeletalLoading } from "../../../../components";
 import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import { retrieveService } from "../../../../hook/adminHook";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteNurse, retrieveService } from "../../../../hook/adminHook";
 import { useSelector } from "react-redux";
 import empty from '../../../../assets/empty.svg';
 import add from '../../../../assets/add.svg';
@@ -22,6 +22,25 @@ function  Nurses() {
     queryKey: ["nurse", search],
     queryFn: () => retrieveService({page:"nurses" ,filter: filterBool, search, token, id}),
   });
+
+  const { mutateAsync } = useMutation(deleteNurse, {
+    onSuccess: () => {
+    },
+    onError: () => {
+      console.log("error");
+    },
+  });
+
+   const deleteItem = async (id: string) => {
+    try {
+      await mutateAsync({ id, token });
+      await queryClient.removeQueries(); // This may not be necessary, as refetching should already update the cache
+      await refetch();
+      console.log("Refetch executed");
+    } catch (error) {
+      console.log("Error in deleteItem:", error);
+    }
+   }
 
   useEffect(() => {
     queryClient.removeQueries();
@@ -80,7 +99,7 @@ function  Nurses() {
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data?.data.map((nurse: any)=>(
-              <NurseList Name={nurse?.Name} Archive={nurse?.Archive} comment={nurse?.comment} id={nurse._id}/>
+              <NurseList Name={nurse?.Name} refetch={refetch} deleteItem={deleteItem} Archive={nurse?.Archive} comment={nurse?.comment} id={nurse._id}/>
             ))
           }
           </div>

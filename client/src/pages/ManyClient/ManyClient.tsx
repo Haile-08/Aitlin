@@ -2,7 +2,7 @@
 import { useSelector } from "react-redux";
 import { ClientServiceList, Logout, NotificationData, SkeletalLoading } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useEffect, useState } from "react";
 import { retrieveClientNotification, retrieveClientServices } from "../../hook/clientHook";
 import empty from "../../assets/empty.svg";
@@ -19,6 +19,7 @@ function ManyClient() {
   const [search, setSearch] = useState("");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const array = Array.from({ length: 9 });
+  const queryClient = useQueryClient();
 
   const { data, isPreviousData, refetch, isLoading } = useQuery({
     queryKey: ["service", page],
@@ -32,10 +33,9 @@ function ManyClient() {
   });
 
   useEffect(() => {
+    queryClient.removeQueries();
     refetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  console.log("Notification", notification.data);
+  }, [search]);
 
   useEffect(()=>{
     notification.refetch();

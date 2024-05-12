@@ -67,13 +67,13 @@ class adminController {
                             serviceName: service.serviceName,
                             clientName: service.clientName,
                         } }, { new: true });
-                    const mail = (0, utils_1.sendEmail)(client.email, 'Welcome to Aitlin', {
+                    yield (0, utils_1.sendEmail)(client.email, 'Welcome to Aitlin', {
                         name: client.Name,
+                        serviceName: undefined,
                         email: client.email,
                         password,
                         link: undefined
                     }, './template/newClient.handlebars');
-                    console.log('email return', mail);
                     return res.status(201).json({
                         message: 'Account created successfully',
                         success: true,
@@ -93,7 +93,7 @@ class adminController {
                     yield database_1.User.findByIdAndUpdate(existingUser._id, { ServiceNumber: existingUser.ServiceNumber + 1 }, { new: true });
                     const service = yield database_1.Service.create({
                         clientId: existingUser._id,
-                        clientName: existingUser.Name,
+                        clientName: Name,
                         serviceName: ServiceData,
                         email: existingUser.email,
                         status: true,
@@ -123,14 +123,12 @@ class adminController {
                 const pageNum = Number(req.query.page) || 0;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const searchTerm = req.query.search || '.*';
-                console.log('search', searchTerm);
                 const servicePerPage = 9;
                 const services = yield database_1.Service.find({ serviceName: { $regex: searchTerm, $options: 'i' } });
                 const startIndex = pageNum * servicePerPage;
                 const endIndex = startIndex + servicePerPage;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const serviceList = services.slice(startIndex, endIndex).map((service) => service.toObject());
-                console.log(services);
                 res.status(200).json({
                     message: 'Services fetched successfully',
                     success: true,
@@ -176,8 +174,6 @@ class adminController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id, status } = req.body;
-                console.log('id', id);
-                console.log('status', status);
                 const updatedService = yield database_1.Service.findByIdAndUpdate(id, { status }, { new: true });
                 if (!updatedService) {
                     return res.status(404).json({ message: 'Service not found', success: false });
@@ -196,12 +192,11 @@ class adminController {
        */
     static handleAddNewBinnacle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                const { period, comment, serviceId } = req.body;
+                const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!period || !serviceId || !file.path) {
+                if (!period || !Name || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -214,24 +209,20 @@ class adminController {
                         success: false,
                     });
                 }
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const lastValue = yield database_1.Blog.find().sort([['_id', -1]]).limit(1).exec();
                 const blog = yield database_1.Blog.create({
                     serviceId,
                     period,
+                    Name,
                     comment: comment || '',
-                    logNumber: lastValue[0] ? ((_a = lastValue[0]) === null || _a === void 0 ? void 0 : _a.logNumber) + 1 : 0,
                     files: file.path.split('/')[2],
                 });
-                if (service.Notification) {
-                    yield database_1.Notification.create({
-                        clientId: service.clientId,
-                        serviceId,
-                        link: `${blog.files}`,
-                        type: 'binnacle',
-                        read: false,
-                    });
-                }
+                yield database_1.Notification.create({
+                    clientId: service.clientId,
+                    serviceId,
+                    link: `${blog.files}`,
+                    type: 'binnacle',
+                    read: false,
+                });
                 const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.blogArchive) ? service === null || service === void 0 ? void 0 : service.blogArchive : 'none.pdf');
                 if (fs_1.default.existsSync(filePath)) {
                     fs_1.default.unlinkSync(filePath);
@@ -264,10 +255,10 @@ class adminController {
                 yield archive.finalize();
                 // Listen for archive completion
                 yield output.on('close', () => {
-                    console.log('Archive created successfully.');
                     if (service.Notification) {
                         (0, utils_1.sendEmail)(service.email, 'New Binnacle document', {
                             name: service.clientName,
+                            serviceName: service.serviceName,
                             email: 'binnacle',
                             password: undefined,
                             link: `https://aitlin.vercel.app/${blog.files}`
@@ -280,12 +271,11 @@ class adminController {
                     });
                 });
                 // Listen for errors
-                archive.on('error', err => {
-                    throw err;
+                archive.on('error', (err) => {
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
                 });
             }
             catch (error) {
-                console.log(error);
                 res.status(500).json({ message: 'Internal server error', success: false });
             }
         });
@@ -317,19 +307,17 @@ class adminController {
                 const nurse = yield database_1.Nurse.create({
                     serviceId,
                     Name,
-                    Archive: Name + '.' + format.split('/')[1],
+                    Archive: Name + '.' + format.split('.')[1],
                     comment: comment || '',
                     files: file.path.split('/')[2],
                 });
-                if (service.Notification) {
-                    yield database_1.Notification.create({
-                        clientId: service.clientId,
-                        serviceId,
-                        link: `${nurse.files}`,
-                        type: 'nurse',
-                        read: false,
-                    });
-                }
+                yield database_1.Notification.create({
+                    clientId: service.clientId,
+                    serviceId,
+                    link: `${nurse.files}`,
+                    type: 'nurse',
+                    read: false,
+                });
                 const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
                 if (fs_1.default.existsSync(filePath)) {
                     fs_1.default.unlinkSync(filePath);
@@ -362,10 +350,10 @@ class adminController {
                 yield archive.finalize();
                 // Listen for archive completion
                 yield output.on('close', () => {
-                    console.log('Archive created successfully.');
                     if (service.Notification) {
                         (0, utils_1.sendEmail)(service.email, 'New nurse document', {
                             name: service.clientName,
+                            serviceName: service.serviceName,
                             email: 'nurse',
                             password: undefined,
                             link: `https://aitlin.vercel.app/${nurse.files}`
@@ -379,7 +367,7 @@ class adminController {
                 });
                 // Listen for errors
                 archive.on('error', err => {
-                    throw err;
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
                 });
             }
             catch (error) {
@@ -394,16 +382,11 @@ class adminController {
        */
     static handleAddNewBill(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                const { period, comment, serviceId } = req.body;
+                const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                console.log('period', period);
-                console.log('comment', comment);
-                console.log('service id', serviceId);
-                console.log('path', file);
-                if (!period || !serviceId || !file.path) {
+                if (!period || !Name || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -416,25 +399,21 @@ class adminController {
                         success: false,
                     });
                 }
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const lastValue = yield database_1.Bill.find().sort([['_id', -1]]).limit(1).exec();
                 const bill = yield database_1.Bill.create({
                     serviceId,
                     period,
+                    Name,
                     comment: comment || '',
-                    invoiceNumber: lastValue[0] ? ((_a = lastValue[0]) === null || _a === void 0 ? void 0 : _a.invoiceNumber) + 1 : 0,
                     files: file.path.split('/')[2],
                 });
-                if (service.Notification) {
-                    yield database_1.Notification.create({
-                        clientId: service.clientId,
-                        serviceId,
-                        link: `${bill.files}`,
-                        type: 'bill',
-                        read: false,
-                    });
-                }
-                const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
+                yield database_1.Notification.create({
+                    clientId: service.clientId,
+                    serviceId,
+                    link: `${bill.files}`,
+                    type: 'bill',
+                    read: false,
+                });
+                const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.billArchive) ? service === null || service === void 0 ? void 0 : service.billArchive : 'none.pdf');
                 if (fs_1.default.existsSync(filePath)) {
                     fs_1.default.unlinkSync(filePath);
                 }
@@ -462,10 +441,10 @@ class adminController {
                 yield archive.finalize();
                 // Listen for archive completion
                 yield output.on('close', () => {
-                    console.log('Archive created successfully.');
                     if (service.Notification) {
                         (0, utils_1.sendEmail)(service.email, 'New bill document', {
                             name: service.clientName,
+                            serviceName: service.serviceName,
                             email: 'bill',
                             password: undefined,
                             link: `https://aitlin.vercel.app/${bill.files}`
@@ -479,12 +458,11 @@ class adminController {
                 });
                 // Listen for errors
                 archive.on('error', err => {
-                    throw err;
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
                 });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             }
             catch (error) {
-                console.log('error message', error === null || error === void 0 ? void 0 : error.message);
                 res.status(500).json({ message: 'Internal server error', success: false });
             }
         });
@@ -503,10 +481,9 @@ class adminController {
                 const filter = req.query.filter === 'true';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const serviceId = req.query.serviceId;
-                const bills = yield database_1.Bill.find({ comment: { $regex: searchTerm, $options: 'i' }, serviceId });
+                const bills = yield database_1.Bill.find({ Name: { $regex: searchTerm, $options: 'i' }, serviceId });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const billList = bills.map((bill) => bill.toObject());
-                console.log('filter', filter);
                 if (filter) {
                     billList.sort((a, b) => new Date(a.fileDate).getTime() - new Date(b.fileDate).getTime());
                 }
@@ -538,7 +515,7 @@ class adminController {
                 const filter = req.query.filter === 'true';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const serviceId = req.query.serviceId;
-                const blogs = yield database_1.Blog.find({ comment: { $regex: searchTerm, $options: 'i' }, serviceId });
+                const blogs = yield database_1.Blog.find({ Name: { $regex: searchTerm, $options: 'i' }, serviceId });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const blogList = blogs.map((blog) => blog.toObject());
                 if (filter) {
@@ -572,7 +549,7 @@ class adminController {
                 const filter = req.query.filter === 'true';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const serviceId = req.query.serviceId;
-                const nurses = yield database_1.Nurse.find({ comment: { $regex: searchTerm, $options: 'i' }, serviceId });
+                const nurses = yield database_1.Nurse.find({ Name: { $regex: searchTerm, $options: 'i' }, serviceId });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const nurseList = nurses.map((nurse) => nurse.toObject());
                 if (filter) {
@@ -601,42 +578,40 @@ class adminController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { period, comment, serviceId } = req.body;
+                const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!period || !serviceId || !file.path) {
+                if (!period || !Name || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
                     });
                 }
                 const bill = yield database_1.Bill.findById(serviceId);
-                const filePath = path_1.default.join(__dirname, 'public', (bill === null || bill === void 0 ? void 0 : bill.files) || '');
-                if (fs_1.default.existsSync(filePath)) {
-                    fs_1.default.unlinkSync(filePath);
-                    console.log('File removed successfully.');
-                }
-                else {
-                    console.log('File does not exist.');
+                if ((bill === null || bill === void 0 ? void 0 : bill.files) !== '' || (bill === null || bill === void 0 ? void 0 : bill.files)) {
+                    const filePath = path_1.default.join('dist/public', bill === null || bill === void 0 ? void 0 : bill.files);
+                    if (fs_1.default.existsSync(filePath)) {
+                        fs_1.default.unlinkSync(filePath);
+                    }
                 }
                 const now = new Date();
-                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Name, period, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedBill) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
                 const service = yield database_1.Service.findById(serviceId);
-                if (service === null || service === void 0 ? void 0 : service.Notification) {
-                    yield database_1.Notification.create({
-                        clientId: service.clientId,
-                        serviceId,
-                        link: `${bill === null || bill === void 0 ? void 0 : bill.files}`,
-                        type: 'bill',
-                        read: false,
-                    });
-                }
-                const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.billArchive) ? service === null || service === void 0 ? void 0 : service.billArchive : 'none.pdf');
-                if (fs_1.default.existsSync(updateFilePath)) {
-                    fs_1.default.unlinkSync(updateFilePath);
+                yield database_1.Notification.create({
+                    clientId: service.clientId,
+                    serviceId,
+                    link: `${bill === null || bill === void 0 ? void 0 : bill.files}`,
+                    type: 'bill',
+                    read: false,
+                });
+                if ((service === null || service === void 0 ? void 0 : service.billArchive) !== '' || (service === null || service === void 0 ? void 0 : service.billArchive)) {
+                    const filePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.billArchive);
+                    if (fs_1.default.existsSync(filePath)) {
+                        fs_1.default.unlinkSync(filePath);
+                    }
                 }
                 const billFiles = yield database_1.Bill.find({ serviceId });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -666,12 +641,11 @@ class adminController {
                 yield archive.finalize();
                 // Listen for archive completion
                 yield output.on('close', () => {
-                    console.log('Archive created successfully.');
                     res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBill });
                 });
                 // Listen for errors
                 archive.on('error', err => {
-                    throw err;
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
                 });
             }
             catch (error) {
@@ -688,42 +662,40 @@ class adminController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { period, comment, serviceId } = req.body;
+                const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!period || !serviceId || !file.path) {
+                if (!period || !Name || !serviceId || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
                     });
                 }
                 const blog = yield database_1.Blog.findById(serviceId);
-                const filePath = path_1.default.join(__dirname, 'public', (blog === null || blog === void 0 ? void 0 : blog.files) || '');
-                if (fs_1.default.existsSync(filePath)) {
-                    fs_1.default.unlinkSync(filePath);
-                    console.log('File removed successfully.');
-                }
-                else {
-                    console.log('File does not exist.');
+                if ((blog === null || blog === void 0 ? void 0 : blog.files) !== '' || (blog === null || blog === void 0 ? void 0 : blog.files)) {
+                    const filePath = path_1.default.join('dist/public', blog === null || blog === void 0 ? void 0 : blog.files);
+                    if (fs_1.default.existsSync(filePath)) {
+                        fs_1.default.unlinkSync(filePath);
+                    }
                 }
                 const now = new Date();
-                const updatedBlog = yield database_1.Blog.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', period, files: file.path.split('/')[1], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedBlog = yield database_1.Blog.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Name, period, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedBlog) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
                 const service = yield database_1.Service.findById(serviceId);
-                if (service === null || service === void 0 ? void 0 : service.Notification) {
-                    yield database_1.Notification.create({
-                        clientId: service.clientId,
-                        serviceId,
-                        link: `${blog === null || blog === void 0 ? void 0 : blog.files}`,
-                        type: 'binnacle',
-                        read: false,
-                    });
-                }
-                const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.blogArchive) ? service === null || service === void 0 ? void 0 : service.blogArchive : 'none.pdf');
-                if (fs_1.default.existsSync(updateFilePath)) {
-                    fs_1.default.unlinkSync(updateFilePath);
+                yield database_1.Notification.create({
+                    clientId: service.clientId,
+                    serviceId,
+                    link: `${blog === null || blog === void 0 ? void 0 : blog.files}`,
+                    type: 'binnacle',
+                    read: false,
+                });
+                if ((service === null || service === void 0 ? void 0 : service.blogArchive) !== '' || (service === null || service === void 0 ? void 0 : service.blogArchive)) {
+                    const filePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.blogArchive);
+                    if (fs_1.default.existsSync(filePath)) {
+                        fs_1.default.unlinkSync(filePath);
+                    }
                 }
                 const blogFiles = yield database_1.Blog.find({ serviceId });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -753,12 +725,11 @@ class adminController {
                 yield archive.finalize();
                 // Listen for archive completion
                 yield output.on('close', () => {
-                    console.log('Archive created successfully.');
                     res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedBlog });
                 });
                 // Listen for errors
                 archive.on('error', err => {
-                    throw err;
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
                 });
             }
             catch (error) {
@@ -785,32 +756,30 @@ class adminController {
                     });
                 }
                 const nurse = yield database_1.Nurse.findById(serviceId);
-                const filePath = path_1.default.join('dist/public', (nurse === null || nurse === void 0 ? void 0 : nurse.files) || '');
-                if (fs_1.default.existsSync(filePath)) {
-                    fs_1.default.unlinkSync(filePath);
-                    console.log('File removed successfully.');
-                }
-                else {
-                    console.log('File does not exist.');
+                if ((nurse === null || nurse === void 0 ? void 0 : nurse.files) !== '' || (nurse === null || nurse === void 0 ? void 0 : nurse.files)) {
+                    const filePath = path_1.default.join('dist/public', nurse === null || nurse === void 0 ? void 0 : nurse.files);
+                    if (fs_1.default.existsSync(filePath)) {
+                        fs_1.default.unlinkSync(filePath);
+                    }
                 }
                 const now = new Date();
-                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Archive: Name + '.' + format.split('/')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Archive: Name + '.' + format.split('.')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedNurse) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
                 const service = yield database_1.Service.findById(serviceId);
-                if (service === null || service === void 0 ? void 0 : service.Notification) {
-                    yield database_1.Notification.create({
-                        clientId: service.clientId,
-                        serviceId,
-                        link: `${nurse === null || nurse === void 0 ? void 0 : nurse.files}`,
-                        type: 'nurse',
-                        read: false,
-                    });
-                }
-                const updateFilePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
-                if (fs_1.default.existsSync(updateFilePath)) {
-                    fs_1.default.unlinkSync(updateFilePath);
+                yield database_1.Notification.create({
+                    clientId: service.clientId,
+                    serviceId,
+                    link: `${nurse === null || nurse === void 0 ? void 0 : nurse.files}`,
+                    type: 'nurse',
+                    read: false,
+                });
+                if ((service === null || service === void 0 ? void 0 : service.nurseArchive) !== '' || (service === null || service === void 0 ? void 0 : service.nurseArchive)) {
+                    const filePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.nurseArchive);
+                    if (fs_1.default.existsSync(filePath)) {
+                        fs_1.default.unlinkSync(filePath);
+                    }
                 }
                 const nurseFiles = yield database_1.Nurse.find({ serviceId });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -840,12 +809,209 @@ class adminController {
                 yield archive.finalize();
                 // Listen for archive completion
                 yield output.on('close', () => {
-                    console.log('Archive created successfully.');
                     res.status(200).json({ message: 'Service status updated successfully', success: true, data: updatedNurse });
                 });
                 // Listen for errors
                 archive.on('error', err => {
-                    throw err;
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
+                });
+            }
+            catch (error) {
+                res.status(500).json({ message: error === null || error === void 0 ? void 0 : error.message, success: false });
+            }
+        });
+    }
+    /**
+     * Delete a bill
+     * @param req request object
+     * @param res response object
+     */
+    static handleDeleteBill(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const user = yield database_1.Bill.findById(id);
+                if ((user === null || user === void 0 ? void 0 : user.files) !== '' || (user === null || user === void 0 ? void 0 : user.files)) {
+                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.files);
+                    if (fs_1.default.existsSync(updateFilePath)) {
+                        fs_1.default.unlinkSync(updateFilePath);
+                    }
+                }
+                const result = yield database_1.Bill.findByIdAndDelete(id);
+                if (!result) {
+                    return res.status(404).json({ message: 'Bill not found' });
+                }
+                const service = yield database_1.Service.findById(user === null || user === void 0 ? void 0 : user.serviceId);
+                const updateFilePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.billArchive);
+                if (fs_1.default.existsSync(updateFilePath)) {
+                    fs_1.default.unlinkSync(updateFilePath);
+                }
+                const billFiles = yield database_1.Bill.find({ serviceId: user === null || user === void 0 ? void 0 : user.serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                billFiles.map((bill) => {
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.files);
+                });
+                const uid = (0, uuid4_1.default)();
+                const zipFileName = uid + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                // Check if the target directory exists, create it if it doesn't
+                if (!fs_1.default.existsSync('public/Archive')) {
+                    fs_1.default.mkdirSync('public/Archive', { recursive: true });
+                }
+                yield database_1.Service.findOneAndUpdate({ _id: user === null || user === void 0 ? void 0 : user.serviceId }, { billArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    return res.status(200).send({ message: 'Bill deleted successfully' });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
+                });
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
+    /**
+     * Delete a binnacle
+     * @param req request object
+     * @param res response object
+     */
+    static handleDeleteBinnacle(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const user = yield database_1.Blog.findById(id);
+                if ((user === null || user === void 0 ? void 0 : user.files) !== '' || (user === null || user === void 0 ? void 0 : user.files)) {
+                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.files);
+                    if (fs_1.default.existsSync(updateFilePath)) {
+                        fs_1.default.unlinkSync(updateFilePath);
+                    }
+                }
+                const result = yield database_1.Blog.findByIdAndDelete(id);
+                if (!result) {
+                    return res.status(404).json({ message: 'Binnacle not found' });
+                }
+                const service = yield database_1.Service.findById(user === null || user === void 0 ? void 0 : user.serviceId);
+                const updateFilePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.blogArchive);
+                if (fs_1.default.existsSync(updateFilePath)) {
+                    fs_1.default.unlinkSync(updateFilePath);
+                }
+                const blogFiles = yield database_1.Blog.find({ serviceId: user === null || user === void 0 ? void 0 : user.serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                blogFiles.map((blog) => {
+                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files);
+                });
+                const uid = (0, uuid4_1.default)();
+                const zipFileName = uid + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                // Check if the target directory exists, create it if it doesn't
+                if (!fs_1.default.existsSync('public/Archive')) {
+                    fs_1.default.mkdirSync('public/Archive', { recursive: true });
+                }
+                yield database_1.Service.findOneAndUpdate({ _id: user === null || user === void 0 ? void 0 : user.serviceId }, { blogArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    return res.status(200).send({ message: 'Binnacle deleted successfully' });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
+                });
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
+    /**
+     * Delete a nurse
+     * @param req request object
+     * @param res response object
+     */
+    static handleDeleteNurse(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const user = yield database_1.Nurse.findById(id);
+                if ((user === null || user === void 0 ? void 0 : user.files) !== '' || (user === null || user === void 0 ? void 0 : user.files)) {
+                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.files);
+                    if (fs_1.default.existsSync(updateFilePath)) {
+                        fs_1.default.unlinkSync(updateFilePath);
+                    }
+                }
+                const result = yield database_1.Nurse.findByIdAndDelete(id);
+                if (!result) {
+                    return res.status(404).json({ message: 'Nurse not found' });
+                }
+                const service = yield database_1.Service.findById(user === null || user === void 0 ? void 0 : user.serviceId);
+                const updateFilePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.nurseArchive);
+                if (fs_1.default.existsSync(updateFilePath)) {
+                    fs_1.default.unlinkSync(updateFilePath);
+                }
+                const nurseFiles = yield database_1.Nurse.find({ serviceId: user === null || user === void 0 ? void 0 : user.serviceId });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const fileList = [];
+                nurseFiles.map((nurse) => {
+                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files);
+                });
+                const uid = (0, uuid4_1.default)();
+                const zipFileName = uid + '.zip';
+                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                // Check if the target directory exists, create it if it doesn't
+                if (!fs_1.default.existsSync('public/Archive')) {
+                    fs_1.default.mkdirSync('public/Archive', { recursive: true });
+                }
+                yield database_1.Service.findOneAndUpdate({ _id: user === null || user === void 0 ? void 0 : user.serviceId }, { nurseArchive: zipFileName }, { new: true });
+                const output = fs_1.default.createWriteStream(outputFilePath);
+                const archive = (0, archiver_1.default)('zip', {
+                    zlib: { level: 9 }
+                });
+                archive.pipe(output);
+                const sourceDir = 'dist/public';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                fileList.forEach((file) => {
+                    archive.append(fs_1.default.createReadStream(`${sourceDir}/${file}`), { name: file });
+                });
+                // Finalize the archive
+                yield archive.finalize();
+                // Listen for archive completion
+                yield output.on('close', () => {
+                    return res.status(200).send({ message: 'Nurse deleted successfully' });
+                });
+                // Listen for errors
+                archive.on('error', err => {
+                    res.status(500).json({ message: err === null || err === void 0 ? void 0 : err.message, success: false });
                 });
             }
             catch (error) {

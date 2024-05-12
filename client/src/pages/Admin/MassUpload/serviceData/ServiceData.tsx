@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -83,10 +82,12 @@ function ServiceData() {
                 }else if (cellIndex === 1) {
                   obj["type"] = cell;
                 } else if (cellIndex === 2) {
-                  const fileIndex = uploadedFiles.findIndex((fileObject: any) => fileObject.name === cell);
+                  const fileIndex = uploadedFiles.findIndex((fileObject: any) => fileObject.name == cell);
                   obj["file"] = uploadedFiles[fileIndex];
                 } else if (cellIndex === 3) {
-                  obj["Comment"] = cell;
+                  obj["comment"] = cell;
+                } else if (cellIndex === 4) {
+                  obj["period"] = cell;
                 }
               });
               acc.push(obj);
@@ -118,11 +119,12 @@ function ServiceData() {
         const data = new FormData();
         data.append("file", res?.file);
         if (res.type === "Nurse Document") {
-          data.append("Name", res.file?.name);
+          data.append("Name", res?.period);
         } else {
-          data.append("period", res.file?.name);
+          data.append("Name", res?.file?.name?.split(".")[0]);
+          data.append("period", res?.period);
         }
-        if (res?.comment) {
+        if (res?.comment !== "" && res?.comment) {
           data.append("comment", res?.comment);
         } else {
           data.append("comment", " ");

@@ -38,8 +38,10 @@ function AddService() {
         if (!data.success){
           setIsError(true);
           setErrorMessage(data.message);
+        }else {
+          navigate('/Admin/Dashboard'); 
         }
-        navigate('/Admin/Dashboard');
+        
     },
     onError: () => {
       console.log('error');

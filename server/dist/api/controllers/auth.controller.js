@@ -145,6 +145,7 @@ class authController {
             const link = `aitlin.vercel.app/password/reset/${resetToken}/${user._id}`;
             (0, utils_1.sendEmail)(user.email, 'Password Reset Request', {
                 name: user.Name,
+                serviceName: undefined,
                 link: link,
                 email: undefined,
                 password: undefined
@@ -190,6 +191,7 @@ class authController {
             }
             (0, utils_1.sendEmail)(user.email, 'Password Reset Successfully', {
                 name: user.Name,
+                serviceName: undefined,
                 link: undefined,
                 email: undefined,
                 password: undefined

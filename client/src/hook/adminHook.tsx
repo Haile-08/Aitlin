@@ -148,3 +148,66 @@ export const retrieveASingleService = async ({serviceId, token}: any) => {
     });
   return client;
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const deleteBill = async ({id, token}: any) => {
+  const client = await axiosBaseURL
+    .delete(`/v1/admin/service/bill/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      console.log(resData.data.blog);
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  return client;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const deleteBinnacle = async ({id, token}: any) => {
+  const client = await axiosBaseURL
+    .delete(`/v1/admin/service/binnacle/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      console.log(resData.data.blog);
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  return client;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const deleteNurse = async ({id, token}: any) => {
+  const client = await axiosBaseURL
+    .delete(`/v1/admin/service/nurses/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      console.log(resData.data.blog);
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  return client;
+};
