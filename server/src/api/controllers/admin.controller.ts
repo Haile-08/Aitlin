@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { Bill, Blog, Nurse, Service, User, Notification } from '../../database';
 import { sendEmail } from '../../utils';
@@ -16,7 +16,7 @@ class adminController {
    * @param req request object
    * @param res response object
    */
-  static async handleAddClient(req: Request, res: Response){
+  static async handleAddClient(req: Request, res: Response, next: NextFunction){
     try {
       const { Name, status, ServiceData, email, Notification } = req.body;
 
@@ -110,8 +110,7 @@ class adminController {
       }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      return res.status(500).json({ message: err.message, success: false  });
-    
+      next(err);
     }
   }
 
@@ -120,7 +119,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleGetAllClient(req: Request, res: Response) {
+  static async handleGetAllClient(req: Request, res: Response, next: NextFunction) {
     try {
       const pageNum: number = Number(req.query.page) || 0;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -141,8 +140,7 @@ class adminController {
         hasMore: endIndex < services.length,
       });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(err);
     }
   }
 
@@ -151,7 +149,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleGetASingleService(req: Request, res: Response) {
+  static async handleGetASingleService(req: Request, res: Response, next: NextFunction) {
     try{
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const serviceId: any = req.query.serviceId || '';
@@ -164,8 +162,7 @@ class adminController {
         data: services,
       });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(err);
     }
   }
 
@@ -174,7 +171,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleServiceStatus(req: Request, res: Response) {
+  static async handleServiceStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const {id, status} = req.body;
 
@@ -187,7 +184,7 @@ class adminController {
       res.status(200).json({ message: 'Service status updated successfully', success: true, updatedService });
 
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -196,7 +193,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleAddNewBinnacle(req: Request, res: Response) {
+  static async handleAddNewBinnacle(req: Request, res: Response, next: NextFunction) {
     try {
       const {period, Name, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -306,7 +303,7 @@ class adminController {
         res.status(500).json({ message: err?.message, success: false });
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -315,7 +312,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleAddNewNurses(req: Request, res: Response) {
+  static async handleAddNewNurses(req: Request, res: Response, next: NextFunction) {
     try {
       const {format, Name, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -430,7 +427,7 @@ class adminController {
       });
 
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -439,7 +436,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleAddNewBill(req: Request, res: Response) {
+  static async handleAddNewBill(req: Request, res: Response, next: NextFunction) {
     try {
       const {period, Name, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -547,7 +544,7 @@ class adminController {
       });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -556,7 +553,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleGetAllBill(req: Request, res: Response) {
+  static async handleGetAllBill(req: Request, res: Response, next: NextFunction) {
     try {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -584,7 +581,7 @@ class adminController {
       });
       
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -593,7 +590,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleGetAllBinnacle(req: Request, res: Response) {
+  static async handleGetAllBinnacle(req: Request, res: Response, next: NextFunction) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const searchTerm: any = req.query.search || '.*';
@@ -619,7 +616,7 @@ class adminController {
         data: blogList,
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -628,7 +625,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleGetAllNurse(req: Request, res: Response) {
+  static async handleGetAllNurse(req: Request, res: Response, next: NextFunction) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const searchTerm: any = req.query.search || '.*';
@@ -654,7 +651,7 @@ class adminController {
         data: nurseList,
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -663,7 +660,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleUpdateABill(req: Request, res: Response) {
+  static async handleUpdateABill(req: Request, res: Response, next: NextFunction) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const {period, Name, comment, serviceId}: any = req.body;
@@ -765,7 +762,7 @@ class adminController {
         res.status(500).json({ message: err?.message, success: false });
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -775,7 +772,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleUpdateABinnacle(req: Request, res: Response) {
+  static async handleUpdateABinnacle(req: Request, res: Response, next: NextFunction) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const {period, Name, comment, serviceId}: any = req.body;
@@ -877,7 +874,7 @@ class adminController {
         res.status(500).json({ message: err?.message, success: false });
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -886,7 +883,7 @@ class adminController {
      * @param req request object
      * @param res response object
      */
-  static async handleUpdateANurse(req: Request, res: Response) {
+  static async handleUpdateANurse(req: Request, res: Response, next: NextFunction) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const {format, Name, comment, serviceId} = req.body;
@@ -988,7 +985,7 @@ class adminController {
         res.status(500).json({ message: err?.message, success: false });
       });
     } catch (error: any) {
-      res.status(500).json({ message: error?.message, success: false });
+      next(error);
     }
   }
 
@@ -997,7 +994,7 @@ class adminController {
    * @param req request object
    * @param res response object
    */
-  static async handleDeleteBill(req: Request, res: Response){
+  static async handleDeleteBill(req: Request, res: Response, next: NextFunction){
     try {
       const { id } = req.params;
 
@@ -1073,7 +1070,7 @@ class adminController {
         res.status(500).json({ message: err?.message, success: false });
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -1082,7 +1079,7 @@ class adminController {
    * @param req request object
    * @param res response object
    */
-  static async handleDeleteBinnacle(req: Request, res: Response){
+  static async handleDeleteBinnacle(req: Request, res: Response, next: NextFunction){
     try {
       const { id } = req.params;
 
@@ -1158,7 +1155,7 @@ class adminController {
         res.status(500).json({ message: err?.message, success: false });
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 
@@ -1167,7 +1164,7 @@ class adminController {
    * @param req request object
    * @param res response object
    */
-  static async handleDeleteNurse(req: Request, res: Response){
+  static async handleDeleteNurse(req: Request, res: Response, next: NextFunction){
     try {
       const { id } = req.params;
 
@@ -1243,7 +1240,7 @@ class adminController {
         res.status(500).json({ message: err?.message, success: false });
       });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error', success: false });
+      next(error);
     }
   }
 }

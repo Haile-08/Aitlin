@@ -5,13 +5,14 @@ import { Express, Request, Response, NextFunction } from 'express';
  * @param app express app
  */
 const expressGlobalErrorHandler = (app: Express) =>{
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-  app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
-    const statusCode: number = error.statusCode || 500;
-    const message: string = error.message;
-    return res.status(statusCode).json({
-      status: statusCode,
-      message,
+  // Global error handler
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack);
+    res.status(500).json({
+      message: 'Internal server error',
+      success: false,
+      error: err.message,
     });
   });
 };

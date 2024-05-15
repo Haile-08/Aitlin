@@ -9,14 +9,15 @@ const app = express();
 // connect to mongodb
 expressConnectDB();
 
+// handle global errors
+expressGlobalErrorHandler(app);
+
 // handle express middleware
 expressMiddleWareHandler(app);
 
 // handle express routes
 expressRouteHandler(app);
 
-// handle global errors
-expressGlobalErrorHandler(app);
 
 // handle express initialization
 serverInitHandler(app);
