@@ -525,7 +525,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -557,7 +561,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', err => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
