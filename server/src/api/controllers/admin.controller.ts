@@ -505,6 +505,10 @@ class adminController {
 
       const output = fs.createWriteStream(outputFilePath);
 
+      output.on('error', (err) => {
+        next(err);
+      });
+
       const archive = archiver('zip', {
         zlib: { level: 9 }
       });
