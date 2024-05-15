@@ -474,12 +474,14 @@ class adminController {
       });
 
       const filePath = path.join('dist/public/Archive', service?.billArchive ? service?.billArchive : 'none.pdf');
-      
+
       fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
           next(err);
+          return;
         } else {
           fs.unlinkSync(filePath);
+          return;
         }
       });
       const billFiles = await Bill.find({ serviceId });
