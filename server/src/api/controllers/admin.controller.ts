@@ -261,6 +261,7 @@ class adminController {
           return;
         }
       });
+
       await Service.findOneAndUpdate(
         { _id: serviceId },
         {blogArchive: zipFileName},
@@ -280,11 +281,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathbinnacle = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathbinnacle.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathbinnacle, { name: file });
       });
       
       // Finalize the archive
@@ -318,6 +319,7 @@ class adminController {
       archive.on('error', (err) => {
         next(err);
       });
+
     } catch (error) {
       next(error);
     }
@@ -419,11 +421,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathnurse = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathnurse.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathnurse, { name: file });
       });
       
       // Finalize the archive
@@ -555,11 +557,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathbill = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathbill.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathbill, { name: file });
       });
       
       // Finalize the archive
@@ -815,11 +817,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathupdatebill = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathupdatebill.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathupdatebill, { name: file });
       });
       
       // Finalize the archive
@@ -948,11 +950,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathupdatebinnacle = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathupdatebinnacle.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathupdatebinnacle, { name: file });
       });
       
       // Finalize the archive
@@ -1080,11 +1082,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathupdatenurse = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathupdatenurse.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathupdatenurse, { name: file });
       });
       
       // Finalize the archive
@@ -1183,11 +1185,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathdeletebill = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathdeletebill.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathdeletebill, { name: file });
       });
       
       // Finalize the archive
@@ -1286,11 +1288,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathdeletebinnacle = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathdeletebinnacle.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathdeletebinnacle, { name: file });
       });
       
       // Finalize the archive
@@ -1389,11 +1391,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
-        fileoutpath.on('error', (err) => {
+        const fileoutpathdeletenurse = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpathdeletenurse.on('error', (err) => {
           next(err);
         });
-        archive.append(fileoutpath, { name: file });
+        archive.append(fileoutpathdeletenurse, { name: file });
       });
       
       // Finalize the archive
