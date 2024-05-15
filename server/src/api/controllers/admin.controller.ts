@@ -474,13 +474,14 @@ class adminController {
       });
 
       const filePath = path.join('dist/public/Archive', service?.billArchive ? service?.billArchive : 'none.pdf');
-
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      } else {
-        console.log('path error');
-      }
-
+      
+      fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+        } else {
+          fs.unlinkSync(filePath);
+        }
+      });
       const billFiles = await Bill.find({ serviceId });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
