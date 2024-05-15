@@ -232,10 +232,15 @@ class adminController {
       
       const filePath = path.join('dist/public/Archive', service?.blogArchive ? service?.blogArchive : 'none.pdf' );
 
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-
+      fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          fs.unlinkSync(filePath);
+          return;
+        }
+      });
       const blogFiles = await Blog.find({ serviceId });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -248,10 +253,14 @@ class adminController {
       const id = uuid4();
       const zipFileName = id + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
-      // Check if the target directory exists, create it if it doesn't
-      if (!fs.existsSync('public/Archive')) {
-        fs.mkdirSync('public/Archive', { recursive: true });
-      }
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
       await Service.findOneAndUpdate(
         { _id: serviceId },
         {blogArchive: zipFileName},
@@ -259,6 +268,9 @@ class adminController {
       );
 
       const output = fs.createWriteStream(outputFilePath);
+      output.on('error', (err) => {
+        next(err);
+      });
 
       const archive = archiver('zip', {
         zlib: { level: 9 }
@@ -268,7 +280,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -300,7 +316,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', (err) => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
     } catch (error) {
       next(error);
@@ -354,10 +370,15 @@ class adminController {
 
 
       const filePath = path.join('dist/public/Archive', service?.nurseArchive ? service?.nurseArchive : 'none.pdf');
-
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+      fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          fs.unlinkSync(filePath);
+          return;
+        }
+      });
 
       const nurseFiles = await Nurse.find({ serviceId });
 
@@ -371,10 +392,14 @@ class adminController {
       const id = uuid4();
       const zipFileName = id + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
-      // Check if the target directory exists, create it if it doesn't
-      if (!fs.existsSync('public/Archive')) {
-        fs.mkdirSync('public/Archive', { recursive: true });
-      }
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
       await Service.findOneAndUpdate(
         { _id: serviceId },
         { nurseArchive: zipFileName },
@@ -382,6 +407,9 @@ class adminController {
       );
 
       const output = fs.createWriteStream(outputFilePath);
+      output.on('error', (err) => {
+        next(err);
+      });
 
       const archive = archiver('zip', {
         zlib: { level: 9 }
@@ -391,7 +419,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -423,7 +455,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', err => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
 
     } catch (error) {
@@ -474,7 +506,6 @@ class adminController {
       });
 
       const filePath = path.join('dist/public/Archive', service?.billArchive ? service?.billArchive : 'none.pdf');
-
       fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
           next(err);
@@ -512,7 +543,6 @@ class adminController {
       );
 
       const output = fs.createWriteStream(outputFilePath);
-
       output.on('error', (err) => {
         next(err);
       });
@@ -700,10 +730,15 @@ class adminController {
 
       if(bill?.files !== '' || bill?.files){
         const filePath = path.join('dist/public', bill?.files);
-
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(filePath);
+            return;
+          }
+        });
       }
 
       const now = new Date();
@@ -730,10 +765,15 @@ class adminController {
 
       if(service?.billArchive !== '' || service?.billArchive){
         const filePath = path.join('dist/public/Archive', service?.billArchive);
-
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(filePath);
+            return;
+          }
+        });
       }
 
       const billFiles = await Bill.find({ serviceId });
@@ -748,10 +788,14 @@ class adminController {
       const id = uuid4();
       const zipFileName = id + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
-      // Check if the target directory exists, create it if it doesn't
-      if (!fs.existsSync('public/Archive')) {
-        fs.mkdirSync('public/Archive', { recursive: true });
-      }
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
       await Service.findOneAndUpdate(
         { _id: serviceId },
         {billArchive: zipFileName},
@@ -759,6 +803,9 @@ class adminController {
       );
 
       const output = fs.createWriteStream(outputFilePath);
+      output.on('error', (err) => {
+        next(err);
+      });
 
       const archive = archiver('zip', {
         zlib: { level: 9 }
@@ -768,7 +815,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -781,7 +832,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', err => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
     } catch (error) {
       next(error);
@@ -812,10 +863,15 @@ class adminController {
 
       if(blog?.files !== '' || blog?.files){
         const filePath = path.join('dist/public', blog?.files);
-
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(filePath);
+            return;
+          }
+        });
       }
 
       const now = new Date();
@@ -842,10 +898,15 @@ class adminController {
 
       if(service?.blogArchive !== '' || service?.blogArchive){
         const filePath = path.join('dist/public/Archive', service?.blogArchive);
-
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(filePath);
+            return;
+          }
+        });
       }
 
       const blogFiles = await Blog.find({ serviceId });
@@ -860,10 +921,14 @@ class adminController {
       const id = uuid4();
       const zipFileName = id + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
-      // Check if the target directory exists, create it if it doesn't
-      if (!fs.existsSync('public/Archive')) {
-        fs.mkdirSync('public/Archive', { recursive: true });
-      }
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
       await Service.findOneAndUpdate(
         { _id: serviceId },
         {blogArchive: zipFileName},
@@ -871,6 +936,9 @@ class adminController {
       );
 
       const output = fs.createWriteStream(outputFilePath);
+      output.on('error', (err) => {
+        next(err);
+      });
 
       const archive = archiver('zip', {
         zlib: { level: 9 }
@@ -880,7 +948,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -893,7 +965,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', err => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
     } catch (error) {
       next(error);
@@ -923,10 +995,15 @@ class adminController {
 
       if(nurse?.files !== '' || nurse?.files){
         const filePath = path.join('dist/public', nurse?.files);
-
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(filePath);
+            return;
+          }
+        });
       }
 
       const now = new Date();
@@ -953,10 +1030,15 @@ class adminController {
       
       if(service?.nurseArchive  !== '' || service?.nurseArchive ){
         const filePath = path.join('dist/public/Archive', service?.nurseArchive );
-
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(filePath);
+            return;
+          }
+        });
       }
 
       const nurseFiles = await Nurse.find({ serviceId });
@@ -971,10 +1053,14 @@ class adminController {
       const id = uuid4();
       const zipFileName = id + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
-      // Check if the target directory exists, create it if it doesn't
-      if (!fs.existsSync('public/Archive')) {
-        fs.mkdirSync('public/Archive', { recursive: true });
-      }
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
       await Service.findOneAndUpdate(
         { _id: serviceId },
         {nurseArchive: zipFileName},
@@ -982,6 +1068,9 @@ class adminController {
       );
 
       const output = fs.createWriteStream(outputFilePath);
+      output.on('error', (err) => {
+        next(err);
+      });
 
       const archive = archiver('zip', {
         zlib: { level: 9 }
@@ -991,7 +1080,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -1004,7 +1097,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', err => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
     } catch (error: any) {
       next(error);
@@ -1025,10 +1118,15 @@ class adminController {
 
       if(user?.files !== '' || user?.files){
         const updateFilePath = path.join('dist/public', user?.files);
-
-        if (fs.existsSync(updateFilePath)) {
-          fs.unlinkSync(updateFilePath);
-        }
+        fs.access(updateFilePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(updateFilePath);
+            return;
+          }
+        });
       }
 
       const result = await Bill.findByIdAndDelete(id);
@@ -1039,10 +1137,15 @@ class adminController {
       const service: any = await Service.findById(user?.serviceId);
 
       const updateFilePath = path.join('dist/public/Archive', service?.billArchive);
-
-      if (fs.existsSync(updateFilePath)) {
-        fs.unlinkSync(updateFilePath);
-      }
+      fs.access(updateFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          fs.unlinkSync(updateFilePath);
+          return;
+        }
+      });
 
       const billFiles = await Bill.find({ serviceId: user?.serviceId });
 
@@ -1056,10 +1159,14 @@ class adminController {
       const uid = uuid4();
       const zipFileName = uid + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
-      // Check if the target directory exists, create it if it doesn't
-      if (!fs.existsSync('public/Archive')) {
-        fs.mkdirSync('public/Archive', { recursive: true });
-      }
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
       await Service.findOneAndUpdate(
         { _id: user?.serviceId },
         {billArchive: zipFileName},
@@ -1076,7 +1183,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -1089,7 +1200,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', err => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
     } catch (error) {
       next(error);
@@ -1110,10 +1221,15 @@ class adminController {
 
       if(user?.files !== '' || user?.files){
         const updateFilePath = path.join('dist/public', user?.files);
-
-        if (fs.existsSync(updateFilePath)) {
-          fs.unlinkSync(updateFilePath);
-        }
+        fs.access(updateFilePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(updateFilePath);
+            return;
+          }
+        });
       }
 
       const result = await Blog.findByIdAndDelete(id);
@@ -1124,10 +1240,15 @@ class adminController {
       const service: any = await Service.findById(user?.serviceId);
 
       const updateFilePath = path.join('dist/public/Archive', service?.blogArchive);
-
-      if (fs.existsSync(updateFilePath)) {
-        fs.unlinkSync(updateFilePath);
-      }
+      fs.access(updateFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          fs.unlinkSync(updateFilePath);
+          return;
+        }
+      });
 
       const blogFiles = await Blog.find({ serviceId: user?.serviceId });
 
@@ -1141,10 +1262,14 @@ class adminController {
       const uid = uuid4();
       const zipFileName = uid + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
-      // Check if the target directory exists, create it if it doesn't
-      if (!fs.existsSync('public/Archive')) {
-        fs.mkdirSync('public/Archive', { recursive: true });
-      }
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
       await Service.findOneAndUpdate(
         { _id: user?.serviceId },
         { blogArchive: zipFileName},
@@ -1161,7 +1286,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -1174,7 +1303,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', err => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
     } catch (error) {
       next(error);
@@ -1195,10 +1324,15 @@ class adminController {
 
       if(user?.files !== '' || user?.files){
         const updateFilePath = path.join('dist/public', user?.files);
-
-        if (fs.existsSync(updateFilePath)) {
-          fs.unlinkSync(updateFilePath);
-        }
+        fs.access(updateFilePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            next(err);
+            return;
+          } else {
+            fs.unlinkSync(updateFilePath);
+            return;
+          }
+        });
       }
 
       const result = await Nurse.findByIdAndDelete(id);
@@ -1209,10 +1343,15 @@ class adminController {
       const service: any = await Service.findById(user?.serviceId);
 
       const updateFilePath = path.join('dist/public/Archive', service?.nurseArchive);
-
-      if (fs.existsSync(updateFilePath)) {
-        fs.unlinkSync(updateFilePath);
-      }
+      fs.access(updateFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          fs.unlinkSync(updateFilePath);
+          return;
+        }
+      });
 
       const nurseFiles = await Nurse.find({ serviceId: user?.serviceId });
 
@@ -1226,10 +1365,14 @@ class adminController {
       const uid = uuid4();
       const zipFileName = uid + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
-      // Check if the target directory exists, create it if it doesn't
-      if (!fs.existsSync('public/Archive')) {
-        fs.mkdirSync('public/Archive', { recursive: true });
-      }
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
       await Service.findOneAndUpdate(
         { _id: user?.serviceId },
         { nurseArchive: zipFileName},
@@ -1246,7 +1389,11 @@ class adminController {
       const sourceDir = 'dist/public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
-        archive.append(fs.createReadStream(`${sourceDir}/${file}`), { name: file });
+        const fileoutpath = fs.createReadStream(`${sourceDir}/${file}`);
+        fileoutpath.on('error', (err) => {
+          next(err);
+        });
+        archive.append(fileoutpath, { name: file });
       });
       
       // Finalize the archive
@@ -1259,7 +1406,7 @@ class adminController {
       
       // Listen for errors
       archive.on('error', err => {
-        res.status(500).json({ message: err?.message, success: false });
+        next(err);
       });
     } catch (error) {
       next(error);
