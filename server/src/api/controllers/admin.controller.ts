@@ -477,6 +477,8 @@ class adminController {
 
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
+      } else {
+        console.log('path error');
       }
 
       const billFiles = await Bill.find({ serviceId });
