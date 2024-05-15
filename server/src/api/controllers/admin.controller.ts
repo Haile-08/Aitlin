@@ -496,6 +496,14 @@ class adminController {
       const id = uuid4();
       const zipFileName = id + '.zip';
       const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      fs.access(outputFilePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          next(err);
+          return;
+        } else {
+          return;
+        }
+      });
   
       await Service.findOneAndUpdate(
         { _id: serviceId },
