@@ -116,8 +116,8 @@ function ServiceData() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit = async (e: any) => {
-    e.preventDefault();
     e.target.disabled = true;
+    e.preventDefault();
     setLoading(true);
     try {
       const promises = documentsInfoList.map(async (res: any) => {
