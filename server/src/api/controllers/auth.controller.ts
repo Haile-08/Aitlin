@@ -34,6 +34,8 @@ class authController {
       }
   
       const user = await User.findOne({ email });
+      console.log('handle user');
+      console.log(user);
       if (!user) {
         return res.json({ 
           message: 'Email not found',
@@ -48,7 +50,7 @@ class authController {
         });
       }
   
-      const isCorrect = bcrypt.compare(password, user.password);
+      const isCorrect = await bcrypt.compare(password, user.password);
       if (!isCorrect) {
         return res.json({ 
           message: 'incorrect password',
