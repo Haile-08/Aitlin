@@ -55,12 +55,12 @@ function ManyClient() {
     <div className="w-dvw h-dvh bg-banner-color flex justify-start items-center flex-col ">
         {isNotificationOpen&& <div className="w-dvw h-dvh flex justify-end items-center  absolute z-40" >
           <div className="h-dvh w-1/4 md:w-3/4 bg-primary-color bg-opacity-20 " onClick={()=>setIsNotificationOpen(false)}></div>
-          <div className="h-dvh w-3/4 md:w-1/4 bg-white flex items-center flex-col">
+          <div className="h-dvh w-3/4 md:w-1/4 bg-white flex items-center flex-col overflow-y-auto scrollbar scrollbar-track-white scrollbar-thin scrollbar-thumb-primary-color">
             <div className="flex items-center justify-between w-[80%] mt-5 mb-10">
               <p className="text-2xl font-bold font-roboto">Notification</p>
               <img src={closeflat} alt="close" className="w-4 cursor-pointer" onClick={()=>setIsNotificationOpen(false)}/>
             </div>
-            <div className="h-full w-full flex justify-start flex-col items-center overflow-y-auto scrollbar scrollbar-track-white scrollbar-thin scrollbar-thumb-primary-color">
+            <div className="h-[90%] w-full flex justify-start flex-col items-center">
             {notification?.data?.data?.map((notify: any)=>(
               <NotificationData type={notify.type} link={notify.link} id={notify._id}/>
             ))}
