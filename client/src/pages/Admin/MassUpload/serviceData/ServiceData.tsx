@@ -117,6 +117,7 @@ function ServiceData() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit = async () => {
     try {
+      setLoading(true)
       const promises = documentsInfoList.map(async (res: any) => {
         const data = new FormData();
         data.append("file", res?.file);
@@ -186,9 +187,7 @@ function ServiceData() {
         <button onClick={handleNavBack} className="flex bg-primary-color font-roboto text-white justify-center items-center px-8 py-3 md:px-8 md:py-3 text-xs md:text-lg m-2 rounded-2xl">
             <p className="flex">Back</p>
         </button>
-        <button onClick={(e:any)=>{
-          e.preventDefault();
-          setLoading(true);
+        <button onClick={()=>{
           handleSubmit();
           }} className="flex bg-primary-color disabled:bg-slate-600 font-roboto text-white justify-center items-center px-8 py-3 md:px-8 md:py-3 text-xs md:text-lg m-2 rounded-2xl">
             <p className="flex">upload</p>
