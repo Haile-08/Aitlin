@@ -114,9 +114,11 @@ function ServiceData() {
     }
   }, [doc]);
 
-  const handleSubmit = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
       const promises = documentsInfoList.map(async (res: any) => {
         const data = new FormData();
         data.append("file", res?.file);
