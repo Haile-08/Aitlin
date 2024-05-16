@@ -152,7 +152,6 @@ function ServiceData() {
       // Wait for all promises to resolve
       await Promise.all(promises).then(()=>{
         // Once all mutations are done, navigate to the desired location
-        setLoading(false);
         navigate('/Admin/Dashboard');
       });
     } catch (error) {
