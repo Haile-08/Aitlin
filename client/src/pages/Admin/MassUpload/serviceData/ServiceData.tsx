@@ -114,6 +114,10 @@ function ServiceData() {
     }
   }, [doc]);
 
+  useEffect(()=>{
+    setLoading(false);
+  },[])
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit = async () => {
     try {
