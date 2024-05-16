@@ -60,7 +60,7 @@ function ManyClient() {
               <p className="text-2xl font-bold font-roboto">Notification</p>
               <img src={closeflat} alt="close" className="w-4 cursor-pointer" onClick={()=>setIsNotificationOpen(false)}/>
             </div>
-            <div className="h-full w-full flex justify-start flex-col items-center overflow-auto scrollbar scrollbar-track-white scrollbar-thin scrollbar-thumb-primary-color">
+            <div className="h-full w-full flex justify-start flex-col items-center overflow-y-auto scrollbar scrollbar-track-white scrollbar-thin scrollbar-thumb-primary-color">
             {notification?.data?.data?.map((notify: any)=>(
               <NotificationData type={notify.type} link={notify.link} id={notify._id}/>
             ))}
