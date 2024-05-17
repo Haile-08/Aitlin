@@ -126,7 +126,7 @@ class adminController {
       const searchTerm: any = req.query.search || '.*';
   
       const servicePerPage: number = 9;
-      const services = await Service.find({ serviceName: { $regex: searchTerm, $options: 'i' } });
+      const services = await Service.find({ email: { $regex: searchTerm, $options: 'i' } });
   
       const startIndex = pageNum * servicePerPage;
       const endIndex = startIndex + servicePerPage;

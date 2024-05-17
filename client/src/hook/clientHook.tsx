@@ -18,9 +18,9 @@ export const retrieveClientServices = async ({page, clientId, search, token}: {p
         console.log(err);
       });
     return client;
-  };
+};
 
-  export const retrieveClientNotification = async ({clientId, token}: { clientId: string, token: string}) => {
+export const retrieveClientNotification = async ({clientId, token}: { clientId: string, token: string}) => {
     const client = await axiosBaseURL
       .get(`/v1/client/notification/?clientId=${clientId}`, {
         headers: {
@@ -38,7 +38,7 @@ export const retrieveClientServices = async ({page, clientId, search, token}: {p
         console.log(err);
       });
     return client;
-  };
+};
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const updateNotificationData = async ({ data, token }: any) => {

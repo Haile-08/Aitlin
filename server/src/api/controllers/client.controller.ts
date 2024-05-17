@@ -17,7 +17,7 @@ class clientController {
       const clientId: any = req.query.clientId || '';
   
       const servicePerPage: number = 9;
-      const services = await Service.find({ serviceName: { $regex: searchTerm, $options: 'i' },clientId: clientId });
+      const services = await Service.find({ email: { $regex: searchTerm, $options: 'i' },clientId: clientId });
   
       const startIndex = pageNum * servicePerPage;
       const endIndex = startIndex + servicePerPage;
