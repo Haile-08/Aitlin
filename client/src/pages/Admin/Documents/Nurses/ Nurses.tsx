@@ -66,7 +66,7 @@ function  Nurses() {
               </div>
             </form>
             <button className="flex bg-primary-color font-roboto text-white justify-center items-center ml-2 md:ml-5 px-3 md:px-5 py-2 md:py-3 text-xs md:text-lg m-2 rounded-xl" onClick={()=> setIsOpen(true)}>
-              <p className="hidden md:flex">Agregar factura</p>
+              <p className="hidden md:flex">Agregar documento</p>
               <img src={add} alt="add" className="flex md:hidden"/>
             </button>
             </div>
