@@ -14,9 +14,9 @@ const app = (0, express_1.default)();
 (0, utils_1.expressMiddleWareHandler)(app);
 // handle express routes
 (0, api_1.expressRouteHandler)(app);
-// handle global errors
-(0, utils_1.expressGlobalErrorHandler)(app);
 // handle express initialization
 (0, utils_1.serverInitHandler)(app);
+// handle global errors
+(0, utils_1.expressGlobalErrorHandler)(app);
 exports.default = app;
 //# sourceMappingURL=index.js.map

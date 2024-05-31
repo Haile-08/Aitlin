@@ -112,10 +112,10 @@ function ManyClient() {
           <div className="w-[30%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Email</p>
           </div>
-          <div className="w-[20%] md:w-[15%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Estatus</p>
           </div>
-          <div className="w-[20%] md:w-[15%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="w-[20%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Action</p>
           </div>
         </div>

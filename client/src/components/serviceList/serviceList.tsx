@@ -45,19 +45,19 @@ function ServiceList({Name, Service, Email, status, id, page }: any) {
 
   return (
     <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-5 md:py-6 border-b-[1.5px]  border-black md:border-black border-opacity-40 flex justify-start items-center">
-          <div className="ml-2 md:ml-6 w-[40%] md:w-[25%] h-[90%] flex justify-start items-center font-roboto font-light">
+          <div className="ml-2 md:ml-6 w-[40%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
             <p className="opacity-50 break-all font-roboto font-light">{id}</p>
           </div>
-          <div className="ml-1 md:ml-4 w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-light">
+          <div className="ml-1 md:ml-4 w-[20%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
             <p className="opacity-50 break-all font-roboto font-light">{Name}</p>
           </div>
           <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-light">
             <p className="opacity-50 break-all font-roboto font-light">{Service}</p>
           </div>
-          <div className="hidden md:flex w-[30%] h-[90%] justify-start items-center font-roboto font-light">
+          <div className="hidden md:flex w-[25%] h-[90%] justify-start items-center font-roboto font-light">
             <p className="opacity-50 break-all font-roboto font-light">{Email}</p>
           </div>
-          <div className="w-[20%] md:w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
+          <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-light">
             <div className="relative inline-block ">
                 <input  checked={check} onChange={handleChange}  type="checkbox" id="hs-large-solid-switch-with-icons" className="peer appearance-none relative w-[4.25rem] h-9 p-px bg-gray-300 border-transparent text-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-blue-600 disabled:opacity-50 disabled:pointer-events-none checked:bg-primary-color checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-600 before:inline-block before:w-8 before:h-8 before:bg-white checked:before:bg-switch-btn before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-gray-400 dark:checked:before:bg-blue-200" />
                 <label htmlFor="hs-large-solid-switch-with-icons" className="sr-only">switch</label>
@@ -70,8 +70,8 @@ function ServiceList({Name, Service, Email, status, id, page }: any) {
             </div>
           </div>
           <div className="w-[20%] md:w-[15%] h-[100%] flex justify-start items-center font-roboto font-light">
-            <button className="text-white bg-primary-color hidden md:flex px-3 py-1 md:px-6 md:py-2 rounded-xl text-xs md:text-xl" onClick={handleDocumentNav}>Ver documentos</button>
-            <button className="text-white bg-white md:bg-primary-color flex md:hidden  rounded-xl text-xs md:text-xl" onClick={handleDocumentNav}>
+            <button className="w-full font-roboto font-light h-[50px] text-white text-base bg-primary-color hidden md:flex md:justify-center md:items-center px-3 py-1 md:px-6 md:py-2 rounded-xl" onClick={handleDocumentNav}>Ver documentos</button>
+            <button className="w-full font-roboto font-light h-[50px] text-white text-base bg-white md:bg-primary-color flex justify-center items-center md:hidden  rounded-xl" onClick={handleDocumentNav}>
               <img src={eye} alt="eye" className="w-[64%]" />  
             </button>  
           </div>

@@ -5,13 +5,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param app express app
  */
 const expressGlobalErrorHandler = (app) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-    app.use((error, _req, res, _next) => {
-        const statusCode = error.statusCode || 500;
-        const message = error.message;
-        return res.status(statusCode).json({
-            status: statusCode,
-            message,
+    // Global error handler
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+    app.use((err, req, res, next) => {
+        console.error(err.stack);
+        res.status(500).json({
+            message: 'Internal server error',
+            success: false,
+            error: err.message,
         });
     });
 };

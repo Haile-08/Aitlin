@@ -26,7 +26,7 @@ class clientController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const clientId = req.query.clientId || '';
                 const servicePerPage = 9;
-                const services = yield database_1.Service.find({ serviceName: { $regex: searchTerm, $options: 'i' }, clientId: clientId });
+                const services = yield database_1.Service.find({ email: { $regex: searchTerm, $options: 'i' }, clientId: clientId });
                 const startIndex = pageNum * servicePerPage;
                 const endIndex = startIndex + servicePerPage;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

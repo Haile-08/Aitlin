@@ -27,12 +27,12 @@ function ClientServiceList({Name, Service, Email, status, id}:any) {
               <div className="w-[30%] h-[90%] hidden md:flex justify-start items-center font-roboto font-light">
                 <p className="opacity-50 font-roboto font-light">{Email}</p>
               </div>
-              <div className="w-[15%] h-[90%] flex justify-start items-center opacity-50 font-roboto font-light">
+              <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center opacity-50 font-roboto font-light">
                 {status? <p>Activo</p>: <p>Inactivo</p>}
               </div>
-              <div className="w-[20%] md:w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
-                <button className="text-white bg-primary-color hidden md:flex px-3 py-1 md:px-6 md:py-2 rounded-xl text-xs md:text-xl"  onClick={handleDocumentNav}>Ver documentos</button>   
-                <button className="text-white bg-white md:bg-primary-color flex md:hidden  rounded-xl text-xs md:text-xl" onClick={handleDocumentNav}>
+              <div className="w-[20%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-light">
+                <button className="w-full h-[50px] text-white bg-primary-color hidden md:flex md:justify-center md:items-center px-1 py-1 rounded-xl text-xs md:text-lg"  onClick={handleDocumentNav}>Ver documentos</button>   
+                <button className="w-full h-[50px] text-white bg-white md:bg-primary-color flex md:hidden  rounded-xl text-xs md:text-base" onClick={handleDocumentNav}>
                   <img src={eye} alt="eye" className="w-[64%]" />  
                 </button>
               </div>

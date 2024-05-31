@@ -67,6 +67,8 @@ class authController {
                     });
                 }
                 const user = yield database_1.User.findOne({ email });
+                console.log('handle user');
+                console.log(user);
                 if (!user) {
                     return res.json({
                         message: 'Email not found',
@@ -79,7 +81,7 @@ class authController {
                         success: false
                     });
                 }
-                const isCorrect = bcrypt_1.default.compare(password, user.password);
+                const isCorrect = yield bcrypt_1.default.compare(password, user.password);
                 if (!isCorrect) {
                     return res.json({
                         message: 'incorrect password',
