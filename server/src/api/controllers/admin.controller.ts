@@ -225,7 +225,7 @@ class adminController {
       await Notification.create({
         clientId: service.clientId,
         serviceId,
-        link: `${blog.files}`,
+        link1: `${blog.files}`,
         type: 'binnacle',
         read: false,
       });
@@ -368,7 +368,7 @@ class adminController {
       await Notification.create({
         clientId: service.clientId,
         serviceId,
-        link: `${nurse.files}`,
+        link1: `${nurse.files}`,
         type: 'nurse',
         read: false,
       });
@@ -481,9 +481,15 @@ class adminController {
     try {
       const {period, Name, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const file : any = req.file;
+      const file : any = req.files;
+      console.log('Files:', file);  // Log files to debug
+      console.log('period', period);
+      console.log('name', Name);
+      console.log('service id', serviceId);
+      console.log('file 1', file[0].path);
+      console.log('file 2', file[1].path);
 
-      if (!period || !Name || !serviceId || !file.path) {
+      if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -492,24 +498,29 @@ class adminController {
       const service = await Service.findById(serviceId);
 
       if (!service) {
+        console.log('Service not found');
         return res.json({ 
           message: 'Service not found',
           success: false, 
         });
       }
+
+      console.log('create');
       
       const bill = await Bill.create({
         serviceId,
         period,
         Name,
         comment: comment || '',
-        files: file.path.split('/')[2],
+        file1: file[0].path.split('/')[2],
+        file2: file[1].path.split('/')[2],
       });
 
       await Notification.create({
         clientId: service.clientId,
         serviceId,
-        link: `${bill.files}`,
+        link1: `${bill.file1}`,
+        link2: `${bill.file2}`,
         type: 'bill',
         read: false,
       });
@@ -526,7 +537,8 @@ class adminController {
       const fileList: any = [];
 
       billFiles.map((bill)=> {
-        fileList.push(bill?.files);
+        fileList.push(bill?.file1);
+        fileList.push(bill?.file2);
       });
 
       const id = uuid4();
@@ -585,7 +597,7 @@ class adminController {
               serviceName: service.serviceName,
               email: 'bill',
               password: undefined,
-              link: `https://aitlin.vercel.app/${bill.files}`
+              link: `https://aitlin.vercel.app/${bill.file1}`
             },
             './template/documentNotification.handlebars'
           );
@@ -729,9 +741,15 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const {period, Name, comment, serviceId}: any = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const file : any = req.file;
+      const file : any = req.files;
+      console.log('Files:', file);  // Log files to debug
+      console.log('period', period);
+      console.log('name', Name);
+      console.log('service id', serviceId);
+      console.log('file 1', file[0].path);
+      console.log('file 2', file[1].path);
 
-      if (!period || !Name || !serviceId || !file.path) {
+      if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -740,8 +758,17 @@ class adminController {
 
       const bill: any = await Bill.findById(serviceId);
 
-      if(bill?.files !== '' || bill?.files){
-        const filePath = path.join('dist/public', bill?.files);
+      if(bill?.file1 !== '' || bill?.file1){
+        const filePath = path.join('dist/public', bill?.file1);
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (!err) {
+            fs.unlinkSync(filePath);
+          }
+        });
+      }
+
+      if(bill?.file2 !== '' || bill?.file2){
+        const filePath = path.join('dist/public', bill?.file2);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -753,7 +780,7 @@ class adminController {
 
       const updatedBill = await Bill.findOneAndUpdate(
         { _id: serviceId },
-        { comment: comment || '', Name ,period, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { comment: comment || '', Name ,period, file1: file[0].path.split('/')[2], file2: file[1].path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
         { new: true }
       );
 
@@ -766,7 +793,8 @@ class adminController {
       await Notification.create({
         clientId: service.clientId,
         serviceId,
-        link: `${bill?.files}`,
+        link1: `${bill?.file1}`,
+        link2: `${bill?.file2}`,
         type: 'bill',
         read: false,
       });
@@ -786,7 +814,8 @@ class adminController {
       const fileList: any = [];
 
       billFiles.map((bill)=> {
-        fileList.push(bill?.files);
+        fileList.push(bill?.file1);
+        fileList.push(bill?.file2);
       });
 
       const id = uuid4();
@@ -899,7 +928,7 @@ class adminController {
       await Notification.create({
         clientId: service.clientId,
         serviceId,
-        link: `${blog?.files}`,
+        link1: `${blog?.files}`,
         type: 'binnacle',
         read: false,
       });
@@ -1031,7 +1060,7 @@ class adminController {
       await Notification.create({
         clientId: service.clientId,
         serviceId,
-        link: `${nurse?.files}`,
+        link1: `${nurse?.files}`,
         type: 'nurse',
         read: false,
       });
@@ -1128,8 +1157,17 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const user: any = await Bill.findById(id);
 
-      if(user?.files !== '' || user?.files){
-        const updateFilePath = path.join('dist/public', user?.files);
+      if(user?.file1 !== '' || user?.file1){
+        const updateFilePath = path.join('dist/public', user?.file1);
+        fs.access(updateFilePath, fs.constants.F_OK, (err) => {
+          if (!err) {
+            fs.unlinkSync(updateFilePath);
+          }
+        });
+      }
+
+      if(user?.file2 !== '' || user?.file2){
+        const updateFilePath = path.join('dist/public', user?.file2);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1157,7 +1195,8 @@ class adminController {
       const fileList: any = [];
 
       billFiles.map((bill)=> {
-        fileList.push(bill?.files);
+        fileList.push(bill?.file1);
+        fileList.push(bill?.file2);
       });
 
       const uid = uuid4();

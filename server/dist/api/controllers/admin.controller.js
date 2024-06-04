@@ -217,7 +217,7 @@ class adminController {
                 yield database_1.Notification.create({
                     clientId: service.clientId,
                     serviceId,
-                    link: `${blog.files}`,
+                    link1: `${blog.files}`,
                     type: 'binnacle',
                     read: false,
                 });
@@ -334,7 +334,7 @@ class adminController {
                 yield database_1.Notification.create({
                     clientId: service.clientId,
                     serviceId,
-                    link: `${nurse.files}`,
+                    link1: `${nurse.files}`,
                     type: 'nurse',
                     read: false,
                 });
@@ -427,8 +427,14 @@ class adminController {
             try {
                 const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const file = req.file;
-                if (!period || !Name || !serviceId || !file.path) {
+                const file = req.files;
+                console.log('Files:', file); // Log files to debug
+                console.log('period', period);
+                console.log('name', Name);
+                console.log('service id', serviceId);
+                console.log('file 1', file[0].path);
+                console.log('file 2', file[1].path);
+                if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -436,22 +442,26 @@ class adminController {
                 }
                 const service = yield database_1.Service.findById(serviceId);
                 if (!service) {
+                    console.log('Service not found');
                     return res.json({
                         message: 'Service not found',
                         success: false,
                     });
                 }
+                console.log('create');
                 const bill = yield database_1.Bill.create({
                     serviceId,
                     period,
                     Name,
                     comment: comment || '',
-                    files: file.path.split('/')[2],
+                    file1: file[0].path.split('/')[2],
+                    file2: file[1].path.split('/')[2],
                 });
                 yield database_1.Notification.create({
                     clientId: service.clientId,
                     serviceId,
-                    link: `${bill.files}`,
+                    link1: `${bill.file1}`,
+                    link2: `${bill.file2}`,
                     type: 'bill',
                     read: false,
                 });
@@ -465,7 +475,8 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 billFiles.map((bill) => {
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.files);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2);
                 });
                 const id = (0, uuid4_1.default)();
                 const zipFileName = id + '.zip';
@@ -510,7 +521,7 @@ class adminController {
                             serviceName: service.serviceName,
                             email: 'bill',
                             password: undefined,
-                            link: `https://aitlin.vercel.app/${bill.files}`
+                            link: `https://aitlin.vercel.app/${bill.file1}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -648,16 +659,30 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const file = req.file;
-                if (!period || !Name || !serviceId || !file.path) {
+                const file = req.files;
+                console.log('Files:', file); // Log files to debug
+                console.log('period', period);
+                console.log('name', Name);
+                console.log('service id', serviceId);
+                console.log('file 1', file[0].path);
+                console.log('file 2', file[1].path);
+                if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
                     });
                 }
                 const bill = yield database_1.Bill.findById(serviceId);
-                if ((bill === null || bill === void 0 ? void 0 : bill.files) !== '' || (bill === null || bill === void 0 ? void 0 : bill.files)) {
-                    const filePath = path_1.default.join('dist/public', bill === null || bill === void 0 ? void 0 : bill.files);
+                if ((bill === null || bill === void 0 ? void 0 : bill.file1) !== '' || (bill === null || bill === void 0 ? void 0 : bill.file1)) {
+                    const filePath = path_1.default.join('dist/public', bill === null || bill === void 0 ? void 0 : bill.file1);
+                    fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
+                        if (!err) {
+                            fs_1.default.unlinkSync(filePath);
+                        }
+                    });
+                }
+                if ((bill === null || bill === void 0 ? void 0 : bill.file2) !== '' || (bill === null || bill === void 0 ? void 0 : bill.file2)) {
+                    const filePath = path_1.default.join('dist/public', bill === null || bill === void 0 ? void 0 : bill.file2);
                     fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(filePath);
@@ -665,7 +690,7 @@ class adminController {
                     });
                 }
                 const now = new Date();
-                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Name, period, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Name, period, file1: file[0].path.split('/')[2], file2: file[1].path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedBill) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
@@ -673,7 +698,8 @@ class adminController {
                 yield database_1.Notification.create({
                     clientId: service.clientId,
                     serviceId,
-                    link: `${bill === null || bill === void 0 ? void 0 : bill.files}`,
+                    link1: `${bill === null || bill === void 0 ? void 0 : bill.file1}`,
+                    link2: `${bill === null || bill === void 0 ? void 0 : bill.file2}`,
                     type: 'bill',
                     read: false,
                 });
@@ -689,7 +715,8 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 billFiles.map((bill) => {
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.files);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2);
                 });
                 const id = (0, uuid4_1.default)();
                 const zipFileName = id + '.zip';
@@ -780,7 +807,7 @@ class adminController {
                 yield database_1.Notification.create({
                     clientId: service.clientId,
                     serviceId,
-                    link: `${blog === null || blog === void 0 ? void 0 : blog.files}`,
+                    link1: `${blog === null || blog === void 0 ? void 0 : blog.files}`,
                     type: 'binnacle',
                     read: false,
                 });
@@ -887,7 +914,7 @@ class adminController {
                 yield database_1.Notification.create({
                     clientId: service.clientId,
                     serviceId,
-                    link: `${nurse === null || nurse === void 0 ? void 0 : nurse.files}`,
+                    link1: `${nurse === null || nurse === void 0 ? void 0 : nurse.files}`,
                     type: 'nurse',
                     read: false,
                 });
@@ -969,8 +996,16 @@ class adminController {
                 const { id } = req.params;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const user = yield database_1.Bill.findById(id);
-                if ((user === null || user === void 0 ? void 0 : user.files) !== '' || (user === null || user === void 0 ? void 0 : user.files)) {
-                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.files);
+                if ((user === null || user === void 0 ? void 0 : user.file1) !== '' || (user === null || user === void 0 ? void 0 : user.file1)) {
+                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.file1);
+                    fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
+                        if (!err) {
+                            fs_1.default.unlinkSync(updateFilePath);
+                        }
+                    });
+                }
+                if ((user === null || user === void 0 ? void 0 : user.file2) !== '' || (user === null || user === void 0 ? void 0 : user.file2)) {
+                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.file2);
                     fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(updateFilePath);
@@ -992,7 +1027,8 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 billFiles.map((bill) => {
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.files);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2);
                 });
                 const uid = (0, uuid4_1.default)();
                 const zipFileName = uid + '.zip';

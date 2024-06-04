@@ -84,10 +84,13 @@ function ServiceData() {
                   obj["type"] = cell;
                 } else if (cellIndex === 2) {
                   const fileIndex = uploadedFiles.findIndex((fileObject: any) => fileObject.name == cell);
-                  obj["file"] = uploadedFiles[fileIndex];
+                  obj["file1"] = uploadedFiles[fileIndex];
                 } else if (cellIndex === 3) {
+                  const fileIndex = uploadedFiles.findIndex((fileObject: any) => fileObject.name == cell);
+                  obj["file2"] = uploadedFiles[fileIndex];
+                }else if (cellIndex === 4) {
                   obj["comment"] = cell;
-                } else if (cellIndex === 4) {
+                } else if (cellIndex === 5) {
                   obj["period"] = cell;
                 }
               });
@@ -122,13 +125,29 @@ function ServiceData() {
   const handleSubmit = async () => {
     try {
       setLoading(true)
+      console.log('document list');
+      console.log(documentsInfoList);
       const promises = documentsInfoList.map(async (res: any) => {
         const data = new FormData();
-        data.append("file", res?.file);
+
+        console.log('file 1');
+        console.log(res?.file1);
+        console.log('file 2');
+        console.log(res?.file2);
+
         if (res.type === "Nurse Document") {
           data.append("Name", res?.period);
+          data.append("format", res.file1?.type);
         } else {
-          data.append("Name", res?.file?.name?.split(".")[0]);
+          if(res.type === "Invoice") {
+            if (res?.file1.type === "application/pdf") {
+              data.append("Name", res?.file1.name.split(".")[0]);
+            } else {
+              data.append("Name", res?.file2.name.split(".")[0]);
+            }
+          } else {
+            data.append("Name", res?.file1?.name?.split(".")[0]);
+          }
           data.append("period", res?.period);
         }
         if (res?.comment !== "" && res?.comment) {
@@ -136,10 +155,15 @@ function ServiceData() {
         } else {
           data.append("comment", " ");
         }
-        data.append("serviceId", res?.serviceId);
-        if (res.type === "Nurse Document") {
-          data.append("format", res.file?.type);
+
+        if(res?.type === "Invoice"){
+          data.append("file", res?.file1);
+          data.append("file", res?.file2);
+        }else {
+          data.append("file", res?.file1);
         }
+
+        data.append("serviceId", res?.serviceId);
     
         let page = "";
         if (res?.type === "Invoice") {

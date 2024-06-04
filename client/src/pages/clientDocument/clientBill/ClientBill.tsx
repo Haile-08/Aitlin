@@ -99,7 +99,7 @@ function ClientBill() {
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
             data?.data.map((bill: any)=>(
-              <ClientBillList Name={bill?.Name} period={bill?.period} comment={bill?.comment} link={bill?.files} id={bill._id}/>
+              <ClientBillList Name={bill?.Name} period={bill?.period} comment={bill?.comment} link1={bill?.file1} link2={bill?.file2} id={bill._id}/>
             ))
           }
           </div>

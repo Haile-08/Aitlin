@@ -62,7 +62,7 @@ function ManyClient() {
             </div>
             <div className="h-[90%] w-full flex justify-start flex-col items-center">
             {notification?.data?.data?.map((notify: any)=>(
-              <NotificationData type={notify.type} link={notify.link} id={notify._id}/>
+              <NotificationData type={notify.type} link1={notify.link1} link2={notify.link2} id={notify._id}/>
             ))}
             </div>
           </div>

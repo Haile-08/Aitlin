@@ -6,6 +6,7 @@ import { storage } from '../../utils';
 
 const adminRoutHandler = (router: Router) => {
   const multerUpload = multer({storage: storage}).single('file');
+  const multerMultiUpload = multer({storage: storage}).array('file', 2);
 
   // add new client route
   router.post('/admin/add',authMiddleWare, adminController.handleAddClient);
@@ -20,7 +21,7 @@ const adminRoutHandler = (router: Router) => {
   router.put('/admin/service/status', authMiddleWare, adminController.handleServiceStatus);
 
   // add a new bill
-  router.post('/admin/service/bill', authMiddleWare, multerUpload, adminController.handleAddNewBill);
+  router.post('/admin/service/bill', authMiddleWare, multerMultiUpload, adminController.handleAddNewBill);
 
   // add a new bill
   router.post('/admin/service/binnacle', authMiddleWare, multerUpload, adminController.handleAddNewBinnacle);
@@ -38,7 +39,7 @@ const adminRoutHandler = (router: Router) => {
   router.get('/admin/service/nurses', authMiddleWare, adminController.handleGetAllNurse);
 
   // update the service bill
-  router.put('/admin/service/bill', authMiddleWare, multerUpload, adminController.handleUpdateABill);
+  router.put('/admin/service/bill', authMiddleWare, multerMultiUpload, adminController.handleUpdateABill);
 
   // update the service bill
   router.put('/admin/service/binnacle', authMiddleWare, multerUpload, adminController.handleUpdateABinnacle);

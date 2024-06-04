@@ -4,28 +4,44 @@ import { updateNotificationData } from '../../hook/clientHook';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-const handleDownload = async (link: string, filename: string) => {
+const handleDownload = async (link1: string, link2: string) => {
     try {
-        const response = await fetch(`https://aitlin.onrender.com/${link}`);
-        const blob = await response.blob();
+        const response1 = await fetch(`https://aitlin.onrender.com/${link1}`);
+        const response2 = await fetch(`https://aitlin.onrender.com/${link2}`);
+        const blob1 = await response1.blob();
+        const blob2 = await response2.blob();
 
         // Create a URL for the blob
-        const blobUrl = window.URL.createObjectURL(blob);
+        const blobUrl1 = window.URL.createObjectURL(blob1);
+        const blobUrl2 = window.URL.createObjectURL(blob2);
+
+        // download 1
 
         // Create a temporary link element
-        const tempLink = document.createElement('a');
-        tempLink.href = blobUrl;
-        tempLink.setAttribute('download', filename); // Set the filename for download
-        tempLink.click();
+        const tempLink1 = document.createElement('a');
+        tempLink1.href = blobUrl1;
+        tempLink1.setAttribute('download', link1); // Set the filename for download
+        tempLink1.click();
 
         // Clean up by revoking the blob URL after the download is complete
-        window.URL.revokeObjectURL(blobUrl);
+        window.URL.revokeObjectURL(blobUrl1);
+
+        // download 2
+        
+        // Create a temporary link element
+        const tempLink2 = document.createElement('a');
+        tempLink2.href = blobUrl2;
+        tempLink2.setAttribute('download', link2); // Set the filename for download
+        tempLink2.click();
+
+        // Clean up by revoking the blob URL after the download is complete
+        window.URL.revokeObjectURL(blobUrl2);
     } catch (error) {
         console.error('Error downloading file:', error);
     }
 };
 
-function NotificationData({type ,link, id} : {type: string, link: string, id:string}) {
+function NotificationData({type ,link1, link2, id} : {type: string, link1: string,link2: string, id:string}) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = useSelector((state: any) => state.auth.token);
 
@@ -54,7 +70,7 @@ function NotificationData({type ,link, id} : {type: string, link: string, id:str
         <div className="ms-3 text-xs md:text-sm font-normal w-[76%]">
             A new {type} document has been added
         </div>
-        <button className="bg-primary-color p-2 rounded-md mr-2" onClick={()=>handleDownload(link, link)}>
+        <button className="bg-primary-color p-2 rounded-md mr-2" onClick={()=>handleDownload(link1, link2)}>
             <img src={download} alt="download" />
         </button>
     </div>

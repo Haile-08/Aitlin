@@ -9,6 +9,7 @@ const multer_1 = __importDefault(require("multer"));
 const utils_1 = require("../../utils");
 const adminRoutHandler = (router) => {
     const multerUpload = (0, multer_1.default)({ storage: utils_1.storage }).single('file');
+    const multerMultiUpload = (0, multer_1.default)({ storage: utils_1.storage }).array('file', 2);
     // add new client route
     router.post('/admin/add', authMiddleWare_1.default, __1.adminController.handleAddClient);
     // get all the clients route
@@ -18,7 +19,7 @@ const adminRoutHandler = (router) => {
     // update the status of the service
     router.put('/admin/service/status', authMiddleWare_1.default, __1.adminController.handleServiceStatus);
     // add a new bill
-    router.post('/admin/service/bill', authMiddleWare_1.default, multerUpload, __1.adminController.handleAddNewBill);
+    router.post('/admin/service/bill', authMiddleWare_1.default, multerMultiUpload, __1.adminController.handleAddNewBill);
     // add a new bill
     router.post('/admin/service/binnacle', authMiddleWare_1.default, multerUpload, __1.adminController.handleAddNewBinnacle);
     // add a new bill
@@ -30,7 +31,7 @@ const adminRoutHandler = (router) => {
     // get all the service bill
     router.get('/admin/service/nurses', authMiddleWare_1.default, __1.adminController.handleGetAllNurse);
     // update the service bill
-    router.put('/admin/service/bill', authMiddleWare_1.default, multerUpload, __1.adminController.handleUpdateABill);
+    router.put('/admin/service/bill', authMiddleWare_1.default, multerMultiUpload, __1.adminController.handleUpdateABill);
     // update the service bill
     router.put('/admin/service/binnacle', authMiddleWare_1.default, multerUpload, __1.adminController.handleUpdateABinnacle);
     // update the service bill

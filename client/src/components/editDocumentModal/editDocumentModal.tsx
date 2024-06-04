@@ -34,7 +34,9 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
     const [file, setFile] = useState<any>("");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = useSelector((state: any) => state.auth.token);
-  
+
+    console.log(file);
+
     const {
       register,
       handleSubmit,
@@ -54,31 +56,49 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
   
     const onSubmit: SubmitHandler<SignUpSchemaType> = (res) => {
       const data = new FormData();
-      data.append("file", file);
+      
       if(documents === "Nurses"){
         data.append("Name", res.period);
+        data.append("format", file[0]?.name);
       }else {
-        data.append("Name", file?.name?.split(".")[0]);
+        if(documents === 'bill') {
+            console.log('bill name created');
+            for (const fileItem of file) {
+                if (fileItem.type === "application/pdf") {
+                    console.log(fileItem);
+                    data.append("Name", fileItem.name.split(".")[0]);
+                }
+            }
+        } else {
+            data.append("Name", file[0]?.name?.split(".")[0]);
+        }
         data.append("period", res.period);
       }
       if(res.comment){
         data.append("comment", res.comment);
       }
-      data.append("serviceId", serviceId);
-      if(documents === "Nurses"){
-        data.append("format", file?.name);
+    
+      if(documents === 'bill'){
+        data.append("file", file[0]);
+        data.append("file", file[1]);
+      }else {
+        data.append("file", file[0]);
       }
-  
+
+      data.append("serviceId", serviceId);
+
       mutate({data, token, page: documents});
     }
   
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleImage = (e: any) => {
-      setFile(e.target.files[0]);
+      setFile(e.target.files);
     };
   
-    const handleClose = () =>{
-      setFile("");
+    const handleClose = (index: number) =>{
+        const newFiles = [...file];
+        newFiles.splice(index, 1);
+        setFile(newFiles);
     }
 
   return (
@@ -116,12 +136,13 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
                         accept='.xlsx, .xls, .pdf, .doc, .docx, .ppt, .pptx'
                         onChange={handleImage} 
                         className="hidden"
+                        multiple
                     />
                     <img src={dir} alt="folder" />   
                 </label>
-                {file?.type === "application/pdf" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file[0]?.type === "application/pdf" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
-                        <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
+                        <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(0)}>
                             <img src={closeModal} alt="close" className='w-3 '/>
                         </div>
                     </div>
@@ -129,9 +150,9 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
                         <img src={pdfIcon} alt="pdf" className='w-9'/>
                     </div>
                 </div>}
-                {file?.type == "application/xml" || file?.type == "text/xml" &&  <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file[0]?.type == "application/xml" || file[0]?.type == "text/xml" &&  <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                         <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
-                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
+                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(0)}>
                                 <img src={closeModal} alt="close" className='w-3 '/>
                             </div>
                         </div>
@@ -139,9 +160,9 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
                             <img src={xmlIcon} alt="pdf" className='w-9'/>
                         </div>
                     </div>}
-                {file?.type == "application/msword" || file?.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file[0]?.type == "application/msword" || file[0]?.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
-                        <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
+                        <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(0)}>
                             <img src={closeModal} alt="close" className='w-3 '/>
                         </div>
                     </div>
@@ -149,9 +170,9 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
                         <img src={wordIcon} alt="pdf" className='w-9'/>
                     </div>
                 </div>}
-                {file?.type == "application/vnd.ms-excel" || file?.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file[0]?.type == "application/vnd.ms-excel" || file[0]?.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
-                        <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
+                        <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(0)}>
                             <img src={closeModal} alt="close" className='w-3 '/>
                         </div>
                     </div>
@@ -159,9 +180,9 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
                         <img src={excelIcon} alt="pdf" className='w-9'/>
                     </div>
                 </div>}
-                {file?.type == "application/vnd.ms-powerpoint" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                {file[0]?.type == "application/vnd.ms-powerpoint" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
                     <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
-                        <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={handleClose}>
+                        <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(0)}>
                             <img src={closeModal} alt="close" className='w-3 '/>
                         </div>
                     </div>
@@ -169,6 +190,59 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
                         <img src={powerpointIcon} alt="pdf" className='w-9'/>
                     </div>
                 </div>}
+                {documents === 'bill' && <>
+                    {file[1]?.type === "application/pdf" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                        <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
+                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(1)}>
+                                <img src={closeModal} alt="close" className='w-3 '/>
+                            </div>
+                        </div>
+                        <div className="w-full h-[50%] flex justify-center items-center" >
+                            <img src={pdfIcon} alt="pdf" className='w-9'/>
+                        </div>
+                    </div>}
+        
+                    {file[1]?.type == "application/xml" || file[1]?.type == "text/xml" &&  <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                        <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
+                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(1)}>
+                                <img src={closeModal} alt="close" className='w-3 '/>
+                            </div>
+                        </div>
+                        <div className="w-full h-[50%] flex justify-center items-center" >
+                            <img src={xmlIcon} alt="pdf" className='w-9'/>
+                        </div>
+                    </div>}
+                    {file[1]?.type == "application/msword" || file[1]?.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                        <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
+                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(1)}>
+                                <img src={closeModal} alt="close" className='w-3 '/>
+                            </div>
+                        </div>
+                        <div className="w-full h-[50%] flex justify-center items-center">
+                            <img src={wordIcon} alt="pdf" className='w-9'/>
+                        </div>
+                    </div>}
+                    {file[1]?.type == "application/vnd.ms-excel" || file[1]?.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                        <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
+                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(1)}>
+                                <img src={closeModal} alt="close" className='w-3 '/>
+                            </div>
+                        </div>
+                        <div className="w-full h-[50%] flex justify-center items-center" >
+                            <img src={excelIcon} alt="pdf" className='w-9'/>
+                        </div>
+                    </div>}
+                    {file[1]?.type == "application/vnd.ms-powerpoint" && <div className=" w-20 h-20 mt-5 ml-5 bg-[#BFBFC2] bg-opacity-20 border-2 border-zinc-400 rounded-xl">
+                        <div className="w-[90%] h-4 mt-1 flex justify-end items-center">
+                            <div className="p-1 rounded-full bg-zinc-500 cursor-pointer" onClick={()=>handleClose(1)}>
+                                <img src={closeModal} alt="close" className='w-3 '/>
+                            </div>
+                        </div>
+                        <div className="w-full h-[50%] flex justify-center items-center" >
+                            <img src={powerpointIcon} alt="pdf" className='w-9'/>
+                        </div>
+                    </div>}
+                    </>}
             </div>
             <div className="mt-3 w-full flex justify-start items-center">
                 <button type='submit' className="mr-2 flex items-center justify-center px-10 py-3 bg-primary-color text-white font-roboto rounded-2xl border-2 border-primary-color shadow-sm">Guardar</button>

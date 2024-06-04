@@ -14,7 +14,11 @@ const notificationSchema = new Schema({
         type: String,
         min: 1,
     },
-    link: {
+    link1: {
+        type: String,
+        min: 1,
+    },
+    link2: {
         type: String,
         min: 1,
     },

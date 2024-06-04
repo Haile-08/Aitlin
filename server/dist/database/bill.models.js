@@ -21,7 +21,11 @@ const billSchema = new Schema({
         type: String,
         min: 1,
     },
-    files: {
+    file1: {
+        type: String,
+        min: 1,
+    },
+    file2: {
         type: String,
         min: 1,
     },
