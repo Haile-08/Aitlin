@@ -67,12 +67,13 @@ class adminController {
                             serviceName: service.serviceName,
                             clientName: service.clientName,
                         } }, { new: true });
+                    const link = yield (0, utils_1.generateResetToken)(client === null || client === void 0 ? void 0 : client._id);
                     yield (0, utils_1.sendEmail)(client.email, 'Welcome to Aitlin', {
                         name: client.Name,
                         serviceName: undefined,
                         email: client.email,
                         password,
-                        link: undefined
+                        link,
                     }, './template/newClient.handlebars');
                     return res.status(201).json({
                         message: 'Account created successfully',
@@ -428,12 +429,7 @@ class adminController {
                 const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.files;
-                console.log('Files:', file); // Log files to debug
-                console.log('period', period);
-                console.log('name', Name);
-                console.log('service id', serviceId);
-                console.log('file 1', file[0].path);
-                console.log('file 2', file[1].path);
+                
                 if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
                     return res.json({
                         message: 'All fields are required',
@@ -442,13 +438,13 @@ class adminController {
                 }
                 const service = yield database_1.Service.findById(serviceId);
                 if (!service) {
-                    console.log('Service not found');
+                    
                     return res.json({
                         message: 'Service not found',
                         success: false,
                     });
                 }
-                console.log('create');
+                
                 const bill = yield database_1.Bill.create({
                     serviceId,
                     period,
@@ -660,12 +656,7 @@ class adminController {
                 const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.files;
-                console.log('Files:', file); // Log files to debug
-                console.log('period', period);
-                console.log('name', Name);
-                console.log('service id', serviceId);
-                console.log('file 1', file[0].path);
-                console.log('file 2', file[1].path);
+                
                 if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
                     return res.json({
                         message: 'All fields are required',

@@ -33,7 +33,6 @@ export const retrieveClients = async ({page, search, token}: any) => {
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data.blog);
       return resData.data;
     })
     .catch(function (err) {
@@ -97,7 +96,6 @@ export const retrieveService = async ({page, filter, search, token, id}: any) =>
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data.blog);
       return resData.data;
     })
     .catch(function (err) {
@@ -140,7 +138,6 @@ export const retrieveASingleService = async ({serviceId, token}: any) => {
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data.blog);
       return resData.data;
     })
     .catch(function (err) {
@@ -161,7 +158,6 @@ export const deleteBill = async ({id, token}: any) => {
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data.blog);
       return resData.data;
     })
     .catch(function (err) {
@@ -182,7 +178,6 @@ export const deleteBinnacle = async ({id, token}: any) => {
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data.blog);
       return resData.data;
     })
     .catch(function (err) {
@@ -203,7 +198,6 @@ export const deleteNurse = async ({id, token}: any) => {
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data.blog);
       return resData.data;
     })
     .catch(function (err) {

@@ -49,7 +49,7 @@ const sendEmail = (email, subject, payload, template) => __awaiter(void 0, void 
                     resolve(false); // Reject the promise
                 }
                 else {
-                    console.log('Email sent:', info.response);
+                    
                     resolve(true); // Resolve the promise
                 }
             });

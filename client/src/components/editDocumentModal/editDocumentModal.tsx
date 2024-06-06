@@ -35,8 +35,6 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = useSelector((state: any) => state.auth.token);
 
-    console.log(file);
-
     const {
       register,
       handleSubmit,
@@ -44,8 +42,7 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
     } = useForm<SignUpSchemaType>({ resolver: zodResolver(addSchema) });
   
     const { mutate, isLoading } = useMutation(editServiceData, {
-      onSuccess: (data) => {
-        console.log(data)
+      onSuccess: () => {
         setIsOpen(false);
         refetch();
       },
@@ -62,10 +59,8 @@ function EditDocumentModal({setIsOpen, refetch, documents, serviceId }: any) {
         data.append("format", file[0]?.name);
       }else {
         if(documents === 'bill') {
-            console.log('bill name created');
             for (const fileItem of file) {
                 if (fileItem.type === "application/pdf") {
-                    console.log(fileItem);
                     data.append("Name", fileItem.name.split(".")[0]);
                 }
             }

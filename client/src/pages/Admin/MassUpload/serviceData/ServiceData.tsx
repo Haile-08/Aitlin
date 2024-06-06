@@ -23,8 +23,7 @@ function ServiceData() {
    const token = useSelector((state: any) => state.auth.token);
 
    const { mutateAsync } = useMutation(addServiceData, {
-     onSuccess: (data) => {
-       console.log(data);
+     onSuccess: () => {
      },
      onError: () => {
        console.log("error")
@@ -125,15 +124,8 @@ function ServiceData() {
   const handleSubmit = async () => {
     try {
       setLoading(true)
-      console.log('document list');
-      console.log(documentsInfoList);
       const promises = documentsInfoList.map(async (res: any) => {
         const data = new FormData();
-
-        console.log('file 1');
-        console.log(res?.file1);
-        console.log('file 2');
-        console.log(res?.file2);
 
         if (res.type === "Nurse Document") {
           data.append("Name", res?.period);
@@ -188,8 +180,7 @@ function ServiceData() {
       // Handle error if needed
     }
   };
-  
-  console.log(documentsInfoList);
+
 
   return (
     <div className="w-full h-full flex justify-center items-center flex-col">

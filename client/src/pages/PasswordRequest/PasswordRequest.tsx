@@ -21,7 +21,7 @@ function PasswordRequest() {
 
   const { mutate, isLoading } = useMutation(requestPasswordReset, {
     onSuccess: (data) => {
-      console.log(data)
+    
       if (!data.success){
         setIsError(true);
         setErrorMessage(data.message);
@@ -42,8 +42,7 @@ function PasswordRequest() {
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
 
   const onSubmit: SubmitHandler<SignUpSchemaType> = (data) => {
-    console.log(data);
-    console.log('data')
+    
     mutate(data.email);
     setErrorMessage('');
     setIsError(false);

@@ -67,8 +67,7 @@ class authController {
                     });
                 }
                 const user = yield database_1.User.findOne({ email });
-                console.log('handle user');
-                console.log(user);
+               
                 if (!user) {
                     return res.json({
                         message: 'Email not found',

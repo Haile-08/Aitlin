@@ -35,7 +35,6 @@ function UploadDocument() {
     navigate('/Admin/Dashboard/Mass/document');
   }
 
-  console.log(uploadedFiles);
 
   return (
     <div className="w-full h-full flex justify-center items-center flex-col">

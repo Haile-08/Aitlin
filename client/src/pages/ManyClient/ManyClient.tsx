@@ -109,10 +109,13 @@ function ManyClient() {
           <div className="w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Servicio</p>
           </div>
-          <div className="w-[30%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
+          <div className="w-[20%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Email</p>
           </div>
-          <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
+          <div className="w-[20%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
+            <p className="text-xs md:text-xl">Notification</p>
+          </div>
+          <div className="w-[10%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Estatus</p>
           </div>
           <div className="w-[20%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
@@ -133,7 +136,7 @@ function ManyClient() {
            {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data?.data.map((service: any)=>(
-              <ClientServiceList Name={service?.clientName} Service={service?.serviceName} Email={service?.email} status={service?.status} id={service?._id}/>
+              <ClientServiceList Name={service?.clientName} Service={service?.serviceName} Email={service?.email} status={service?.Notification} id={service?._id} page={page}/>
             ))
           }
         </div>

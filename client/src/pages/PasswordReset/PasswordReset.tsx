@@ -43,7 +43,7 @@ function PasswordReset() {
 
   const { mutate, isLoading } = useMutation(passwordReset, {
     onSuccess: (data) => {
-      console.log(data)
+     
       if (!data.success){
         setIsError(true);
         setErrorMessage(data.message);
@@ -98,7 +98,7 @@ function PasswordReset() {
             <div className={`relative h-14 rounded-lg border-2 ${errors.password? 'border-error' : 'border-primary-color'} flex flex-row justify-start items-center`}>
               <i className='absolute ml-6 mr-6 '><img src={passwordLogo} alt="password logo" /></i>
               <div className="absolute left-16 h-2/3 w-0.5 bg-black opacity-25"></div>
-              <input  id="inputField" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="Password"
+              <input  id="password" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="Password"
               {...register("password")}
               type={!isVisible ? "password" : "text"} />
               <i onClick={()=> setVisible(!isVisible)} className='mr-6'> 
@@ -111,7 +111,7 @@ function PasswordReset() {
             <div className={`relative h-14 rounded-lg border-2 ${errors.password? 'border-error' : 'border-primary-color'} flex flex-row justify-start items-center`}>
               <i className='absolute ml-6 mr-6 '><img src={passwordLogo} alt="password logo" /></i>
               <div className="absolute left-16 h-2/3 w-0.5 bg-black opacity-25"></div>
-              <input  id="inputField" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="confirm password"
+              <input  id="confirmpassword" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="confirm password"
               {...register("confirmPassword")}
               type={!isVisbleComfirm ? "password" : "text"} />
               <i onClick={()=> setIsVisbleComfirm(!isVisbleComfirm)} className='mr-6'> 

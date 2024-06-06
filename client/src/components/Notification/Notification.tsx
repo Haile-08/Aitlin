@@ -46,8 +46,7 @@ function NotificationData({type ,link1, link2, id} : {type: string, link1: strin
   const token = useSelector((state: any) => state.auth.token);
 
   const { mutate} = useMutation(updateNotificationData, {
-    onSuccess: (data) => {
-        console.log(data);
+    onSuccess: () => {
     },
     onError: () => {
         console.log("error")

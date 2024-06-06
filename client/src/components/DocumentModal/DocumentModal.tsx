@@ -41,8 +41,7 @@ function DocumentModal({setIsOpen, documents, serviceId}: any) {
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(addSchema) });
 
   const { mutate, isLoading } = useMutation(addServiceData, {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setIsOpen(false);
     },
     onError: () => {
@@ -58,12 +57,8 @@ function DocumentModal({setIsOpen, documents, serviceId}: any) {
         data.append("format", file[0]?.name);
     }else {
         if(documents === 'bill') {
-            console.log('bill name created');
             for (const fileItem of file) {
-                console.log('file...............');
-                console.log(fileItem.name);
                 if (fileItem.type === "application/pdf") {
-                    console.log(fileItem);
                     data.append("Name", fileItem.name.split(".")[0]);
                 }
             }

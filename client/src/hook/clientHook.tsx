@@ -11,7 +11,6 @@ export const retrieveClientServices = async ({page, clientId, search, token}: {p
         return res;
       })
       .then(function (resData) {
-        console.log(resData.data.blog);
         return resData.data;
       })
       .catch(function (err) {
@@ -31,7 +30,6 @@ export const retrieveClientNotification = async ({clientId, token}: { clientId: 
         return res;
       })
       .then(function (resData) {
-        console.log(resData.data.blog);
         return resData.data;
       })
       .catch(function (err) {
@@ -44,6 +42,27 @@ export const retrieveClientNotification = async ({clientId, token}: { clientId: 
 export const updateNotificationData = async ({ data, token }: any) => {
   const client = await axiosBaseURL
     .put(`/v1/client/notification`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(function (res) {
+      return res;
+    })
+    .then(function (resData) {
+      return resData.data;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+
+  return client;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateNotificationStatus = async ({ data, token }: any) => {
+  const client = await axiosBaseURL
+    .put(`/v1/client/document/notification`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

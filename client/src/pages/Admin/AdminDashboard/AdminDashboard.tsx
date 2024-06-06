@@ -117,7 +117,7 @@ function AdminDashboard() {
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data?.services.map((service: any)=>(
-              <ServiceList Name={service?.clientName} Service={service?.serviceName} Email={service?.email} status={service?.status} id={service?._id} page={page}/>
+              <ServiceList key={service._id} Name={service?.clientName} Service={service?.serviceName} Email={service?.email} status={service?.status} id={service?._id} page={page}/>
             ))
           }
         </div>

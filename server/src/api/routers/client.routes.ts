@@ -7,6 +7,7 @@ const clientRoutHandler = (router: Router) => {
   router.get('/client/service', authMiddleWare, clientController.handleGetAllService);
   router.get('/client/notification', authMiddleWare, clientController.handleGetAllNotification);
   router.put('/client/notification', authMiddleWare, clientController.handleUpdateNotification);
+  router.put('/client/document/notification', authMiddleWare, clientController.handleUpdateDocumentNotification);
 };
 
 export default clientRoutHandler;

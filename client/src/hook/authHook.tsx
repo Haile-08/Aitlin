@@ -9,7 +9,6 @@ export const loginUser = async (user: userDataTypes) =>{
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data);
       return resData.data;
     })
     .catch(function (err) {
@@ -27,7 +26,6 @@ export const requestPasswordReset = async (email: string) =>{
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data);
       return resData.data;
     })
     .catch(function (err) {
@@ -46,7 +44,6 @@ export const passwordReset = async (user: resetDataTypes) =>{
       return res;
     })
     .then(function (resData) {
-      console.log(resData.data);
       return resData.data;
     })
     .catch(function (err) {

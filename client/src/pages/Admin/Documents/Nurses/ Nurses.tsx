@@ -36,7 +36,6 @@ function  Nurses() {
       await mutateAsync({ id, token });
       await queryClient.removeQueries(); // This may not be necessary, as refetching should already update the cache
       await refetch();
-      console.log("Refetch executed");
     } catch (error) {
       console.log("Error in deleteItem:", error);
     }
@@ -47,7 +46,6 @@ function  Nurses() {
     refetch();
   }, [filterBool, isOpen]);
 
-  console.log("data", data);
 
   return (
     <>

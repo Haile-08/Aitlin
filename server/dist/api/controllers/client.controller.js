@@ -89,6 +89,31 @@ class clientController {
             }
         });
     }
+    /**
+      * get all notification
+      * @param req request object
+      * @param res response object
+      */
+    static handleUpdateDocumentNotification(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id, status } = req.body;
+                const updatedService = yield database_1.Service.findOneAndUpdate({ _id: id }, { $set: { Notification: status } }, { new: true });
+                if (!updatedService) {
+                    return res.status(404).json({ message: 'Service not found', success: false });
+                }
+                res.status(200).json({
+                    message: 'notifications updated successfully',
+                    success: true,
+                    data: updatedService,
+                });
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error', success: false });
+            }
+        });
+    }
 }
 exports.default = clientController;
 //# sourceMappingURL=client.controller.js.map

@@ -84,6 +84,36 @@ class clientController {
       res.status(500).json({ message: 'Internal server error', success: false });
     }
   }
+
+  /**
+    * get all notification
+    * @param req request object
+    * @param res response object
+    */
+  static async handleUpdateDocumentNotification(req: Request, res: Response) {
+    try{
+      const {id, status} = req.body;
+
+      const updatedService = await Service.findOneAndUpdate(
+        { _id: id },
+        { $set: { Notification: status } },
+        { new: true }
+      );
+
+      if (!updatedService) {
+        return res.status(404).json({ message: 'Service not found', success: false });
+      }
+
+      res.status(200).json({
+        message: 'notifications updated successfully',
+        success: true,
+        data: updatedService,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error', success: false });
+    }
+  }
 }
 
 export default clientController;

@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
 import { loginUser } from '../../hook';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setLogin } from '../../slice/authSlice';
 
 const SignUpSchema = z.object({
@@ -28,13 +28,9 @@ function Signin() {
   const [isVisible, setVisible] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const user = useSelector((state: any) => state.auth.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-
-  console.log('user selector', user);
 
   const { mutate, isLoading } = useMutation(loginUser, {
     onSuccess: (data) => {
@@ -113,7 +109,7 @@ function Signin() {
             <div className={`relative h-14 rounded-lg border-2 ${errors.email? 'border-error' : 'border-primary-color'} flex flex-row justify-start items-center`}>
               <i className='absolute ml-6 mr-6 '><img src={emailLogo} alt="email logo" /></i>
               <div className="absolute left-16 h-2/3 w-0.5 bg-black opacity-25"></div>
-              <input id="inputField" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="Email" {...register("email")} />
+              <input id="email" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="Email" {...register("email")} />
             </div>
             {errors.email && <span className='text-error'>{errors.email.message}</span>}
 
@@ -121,7 +117,7 @@ function Signin() {
             <div className={`relative h-14 rounded-lg border-2 ${errors.password? 'border-error' : 'border-primary-color'} flex flex-row justify-start items-center`}>
               <i className='absolute ml-6 mr-6 '><img src={passwordLogo} alt="password logo" /></i>
               <div className="absolute left-16 h-2/3 w-0.5 bg-black opacity-25"></div>
-              <input  id="inputField" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="Password"
+              <input  id="password" className="pl-20 h-10 w-full ml-6 outline-none appearance-none bg-transparent focus:bg-transparen"  placeholder="Password"
               {...register("password")}
               type={!isVisible ? "password" : "text"} />
               <i onClick={()=> setVisible(!isVisible)} className='mr-6'> 
