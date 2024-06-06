@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { Bill, Blog, Nurse, Service, User, Notification } from '../../database';
-import { sendEmail } from '../../utils';
+import { generateResetToken, sendEmail } from '../../utils';
 import path from 'path';
 import fs from 'fs';
 import archiver from 'archiver';
@@ -36,6 +36,7 @@ class adminController {
             success: false, 
           });
         }
+        
         const salt = await bcrypt.genSalt();
         const password = Math.random().toString(36).slice(2, 10);
         const passwordHash = await bcrypt.hash(password, salt);
@@ -63,6 +64,9 @@ class adminController {
           clientName: service.clientName,
         }}, { new: true });
 
+
+        const link = await generateResetToken(client?._id); 
+
         await sendEmail(
           client.email,
           'Welcome to Aitlin',
@@ -71,7 +75,7 @@ class adminController {
             serviceName: undefined,
             email: client.email,
             password,
-            link: undefined
+            link,
           },
           './template/newClient.handlebars'
         );
