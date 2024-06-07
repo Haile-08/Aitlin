@@ -126,7 +126,7 @@ class authController {
 
     sendEmail(
       user.email,
-      'Password Reset Request',
+      'Atend - contraseña cambiada',
       {
         name: user.Name,
         serviceName: undefined,

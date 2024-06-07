@@ -5,8 +5,8 @@ function ClientBillList({Name, period, comment, link1, link2}: any) {
 
     const handleDownload = async () => {
       try {
-          const response1 = await fetch(`https://aitlin.onrender.com/${link1}`);
-          const response2 = await fetch(`https://aitlin.onrender.com/${link2}`);
+          const response1 = await fetch(`http://localhost:8000/${link1}`);
+          const response2 = await fetch(`http://localhost:8000/${link2}`);
           const blob1 = await response1.blob();
           const blob2 = await response2.blob();
 

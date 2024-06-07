@@ -69,7 +69,7 @@ class adminController {
 
         await sendEmail(
           client.email,
-          'Welcome to Aitlin',
+          'Atend - Bienvenido a tu portal de documentos',
           {
             name: client.Name,
             serviceName: undefined,
@@ -300,13 +300,13 @@ class adminController {
         if (service.Notification){
           sendEmail(
             service.email,
-            'New Binnacle document',
+            'Atend - Nueva bitácora cargada',
             {
               name: service.clientName,
               serviceName: service.serviceName,
               email: 'binnacle',
               password: undefined,
-              link: `https://aitlin.vercel.app/${blog.files}`
+              link: `http://localhost:5173//${blog.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -443,13 +443,13 @@ class adminController {
         if (service.Notification){
           sendEmail(
             service.email,
-            'New nurse document',
+            'Atend - Nueva factura cargada',
             {
               name: service.clientName,
               serviceName: service.serviceName,
               email: 'nurse',
               password: undefined,
-              link: `https://aitlin.vercel.app/${nurse.files}`
+              link: `http://localhost:5173//${nurse.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -588,13 +588,13 @@ class adminController {
         if (service.Notification){
           sendEmail(
             service.email,
-            'New bill document',
+            'Atend - Nueva factura cargada',
             {
               name: service.clientName,
               serviceName: service.serviceName,
               email: 'bill',
               password: undefined,
-              link: `https://aitlin.vercel.app/${bill.file1}`
+              link: `http://localhost:5173//${bill.file1}`
             },
             './template/documentNotification.handlebars'
           );
