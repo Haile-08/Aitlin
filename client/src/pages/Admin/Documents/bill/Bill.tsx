@@ -7,12 +7,14 @@ import { useSelector } from "react-redux";
 import { deleteBill, retrieveService } from "../../../../hook/adminHook";
 import empty from '../../../../assets/empty.svg';
 import add from '../../../../assets/add.svg';
+import downloadIcon from '../../../../assets/download.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OutletContextType = [any, any, string, string];
+type OutletContextType = [any, any, string, string, string, string, string];
 
 function Bill() {
-  const [setIsOpen, isOpen, filterBool, id] = useOutletContext() as OutletContextType;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [setIsOpen, isOpen, filterBool, id, billArchive, _blogArchive, _nurseArchive] = useOutletContext() as OutletContextType;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = useSelector((state: any) => state.auth.token);
   const [search, setSearch] = useState("");
@@ -31,6 +33,27 @@ function Bill() {
       console.log("error");
     },
   });
+
+  const handleDownload = async () => {
+    try {
+        const response = await fetch(`https://clientes.atend.mx/api/Archive/${billArchive}`);
+        const blob = await response.blob();
+
+        // Create a URL for the blob
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Create a temporary link element
+        const tempLink = document.createElement('a');
+        tempLink.href = blobUrl;
+        tempLink.setAttribute('download', billArchive); // Set the filename for download
+        tempLink.click();
+
+        // Clean up by revoking the blob URL after the download is complete
+        window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+        console.error('Error downloading file:', error);
+    }
+  };
 
    const deleteItem = async (id: string) => {
     try {
@@ -64,6 +87,10 @@ function Bill() {
               <input value={search} onChange={(e)=> setSearch(e.target.value)} type="search" id="default-search" className="block outline-none w-full px-5 md:px-10 py-3.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." required />
               </div>
             </form>
+            <button onClick={handleDownload} className="flex bg-primary-color font-roboto text-white justify-center items-center px-5 py-2 text-xs md:text-lg m-2 rounded-xl">
+              <p className="hidden md:flex">Descargar</p>
+              <img src={downloadIcon} alt="add" className="flex md:hidden py-2"/>
+            </button>
             <button className="flex bg-primary-color font-roboto text-white justify-center items-center ml-1 md:ml-4 px-0 md:px-4 py-2 md:py-3 text-base rounded-xl" onClick={()=> setIsOpen(true)}>
               <p className="hidden md:flex">Agregar factura</p>
               <img src={add} alt="add" className="flex md:hidden"/>
@@ -98,7 +125,7 @@ function Bill() {
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
             data?.data.map((bill: any)=>(
-              <BillList Name={bill?.Name} refetch={refetch} deleteItem={deleteItem} period={bill?.period} comment={bill?.comment} id={bill._id}/>
+              <BillList Name={bill?.Name} refetch={refetch} deleteItem={deleteItem} period={bill?.period} comment={bill?.comment} id={bill._id} link1={bill?.file1} link2={bill?.file2}/>
             ))
           }
           </div>

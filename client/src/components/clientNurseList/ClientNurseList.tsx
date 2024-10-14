@@ -4,7 +4,7 @@ import downloadIcon from '../../assets/download.svg';
 function ClientNurseList({ Name, Archive, comment, link}: any) {
   const handleDownload = async () => {
     try {
-        const response = await fetch(`https://aitlin.onrender.com/${link}`);
+        const response = await fetch(`https://clientes.atend.mx/api/${link}`);
         const blob = await response.blob();
 
         // Create a URL for the blob

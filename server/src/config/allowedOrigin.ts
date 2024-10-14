@@ -1,5 +1,5 @@
 const allowedOrigins = {
-  origin: 'https://aitlin.vercel.app',
+  origin: 'https://clientes.atend.mx',
   credentials: true,
 };
   

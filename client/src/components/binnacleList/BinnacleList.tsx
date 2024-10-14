@@ -2,14 +2,36 @@ import { useState } from 'react';
 import edit from '../../assets/edit.svg'
 import EditDocumentModal from '../editDocumentModal/editDocumentModal';
 import trash from '../../assets/trash.png';
+import downloadIcon from '../../assets/download.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function BinnacleList({Name, refetch, deleteItem, period, comment, id}: any) {
+function BinnacleList({Name, refetch, deleteItem, period, comment, id, link}: any) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDelete = () => {
     deleteItem(id);
-   }
+  }
+
+  const handleDownload = async () => {
+    try {
+        const response = await fetch(`https://clientes.atend.mx/api/${link}`);
+        const blob = await response.blob();
+
+        // Create a URL for the blob
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Create a temporary link element
+        const tempLink = document.createElement('a');
+        tempLink.href = blobUrl;
+        tempLink.setAttribute('download', link); // Set the filename for download
+        tempLink.click();
+
+        // Clean up by revoking the blob URL after the download is complete
+        window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+        console.error('Error downloading file:', error);
+    }
+  };
 
   return (
     <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-6 border-b-[1.5px] border-black border-opacity-40 flex justify-start items-center">
@@ -25,6 +47,9 @@ function BinnacleList({Name, refetch, deleteItem, period, comment, id}: any) {
           <p className="opacity-50 font-roboto font-light ">{comment.length <= 115? comment: comment.slice(0, 115) + '...'}</p>
         </div>
         <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
+          <button onClick={handleDownload} className='bg-primary-color px-4 py-3 rounded-xl'>
+            <img src={downloadIcon} alt="download" />
+          </button>
           <button className="text-white bg-primary-color px-3 py-3 rounded-xl mr-3"  onClick={handleDelete}>
             <img src={trash} alt="delete" className='h-5'/>
           </button>

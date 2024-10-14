@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const axiosBaseURL = Axios.create({
-  baseURL: 'https://aitlin.onrender.com',
+  baseURL: 'https://clientes.atend.mx/api',
 });
 
 export default axiosBaseURL;

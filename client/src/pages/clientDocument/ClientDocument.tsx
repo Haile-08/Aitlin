@@ -60,27 +60,27 @@ function ClientDocument() {
       navigate(`/Client/Documents/bill/?${searchQuery}`);
     }
   
-    const handleBinnacleNav = (e: { preventDefault: () => void; }) =>{
-      e.preventDefault();
-      setDocuments("binnacle");
-      const urlParams = new URLSearchParams(window.location.search);
-      urlParams.set("id", id);
-      urlParams.set("service", Service);
-      urlParams.set("name", Name);
-      const searchQuery = urlParams.toString();
-      navigate(`/Client/Documents/Binnacle/?${searchQuery}`);
-    }
+    // const handleBinnacleNav = (e: { preventDefault: () => void; }) =>{
+    //   e.preventDefault();
+    //   setDocuments("binnacle");
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   urlParams.set("id", id);
+    //   urlParams.set("service", Service);
+    //   urlParams.set("name", Name);
+    //   const searchQuery = urlParams.toString();
+    //   navigate(`/Client/Documents/Binnacle/?${searchQuery}`);
+    // }
   
-    const handleNursesNav = (e: { preventDefault: () => void; }) => {
-      e.preventDefault();
-      setDocuments('Nurses');
-      const urlParams = new URLSearchParams(window.location.search);
-      urlParams.set("id", id);
-      urlParams.set("service", Service);
-      urlParams.set("name", Name);
-      const searchQuery = urlParams.toString();
-      navigate(`/Client/Documents/Nurses/?${searchQuery}`);
-    }
+    // const handleNursesNav = (e: { preventDefault: () => void; }) => {
+    //   e.preventDefault();
+    //   setDocuments('Nurses');
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   urlParams.set("id", id);
+    //   urlParams.set("service", Service);
+    //   urlParams.set("name", Name);
+    //   const searchQuery = urlParams.toString();
+    //   navigate(`/Client/Documents/Nurses/?${searchQuery}`);
+    // }
 
     const handleChange = () => {
       const info = {
@@ -131,8 +131,8 @@ function ClientDocument() {
           <div className="my-3 w-[100%] md:w-10/12 mt-8 md:mt-0 h-[5%] flex justify-center items-center">
             <div className=" w-[70%] flex items-center justify-end">
               <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'bill'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'bill'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBillNav}>Factura</button>
-              <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'binnacle'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'binnacle'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBinnacleNav}>Bitácora</button>
-              <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'Nurses'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'Nurses'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleNursesNav}>Enfermeras</button>
+              {/* <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'binnacle'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'binnacle'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBinnacleNav}>Bitácora</button>
+              <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'Nurses'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'Nurses'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleNursesNav}>Enfermeras</button> */}
               </div>
             <div className="flex justify-end items-center ml-2 md:ml-0 w-[20%] md:w-[30%] cursor-pointer" onClick={()=> setFilterBool(!filterBool)}>
               <p className="mx-3 font-semibold text-primary-color ">{filterBool? "Más reciente" : "Menos reciente"}</p>

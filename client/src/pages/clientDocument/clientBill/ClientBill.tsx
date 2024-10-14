@@ -25,7 +25,7 @@ function ClientBill() {
 
   const handleDownload = async () => {
     try {
-        const response = await fetch(`https://aitlin.onrender.com/Archive/${billArchive}`);
+        const response = await fetch(`https://clientes.atend.mx/api/Archive/${billArchive}`);
         const blob = await response.blob();
 
         // Create a URL for the blob

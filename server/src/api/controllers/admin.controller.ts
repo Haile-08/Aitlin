@@ -306,7 +306,7 @@ class adminController {
               serviceName: service.serviceName,
               email: 'binnacle',
               password: undefined,
-              link: `https://aitlin.vercel.app/${blog.files}`
+              link: `https://clientes.atend.mx/${blog.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -449,7 +449,7 @@ class adminController {
               serviceName: service.serviceName,
               email: 'nurse',
               password: undefined,
-              link: `https://aitlin.vercel.app/${nurse.files}`
+              link: `https://clientes.atend.mx/${nurse.files}`
             },
             './template/documentNotification.handlebars'
           );
@@ -594,7 +594,7 @@ class adminController {
               serviceName: service.serviceName,
               email: 'bill',
               password: undefined,
-              link: `https://aitlin.vercel.app/${bill.file1}`
+              link: `https://clientes.atend.mx/${bill.file1}`
             },
             './template/documentNotification.handlebars'
           );

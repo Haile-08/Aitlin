@@ -3,13 +3,51 @@ import { useState } from 'react';
 import edit from '../../assets/edit.svg'
 import EditDocumentModal from '../editDocumentModal/editDocumentModal';
 import trash from '../../assets/trash.png';
+import downloadIcon from '../../assets/download.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function BillList({Name, refetch, deleteItem, period, comment, id}: any) {
+function BillList({Name, refetch, deleteItem, period, comment, id, link1, link2}: any) {
    const [isOpen, setIsOpen] = useState(false);
    const handleDelete = () => {
     deleteItem(id);
    }
+
+   const handleDownload = async () => {
+    try {
+        const response1 = await fetch(`https://clientes.atend.mx/api/${link1}`);
+        const response2 = await fetch(`https://clientes.atend.mx/api/${link2}`);
+        const blob1 = await response1.blob();
+        const blob2 = await response2.blob();
+
+        // Create a URL for the blob
+        const blobUrl1 = window.URL.createObjectURL(blob1);
+        const blobUrl2 = window.URL.createObjectURL(blob2);
+
+        // download 1
+
+        // Create a temporary link element
+        const tempLink1 = document.createElement('a');
+        tempLink1.href = blobUrl1;
+        tempLink1.setAttribute('download', link1); // Set the filename for download
+        tempLink1.click();
+
+        // Clean up by revoking the blob URL after the download is complete
+        window.URL.revokeObjectURL(blobUrl1);
+
+        // download 2
+        
+        // Create a temporary link element
+        const tempLink2 = document.createElement('a');
+        tempLink2.href = blobUrl2;
+        tempLink2.setAttribute('download', link2); // Set the filename for download
+        tempLink2.click();
+
+        // Clean up by revoking the blob URL after the download is complete
+        window.URL.revokeObjectURL(blobUrl2);
+    } catch (error) {
+        console.error('Error downloading file:', error);
+    }
+};
 
    return (
     <div className="w-[100%] h-[5%] md:h-[7%] mt-3 py-6 border-b-[1.5px] border-black border-opacity-40 flex justify-start items-center">
@@ -24,6 +62,9 @@ function BillList({Name, refetch, deleteItem, period, comment, id}: any) {
           <p className="opacity-50 font-roboto font-light ">{comment.length <= 115? comment: comment.slice(0, 115) + '...'}</p>
         </div>
         <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
+          <button onClick={handleDownload} className='bg-primary-color px-4 py-3 rounded-xl'>
+              <img src={downloadIcon} alt="download" />
+          </button>
           <button className="text-white bg-primary-color px-3 py-3 rounded-xl mr-3"  onClick={handleDelete}>
             <img src={trash} alt="delete" className='h-5'/>
           </button>

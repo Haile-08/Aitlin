@@ -68,7 +68,7 @@ class adminController {
                             clientName: service.clientName,
                         } }, { new: true });
                     const link = yield (0, utils_1.generateResetToken)(client === null || client === void 0 ? void 0 : client._id);
-                    yield (0, utils_1.sendEmail)(client.email, 'Welcome to Aitlin', {
+                    yield (0, utils_1.sendEmail)(client.email, 'Atend - Bienvenido a tu portal de documentos', {
                         name: client.Name,
                         serviceName: undefined,
                         email: client.email,
@@ -272,12 +272,12 @@ class adminController {
                 // Listen for archive completion
                 yield output.on('close', () => {
                     if (service.Notification) {
-                        (0, utils_1.sendEmail)(service.email, 'New Binnacle document', {
+                        (0, utils_1.sendEmail)(service.email, 'Atend - Nueva bitácora cargada', {
                             name: service.clientName,
                             serviceName: service.serviceName,
                             email: 'binnacle',
                             password: undefined,
-                            link: `https://aitlin.vercel.app//${blog.files}`
+                            link: `https://clientes.atend.mx/${blog.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -389,12 +389,12 @@ class adminController {
                 // Listen for archive completion
                 yield output.on('close', () => {
                     if (service.Notification) {
-                        (0, utils_1.sendEmail)(service.email, 'New nurse document', {
+                        (0, utils_1.sendEmail)(service.email, 'Atend - Nueva factura cargada', {
                             name: service.clientName,
                             serviceName: service.serviceName,
                             email: 'nurse',
                             password: undefined,
-                            link: `https://aitlin.vercel.app//${nurse.files}`
+                            link: `https://clientes.atend.mx/${nurse.files}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({
@@ -509,12 +509,12 @@ class adminController {
                 // Listen for archive completion
                 yield output.on('close', () => {
                     if (service.Notification) {
-                        (0, utils_1.sendEmail)(service.email, 'New bill document', {
+                        (0, utils_1.sendEmail)(service.email, 'Atend - Nueva factura cargada', {
                             name: service.clientName,
                             serviceName: service.serviceName,
                             email: 'bill',
                             password: undefined,
-                            link: `https://aitlin.vercel.app//${bill.file1}`
+                            link: `https://clientes.atend.mx/${bill.file1}`
                         }, './template/documentNotification.handlebars');
                     }
                     return res.status(201).json({

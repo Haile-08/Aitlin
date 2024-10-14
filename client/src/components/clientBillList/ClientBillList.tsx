@@ -5,8 +5,8 @@ function ClientBillList({Name, period, comment, link1, link2}: any) {
 
     const handleDownload = async () => {
       try {
-          const response1 = await fetch(`https://aitlin.onrender.com/${link1}`);
-          const response2 = await fetch(`https://aitlin.onrender.com/${link2}`);
+          const response1 = await fetch(`https://clientes.atend.mx/api/${link1}`);
+          const response2 = await fetch(`https://clientes.atend.mx/api/${link2}`);
           const blob1 = await response1.blob();
           const blob2 = await response2.blob();
 
