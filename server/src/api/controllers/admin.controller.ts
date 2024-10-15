@@ -503,6 +503,8 @@ class adminController {
         });
       }
 
+      console.log(file);
+
       
       const bill = await Bill.create({
         serviceId,
