@@ -2,7 +2,8 @@ import downloadIcon from '../../assets/download.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ClientBillList({Name, period, comment, link1, link2}: any) {
-
+    console.log(link1);
+    console.log(link2);
     const handleDownload = async () => {
       try {
           const response1 = await fetch(`https://clientes.atend.mx/api/public/${link1}`);
