@@ -10,7 +10,7 @@ const expressRouteHandler = (app: Express) => {
   const router = express.Router();
   
   // Api versioning
-  app.use('/v1', router);
+  app.use('/api/v1', router);
   
   // auth router
   authRoutHandler(router);
