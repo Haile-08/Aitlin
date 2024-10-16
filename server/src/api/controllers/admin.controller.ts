@@ -226,7 +226,7 @@ class adminController {
         period,
         Name,
         comment: comment || '',
-        files: file.path.split('/')[2],
+        files: file.path,
       });
 
       await Notification.create({
@@ -371,7 +371,7 @@ class adminController {
         Name,
         Archive: Name + '.' + format.split('.')[1],
         comment: comment || '',
-        files: file.path.split('/')[2],
+        files: file.path,
       });
 
 
@@ -519,8 +519,8 @@ class adminController {
         period,
         Name,
         comment: comment || '',
-        file1: file[0].path.split('/')[2],
-        file2: file[1].path.split('/')[2],
+        file1: file[0].path,
+        file2: file[1].path,
       });
 
       await Notification.create({
@@ -782,7 +782,7 @@ class adminController {
 
       const updatedBill = await Bill.findOneAndUpdate(
         { _id: serviceId },
-        { comment: comment || '', Name ,period, file1: file[0].path.split('/')[2], file2: file[1].path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { comment: comment || '', Name ,period, file1: file[0].path, file2: file[1].path, fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
         { new: true }
       );
 
@@ -917,7 +917,7 @@ class adminController {
 
       const updatedBlog = await Blog.findOneAndUpdate(
         { _id: serviceId },
-        { comment: comment || '', Name, period, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { comment: comment || '', Name, period, files: file.path, fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
         { new: true }
       );
 
@@ -1049,7 +1049,7 @@ class adminController {
 
       const updatedNurse = await Nurse.findOneAndUpdate(
         { _id: serviceId },
-        { comment: comment || '', Archive: Name + '.' + format.split('.')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
+        { comment: comment || '', Archive: Name + '.' + format.split('.')[1], Name, files: file.path, fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, 
         { new: true }
       );
 
