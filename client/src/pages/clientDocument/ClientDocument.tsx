@@ -129,12 +129,12 @@ function ClientDocument() {
             </div>
           </div>
           <div className="my-3 w-[100%] md:w-10/12 mt-8 md:mt-4 h-[5%] flex justify-center items-center">
-            <div className="mt-3 w-[70%] flex items-center justify-start">
+            <div className="mt-3 w-[50%] flex items-center justify-end">
               <button className={`mx-0 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'bill'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'bill'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBillNav}>Factura</button>
               {/* <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'binnacle'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'binnacle'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBinnacleNav}>Bitácora</button>
               <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'Nurses'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'Nurses'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleNursesNav}>Enfermeras</button> */}
               </div>
-            <div className="flex justify-end items-center ml-2 md:ml-0 w-[20%] md:w-[30%] cursor-pointer" onClick={()=> setFilterBool(!filterBool)}>
+            <div className="flex justify-end items-center ml-2 md:ml-0 w-[50%] md:w-[30%] cursor-pointer" onClick={()=> setFilterBool(!filterBool)}>
               <p className="mx-3 font-semibold text-primary-color ">{filterBool? "Más reciente" : "Menos reciente"}</p>
               <img src={arrowUp} alt="filter" className="hidden md:flex" />
               <img src={arrowDown} alt="filter" className="hidden md:flex"/>
