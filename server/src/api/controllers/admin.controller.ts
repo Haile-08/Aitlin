@@ -237,7 +237,7 @@ class adminController {
         read: false,
       });
       
-      const filePath = path.join('dist/public/Archive', service?.blogArchive ? service?.blogArchive : 'none.pdf' );
+      const filePath = path.join('public/Archive', service?.blogArchive ? service?.blogArchive : 'none.pdf' );
 
       fs.access(filePath, fs.constants.F_OK, (err) => {
         if (!err) {
@@ -255,7 +255,7 @@ class adminController {
 
       const id = uuid4();
       const zipFileName = id + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
 
       await Service.findOneAndUpdate(
         { _id: serviceId },
@@ -276,7 +276,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
@@ -383,7 +383,7 @@ class adminController {
         read: false,
       });
 
-      const filePath = path.join('dist/public/Archive', service?.nurseArchive ? service?.nurseArchive : 'none.pdf');
+      const filePath = path.join('public/Archive', service?.nurseArchive ? service?.nurseArchive : 'none.pdf');
       fs.access(filePath, fs.constants.F_OK, (err) => {
         if (!err) {
           fs.unlinkSync(filePath);
@@ -401,7 +401,7 @@ class adminController {
 
       const id = uuid4();
       const zipFileName = id + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
       
       await Service.findOneAndUpdate(
         { _id: serviceId },
@@ -422,7 +422,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
@@ -532,7 +532,7 @@ class adminController {
         read: false,
       });
 
-      const filePath = path.join('dist/public/Archive', service?.billArchive ? service?.billArchive : 'none.pdf');
+      const filePath = path.join('public/Archive', service?.billArchive ? service?.billArchive : 'none.pdf');
       fs.access(filePath, fs.constants.F_OK, (err) => {
         if (!err) {
           fs.unlinkSync(filePath);
@@ -550,7 +550,7 @@ class adminController {
 
       const id = uuid4();
       const zipFileName = id + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
   
       await Service.findOneAndUpdate(
         { _id: serviceId },
@@ -571,7 +571,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
@@ -761,7 +761,7 @@ class adminController {
       const bill: any = await Bill.findById(serviceId);
 
       if(bill?.file1 !== '' || bill?.file1){
-        const filePath = path.join('dist/public', bill?.file1);
+        const filePath = path.join('public', bill?.file1);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -770,7 +770,7 @@ class adminController {
       }
 
       if(bill?.file2 !== '' || bill?.file2){
-        const filePath = path.join('dist/public', bill?.file2);
+        const filePath = path.join('public', bill?.file2);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -802,7 +802,7 @@ class adminController {
       });
 
       if(service?.billArchive !== '' || service?.billArchive){
-        const filePath = path.join('dist/public/Archive', service?.billArchive);
+        const filePath = path.join('public/Archive', service?.billArchive);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -822,7 +822,7 @@ class adminController {
 
       const id = uuid4();
       const zipFileName = id + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
       
       await Service.findOneAndUpdate(
         { _id: serviceId },
@@ -843,7 +843,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
@@ -905,7 +905,7 @@ class adminController {
       const blog: any = await Blog.findById(serviceId);
 
       if(blog?.files !== '' || blog?.files){
-        const filePath = path.join('dist/public', blog?.files);
+        const filePath = path.join('public', blog?.files);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -936,7 +936,7 @@ class adminController {
       });
 
       if(service?.blogArchive !== '' || service?.blogArchive){
-        const filePath = path.join('dist/public/Archive', service?.blogArchive);
+        const filePath = path.join('public/Archive', service?.blogArchive);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -955,7 +955,7 @@ class adminController {
 
       const id = uuid4();
       const zipFileName = id + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
       
       await Service.findOneAndUpdate(
         { _id: serviceId },
@@ -976,7 +976,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
@@ -1037,7 +1037,7 @@ class adminController {
       const nurse: any = await Nurse.findById(serviceId);
 
       if(nurse?.files !== '' || nurse?.files){
-        const filePath = path.join('dist/public', nurse?.files);
+        const filePath = path.join('public', nurse?.files);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -1068,7 +1068,7 @@ class adminController {
       });
       
       if(service?.nurseArchive  !== '' || service?.nurseArchive ){
-        const filePath = path.join('dist/public/Archive', service?.nurseArchive );
+        const filePath = path.join('public/Archive', service?.nurseArchive );
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -1087,7 +1087,7 @@ class adminController {
 
       const id = uuid4();
       const zipFileName = id + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
       
       await Service.findOneAndUpdate(
         { _id: serviceId },
@@ -1108,7 +1108,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
@@ -1160,7 +1160,7 @@ class adminController {
       const user: any = await Bill.findById(id);
 
       if(user?.file1 !== '' || user?.file1){
-        const updateFilePath = path.join('dist/public', user?.file1);
+        const updateFilePath = path.join('public', user?.file1);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1169,7 +1169,7 @@ class adminController {
       }
 
       if(user?.file2 !== '' || user?.file2){
-        const updateFilePath = path.join('dist/public', user?.file2);
+        const updateFilePath = path.join('public', user?.file2);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1184,7 +1184,7 @@ class adminController {
 
       const service: any = await Service.findById(user?.serviceId);
 
-      const updateFilePath = path.join('dist/public/Archive', service?.billArchive);
+      const updateFilePath = path.join('public/Archive', service?.billArchive);
       fs.access(updateFilePath, fs.constants.F_OK, (err) => {
         if (!err) {
           fs.unlinkSync(updateFilePath);
@@ -1203,7 +1203,7 @@ class adminController {
 
       const uid = uuid4();
       const zipFileName = uid + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
       
       await Service.findOneAndUpdate(
         { _id: user?.serviceId },
@@ -1224,7 +1224,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
@@ -1276,7 +1276,7 @@ class adminController {
       const user: any = await Blog.findById(id);
 
       if(user?.files !== '' || user?.files){
-        const updateFilePath = path.join('dist/public', user?.files);
+        const updateFilePath = path.join('public', user?.files);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1291,7 +1291,7 @@ class adminController {
 
       const service: any = await Service.findById(user?.serviceId);
 
-      const updateFilePath = path.join('dist/public/Archive', service?.blogArchive);
+      const updateFilePath = path.join('public/Archive', service?.blogArchive);
       fs.access(updateFilePath, fs.constants.F_OK, (err) => {
         if (!err) {
           fs.unlinkSync(updateFilePath);
@@ -1309,7 +1309,7 @@ class adminController {
 
       const uid = uuid4();
       const zipFileName = uid + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
       
       await Service.findOneAndUpdate(
         { _id: user?.serviceId },
@@ -1330,7 +1330,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
@@ -1382,7 +1382,7 @@ class adminController {
       const user: any = await Nurse.findById(id);
 
       if(user?.files !== '' || user?.files){
-        const updateFilePath = path.join('dist/public', user?.files);
+        const updateFilePath = path.join('public', user?.files);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1397,7 +1397,7 @@ class adminController {
 
       const service: any = await Service.findById(user?.serviceId);
 
-      const updateFilePath = path.join('dist/public/Archive', service?.nurseArchive);
+      const updateFilePath = path.join('public/Archive', service?.nurseArchive);
       fs.access(updateFilePath, fs.constants.F_OK, (err) => {
         if (!err) {
           fs.unlinkSync(updateFilePath);
@@ -1415,7 +1415,7 @@ class adminController {
 
       const uid = uuid4();
       const zipFileName = uid + '.zip';
-      const outputFilePath = path.join('dist/public/Archive', zipFileName);
+      const outputFilePath = path.join('public/Archive', zipFileName);
       
       await Service.findOneAndUpdate(
         { _id: user?.serviceId },
@@ -1436,7 +1436,7 @@ class adminController {
       });
 
       archive.pipe(output);
-      const sourceDir = 'dist/public';
+      const sourceDir = 'public';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileList.forEach((file: any) => {
         const fullPath = path.join(sourceDir, file);
