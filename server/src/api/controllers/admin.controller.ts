@@ -250,7 +250,7 @@ class adminController {
       const fileList: any = [];
 
       blogFiles.map((blog)=> {
-        fileList.push(blog?.files);
+        fileList.push(blog?.files.split('/')[1]);
       });
 
       const id = uuid4();
@@ -396,7 +396,7 @@ class adminController {
       const fileList: any = [];
 
       nurseFiles.map((nurse)=> {
-        fileList.push(nurse?.files);
+        fileList.push(nurse?.files.split('/')[1]);
       });
 
       const id = uuid4();
@@ -544,8 +544,8 @@ class adminController {
       const fileList: any = [];
 
       billFiles.map((bill)=> {
-        fileList.push(bill?.file1);
-        fileList.push(bill?.file2);
+        fileList.push(bill?.file1.split('/')[1]);
+        fileList.push(bill?.file2.split('/')[1]);
       });
 
       const id = uuid4();
@@ -761,7 +761,7 @@ class adminController {
       const bill: any = await Bill.findById(serviceId);
 
       if(bill?.file1 !== '' || bill?.file1){
-        const filePath = path.join('public', bill?.file1);
+        const filePath = path.join('public', bill?.file1.split('/')[1]);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -770,7 +770,7 @@ class adminController {
       }
 
       if(bill?.file2 !== '' || bill?.file2){
-        const filePath = path.join('public', bill?.file2);
+        const filePath = path.join('public', bill?.file2.split('/')[1]);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -816,8 +816,8 @@ class adminController {
       const fileList: any = [];
 
       billFiles.map((bill)=> {
-        fileList.push(bill?.file1);
-        fileList.push(bill?.file2);
+        fileList.push(bill?.file1.split('/')[1]);
+        fileList.push(bill?.file2.split('/')[1]);
       });
 
       const id = uuid4();
@@ -905,7 +905,7 @@ class adminController {
       const blog: any = await Blog.findById(serviceId);
 
       if(blog?.files !== '' || blog?.files){
-        const filePath = path.join('public', blog?.files);
+        const filePath = path.join('public', blog?.files.split('/')[1]);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -950,7 +950,7 @@ class adminController {
       const fileList: any = [];
 
       blogFiles.map((blog)=> {
-        fileList.push(blog?.files);
+        fileList.push(blog?.files.split('/')[1]);
       });
 
       const id = uuid4();
@@ -1037,7 +1037,7 @@ class adminController {
       const nurse: any = await Nurse.findById(serviceId);
 
       if(nurse?.files !== '' || nurse?.files){
-        const filePath = path.join('public', nurse?.files);
+        const filePath = path.join('public', nurse?.files.split('/')[1]);
         fs.access(filePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(filePath);
@@ -1082,7 +1082,7 @@ class adminController {
       const fileList: any = [];
 
       nurseFiles.map((nurse)=> {
-        fileList.push(nurse?.files);
+        fileList.push(nurse?.files.split('/')[1]);
       });
 
       const id = uuid4();
@@ -1160,7 +1160,7 @@ class adminController {
       const user: any = await Bill.findById(id);
 
       if(user?.file1 !== '' || user?.file1){
-        const updateFilePath = path.join('public', user?.file1);
+        const updateFilePath = path.join('public', user?.file1.split('/')[1]);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1169,7 +1169,7 @@ class adminController {
       }
 
       if(user?.file2 !== '' || user?.file2){
-        const updateFilePath = path.join('public', user?.file2);
+        const updateFilePath = path.join('public', user?.file2.split('/')[1]);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1197,8 +1197,8 @@ class adminController {
       const fileList: any = [];
 
       billFiles.map((bill)=> {
-        fileList.push(bill?.file1);
-        fileList.push(bill?.file2);
+        fileList.push(bill?.file1.split('/')[1]);
+        fileList.push(bill?.file2.split('/')[1]);
       });
 
       const uid = uuid4();
@@ -1276,7 +1276,7 @@ class adminController {
       const user: any = await Blog.findById(id);
 
       if(user?.files !== '' || user?.files){
-        const updateFilePath = path.join('public', user?.files);
+        const updateFilePath = path.join('public', user?.files.split('/')[1]);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1304,7 +1304,7 @@ class adminController {
       const fileList: any = [];
 
       blogFiles.map((blog)=> {
-        fileList.push(blog?.files);
+        fileList.push(blog?.files.split('/')[1]);
       });
 
       const uid = uuid4();
@@ -1382,7 +1382,7 @@ class adminController {
       const user: any = await Nurse.findById(id);
 
       if(user?.files !== '' || user?.files){
-        const updateFilePath = path.join('public', user?.files);
+        const updateFilePath = path.join('public', user?.files.split('/')[1]);
         fs.access(updateFilePath, fs.constants.F_OK, (err) => {
           if (!err) {
             fs.unlinkSync(updateFilePath);
@@ -1410,7 +1410,7 @@ class adminController {
       const fileList: any = [];
 
       nurseFiles.map((nurse)=> {
-        fileList.push(nurse?.files);
+        fileList.push(nurse?.files.split('/')[1]);
       });
 
       const uid = uuid4();
