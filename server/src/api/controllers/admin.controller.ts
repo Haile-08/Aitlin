@@ -203,7 +203,10 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
-      if (!period || !Name || !serviceId || !file.path) {
+      console.log(file);
+      console.log('file in add new binnacle', file.path);
+
+      if (!period || !Name || !serviceId || !file || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -344,7 +347,10 @@ class adminController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const file : any = req.file;
 
-      if (!format || !Name || !serviceId || !file.path) {
+      console.log(file);
+      console.log('file in add new nurse', file.path);
+
+      if (!format || !Name || !serviceId || !file || !file.path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
@@ -485,10 +491,12 @@ class adminController {
     try {
       const {period, Name, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const file : any[] = req.files;
-      
+      const file : any = req.files;
 
-      if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
+      console.log(file);
+      console.log('file in add new nurse', file.path);
+      
+      if (!period || !Name || !serviceId || !file || !file[0] || !file[1] || !file[0].path || !file[1].path) {
         return res.json({ 
           message: 'All fields are required',
           success: false
