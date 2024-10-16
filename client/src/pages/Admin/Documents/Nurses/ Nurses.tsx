@@ -74,7 +74,7 @@ function  Nurses() {
     <>
       <div className="w-[95%] h-[15%] md:h-[10%]  flex justify-between items-center flex-row">
             <p className="font-roboto font-extrabold text-xl md:text-3xl">Nurse</p>
-            <div className="flex ml-16 md:ml-0">
+            <div className="flex ml-10 md:ml-0">
             <form className="w-[70%] m-0 md:w-[60%] md:mx-auto flex items-center justify-center" >   
               <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
               <div className="relative">
