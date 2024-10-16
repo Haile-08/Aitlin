@@ -25,7 +25,7 @@ function ClientBinnacle() {
 
     const handleDownload = async () => {
       try {
-          const response = await fetch(`https://clientes.atend.mx/api/Archive/${blogArchive}`);
+          const response = await fetch(`https://clientes.atend.mx/public/Archive/${blogArchive}`);
           const blob = await response.blob();
   
           // Create a URL for the blob

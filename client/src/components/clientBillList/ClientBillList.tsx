@@ -6,8 +6,8 @@ function ClientBillList({Name, period, comment, link1, link2}: any) {
     console.log(link2);
     const handleDownload = async () => {
       try {
-          const response1 = await fetch(`https://clientes.atend.mx/api/public/${link1}`);
-          const response2 = await fetch(`https://clientes.atend.mx/api/public/${link2}`);
+          const response1 = await fetch(`https://clientes.atend.mx/${link1}`);
+          const response2 = await fetch(`https://clientes.atend.mx/${link2}`);
           const blob1 = await response1.blob();
           const blob2 = await response2.blob();
 

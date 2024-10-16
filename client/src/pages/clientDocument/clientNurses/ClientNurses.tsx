@@ -19,7 +19,7 @@ function ClientNurses() {
 
   const handleDownload = async () => {
     try {
-        const response = await fetch(`https://clientes.atend.mx/api/Archive/${nurseArchive}`);
+        const response = await fetch(`https://clientes.atend.mx/public/Archive/${nurseArchive}`);
         const blob = await response.blob();
 
         // Create a URL for the blob

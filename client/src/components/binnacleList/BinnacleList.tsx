@@ -14,7 +14,7 @@ function BinnacleList({Name, refetch, deleteItem, period, comment, id, link}: an
 
   const handleDownload = async () => {
     try {
-        const response = await fetch(`https://clientes.atend.mx/api/${link}`);
+        const response = await fetch(`https://clientes.atend.mx/${link}`);
         const blob = await response.blob();
 
         // Create a URL for the blob
@@ -47,7 +47,7 @@ function BinnacleList({Name, refetch, deleteItem, period, comment, id, link}: an
           <p className="opacity-50 font-roboto font-light ">{comment.length <= 115? comment: comment.slice(0, 115) + '...'}</p>
         </div>
         <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
-          <button onClick={handleDownload} className='bg-primary-color px-4 py-3 rounded-xl'>
+          <button onClick={handleDownload} className="text-white bg-primary-color px-3 py-3 rounded-xl mr-3">
             <img src={downloadIcon} alt="download" />
           </button>
           <button className="text-white bg-primary-color px-3 py-3 rounded-xl mr-3"  onClick={handleDelete}>

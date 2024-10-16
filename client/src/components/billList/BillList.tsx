@@ -14,8 +14,8 @@ function BillList({Name, refetch, deleteItem, period, comment, id, link1, link2}
 
    const handleDownload = async () => {
     try {
-        const response1 = await fetch(`https://clientes.atend.mx/api/${link1}`);
-        const response2 = await fetch(`https://clientes.atend.mx/api/${link2}`);
+        const response1 = await fetch(`https://clientes.atend.mx/${link1}`);
+        const response2 = await fetch(`https://clientes.atend.mx/${link2}`);
         const blob1 = await response1.blob();
         const blob2 = await response2.blob();
 
@@ -62,7 +62,7 @@ function BillList({Name, refetch, deleteItem, period, comment, id, link1, link2}
           <p className="opacity-50 font-roboto font-light ">{comment.length <= 115? comment: comment.slice(0, 115) + '...'}</p>
         </div>
         <div className="w-[15%] h-[90%] flex justify-start items-center font-roboto font-light">
-          <button onClick={handleDownload} className='bg-primary-color px-4 py-3 rounded-xl'>
+          <button onClick={handleDownload} className="text-white bg-primary-color px-3 py-3 rounded-xl mr-3">
               <img src={downloadIcon} alt="download" />
           </button>
           <button className="text-white bg-primary-color px-3 py-3 rounded-xl mr-3"  onClick={handleDelete}>
