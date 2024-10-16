@@ -134,7 +134,7 @@ function ClientDocument() {
               {/* <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'binnacle'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'binnacle'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBinnacleNav}>Bitácora</button>
               <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'Nurses'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'Nurses'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleNursesNav}>Enfermeras</button> */}
               </div>
-            <div className="flex justify-end items-center ml-2 md:ml-0 w-[50%] md:w-[30%] cursor-pointer" onClick={()=> setFilterBool(!filterBool)}>
+            <div className="flex justify-end items-center ml-2 md:ml-0 w-[50%] md:w-[50%] cursor-pointer" onClick={()=> setFilterBool(!filterBool)}>
               <p className="mx-3 font-semibold text-primary-color ">{filterBool? "Más reciente" : "Menos reciente"}</p>
               <img src={arrowUp} alt="filter" className="hidden md:flex" />
               <img src={arrowDown} alt="filter" className="hidden md:flex"/>
