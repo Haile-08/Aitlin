@@ -485,7 +485,7 @@ class adminController {
     try {
       const {period, Name, comment, serviceId} = req.body;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const file : any = req.files;
+      const file : any[] = req.files;
       
 
       if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
