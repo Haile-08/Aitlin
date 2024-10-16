@@ -128,7 +128,7 @@ function ClientDocument() {
               <p className="text-sm md:text-base mt-1 font-normal">{Service}</p>
             </div>
           </div>
-          <div className="my-3 w-[100%] md:w-10/12 mt-8 md:mt-0 h-[5%] flex justify-center items-center">
+          <div className="my-3 w-[100%] md:w-10/12 mt-8 md:mt-4 h-[5%] flex justify-center items-center">
             <div className="mt-3 w-[70%] flex items-center justify-start">
               <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'bill'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'bill'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBillNav}>Factura</button>
               {/* <button className={`mx-1 md:mx-5 flex items-center justify-center px-2 md:px-10 py-2 ${documents == 'binnacle'? 'bg-primary-color' : 'bg-banner-color'} ${documents == 'binnacle'? 'text-white' : 'text-primary-color'} font-roboto rounded-2xl border-2 border-primary-color shadow-sm`} onClick={handleBinnacleNav}>Bitácora</button>
