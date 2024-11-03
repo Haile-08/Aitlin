@@ -26,6 +26,8 @@ function ClientDocument() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Name: any = searchParams.get("name");
 
+    console.log('checked');
+
     const { data } = useQuery({
       queryKey: ["service", id],
       queryFn: () => retrieveASingleService({serviceId: id, token}),
@@ -89,6 +91,7 @@ function ClientDocument() {
         status: /*!check*/ false,
       }
       mutate({data: info, token})
+      setCheck(false)
     }
   
     return (
