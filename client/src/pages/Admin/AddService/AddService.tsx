@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { z } from 'zod';
 import { Back, Logout } from '../../../components'
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -111,7 +112,7 @@ function AddService() {
                 </div>
             </form>
             <div className="w-[95%] ml-5 md:ml-0 mt-10 flex justify-start items-center">
-                <input id="bordered-checkbox-1" onChange={(e) => setNotification(e.target.checked)} type="checkbox" value="" name="bordered-checkbox" className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                <input id="bordered-checkbox-1" onChange={() => setNotification(/* e.target.checked*/false)} type="checkbox" value="" name="bordered-checkbox" className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                 <label htmlFor="bordered-checkbox-1" className="w-full py-4 ms-2 text-sm font-semibold font-roboto text-gray-900 dark:text-gray-300">Recibir notificación por correo</label>
             </div>
             <div className="w-[95%] mt-10 flex justify-start items-center">
