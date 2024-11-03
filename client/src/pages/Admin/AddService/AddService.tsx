@@ -18,7 +18,7 @@ const SignUpSchema = z.object({
 type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
 function AddService() {
-  const [notification, setNotification] = useState(false);
+  const [, setNotification] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
