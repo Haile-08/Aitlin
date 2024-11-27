@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { Bill, Blog, Nurse, Service, User, Notification } from '../../database';
-import { generateResetToken, sendEmail } from '../../utils';
+import {sendEmail } from '../../utils';
 import path from 'path';
 import fs from 'fs';
 import archiver from 'archiver';
@@ -65,20 +65,20 @@ class adminController {
         }}, { new: true });
 
 
-        const link = await generateResetToken(client?._id); 
+        // const link = await generateResetToken(client?._id); 
 
-        await sendEmail(
-          client.email,
-          'Atend - Bienvenido a tu portal de documentos',
-          {
-            name: client.Name,
-            serviceName: undefined,
-            email: client.email,
-            password,
-            link,
-          },
-          './template/newClient.handlebars'
-        );
+        // await sendEmail(
+        //   client.email,
+        //   'Atend - Bienvenido a tu portal de documentos',
+        //   {
+        //     name: client.Name,
+        //     serviceName: undefined,
+        //     email: client.email,
+        //     password,
+        //     link,
+        //   },
+        //   './template/newClient.handlebars'
+        // );
         return res.status(201).json({
           message: 'Account created successfully',
           success: true,
