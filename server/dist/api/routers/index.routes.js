@@ -12,7 +12,7 @@ const __1 = require("..");
 const expressRouteHandler = (app) => {
     const router = express_1.default.Router();
     // Api versioning
-    app.use('/v1', router);
+    app.use('/api/v1', router);
     // auth router
     (0, __1.authRoutHandler)(router);
     // admin router

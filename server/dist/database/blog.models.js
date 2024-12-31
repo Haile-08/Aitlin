@@ -23,7 +23,7 @@ const blogSchema = new Schema({
     },
     files: {
         type: String,
-        min: 1,
+        required: true,
     },
     fileDate: {
         type: Date,

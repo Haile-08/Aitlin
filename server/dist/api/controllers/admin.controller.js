@@ -67,14 +67,19 @@ class adminController {
                             serviceName: service.serviceName,
                             clientName: service.clientName,
                         } }, { new: true });
-                    const link = yield (0, utils_1.generateResetToken)(client === null || client === void 0 ? void 0 : client._id);
-                    yield (0, utils_1.sendEmail)(client.email, 'Atend - Bienvenido a tu portal de documentos', {
-                        name: client.Name,
-                        serviceName: undefined,
-                        email: client.email,
-                        password,
-                        link,
-                    }, './template/newClient.handlebars');
+                    // const link = await generateResetToken(client?._id); 
+                    // await sendEmail(
+                    //   client.email,
+                    //   'Atend - Bienvenido a tu portal de documentos',
+                    //   {
+                    //     name: client.Name,
+                    //     serviceName: undefined,
+                    //     email: client.email,
+                    //     password,
+                    //     link,
+                    //   },
+                    //   './template/newClient.handlebars'
+                    // );
                     return res.status(201).json({
                         message: 'Account created successfully',
                         success: true,
@@ -195,7 +200,9 @@ class adminController {
                 const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!period || !Name || !serviceId || !file.path) {
+                console.log(file);
+                console.log('file in add new binnacle', file.path);
+                if (!period || !Name || !serviceId || !file || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -213,7 +220,7 @@ class adminController {
                     period,
                     Name,
                     comment: comment || '',
-                    files: file.path.split('/')[2],
+                    files: file.path,
                 });
                 yield database_1.Notification.create({
                     clientId: service.clientId,
@@ -222,7 +229,7 @@ class adminController {
                     type: 'binnacle',
                     read: false,
                 });
-                const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.blogArchive) ? service === null || service === void 0 ? void 0 : service.blogArchive : 'none.pdf');
+                const filePath = path_1.default.join('public/Archive', (service === null || service === void 0 ? void 0 : service.blogArchive) ? service === null || service === void 0 ? void 0 : service.blogArchive : 'none.pdf');
                 fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                     if (!err) {
                         fs_1.default.unlinkSync(filePath);
@@ -232,11 +239,11 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 blogFiles.map((blog) => {
-                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files);
+                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files.split('/')[1]);
                 });
                 const id = (0, uuid4_1.default)();
                 const zipFileName = id + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { blogArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -249,7 +256,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
@@ -312,7 +319,9 @@ class adminController {
                 const { format, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.file;
-                if (!format || !Name || !serviceId || !file.path) {
+                console.log(file);
+                console.log('file in add new nurse', file.path);
+                if (!format || !Name || !serviceId || !file || !file.path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -330,7 +339,7 @@ class adminController {
                     Name,
                     Archive: Name + '.' + format.split('.')[1],
                     comment: comment || '',
-                    files: file.path.split('/')[2],
+                    files: file.path,
                 });
                 yield database_1.Notification.create({
                     clientId: service.clientId,
@@ -339,7 +348,7 @@ class adminController {
                     type: 'nurse',
                     read: false,
                 });
-                const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
+                const filePath = path_1.default.join('public/Archive', (service === null || service === void 0 ? void 0 : service.nurseArchive) ? service === null || service === void 0 ? void 0 : service.nurseArchive : 'none.pdf');
                 fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                     if (!err) {
                         fs_1.default.unlinkSync(filePath);
@@ -349,11 +358,11 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 nurseFiles.map((nurse) => {
-                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files);
+                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files.split('/')[1]);
                 });
                 const id = (0, uuid4_1.default)();
                 const zipFileName = id + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { nurseArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -366,7 +375,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
@@ -429,7 +438,9 @@ class adminController {
                 const { period, Name, comment, serviceId } = req.body;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const file = req.files;
-                if (!period || !Name || !serviceId || !file[0].path || !file[1].path) {
+                console.log(file);
+                console.log('file in add new nurse', file.path);
+                if (!period || !Name || !serviceId || !file || !file[0] || !file[1] || !file[0].path || !file[1].path) {
                     return res.json({
                         message: 'All fields are required',
                         success: false
@@ -442,13 +453,14 @@ class adminController {
                         success: false,
                     });
                 }
+                console.log(file);
                 const bill = yield database_1.Bill.create({
                     serviceId,
                     period,
                     Name,
                     comment: comment || '',
-                    file1: file[0].path.split('/')[2],
-                    file2: file[1].path.split('/')[2],
+                    file1: file[0].path,
+                    file2: file[1].path,
                 });
                 yield database_1.Notification.create({
                     clientId: service.clientId,
@@ -458,7 +470,7 @@ class adminController {
                     type: 'bill',
                     read: false,
                 });
-                const filePath = path_1.default.join('dist/public/Archive', (service === null || service === void 0 ? void 0 : service.billArchive) ? service === null || service === void 0 ? void 0 : service.billArchive : 'none.pdf');
+                const filePath = path_1.default.join('public/Archive', (service === null || service === void 0 ? void 0 : service.billArchive) ? service === null || service === void 0 ? void 0 : service.billArchive : 'none.pdf');
                 fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                     if (!err) {
                         fs_1.default.unlinkSync(filePath);
@@ -468,12 +480,12 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 billFiles.map((bill) => {
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1);
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1.split('/')[1]);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2.split('/')[1]);
                 });
                 const id = (0, uuid4_1.default)();
                 const zipFileName = id + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { billArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -486,7 +498,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
@@ -661,7 +673,7 @@ class adminController {
                 }
                 const bill = yield database_1.Bill.findById(serviceId);
                 if ((bill === null || bill === void 0 ? void 0 : bill.file1) !== '' || (bill === null || bill === void 0 ? void 0 : bill.file1)) {
-                    const filePath = path_1.default.join('dist/public', bill === null || bill === void 0 ? void 0 : bill.file1);
+                    const filePath = path_1.default.join('public', bill === null || bill === void 0 ? void 0 : bill.file1.split('/')[1]);
                     fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(filePath);
@@ -669,7 +681,7 @@ class adminController {
                     });
                 }
                 if ((bill === null || bill === void 0 ? void 0 : bill.file2) !== '' || (bill === null || bill === void 0 ? void 0 : bill.file2)) {
-                    const filePath = path_1.default.join('dist/public', bill === null || bill === void 0 ? void 0 : bill.file2);
+                    const filePath = path_1.default.join('public', bill === null || bill === void 0 ? void 0 : bill.file2.split('/')[1]);
                     fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(filePath);
@@ -677,7 +689,7 @@ class adminController {
                     });
                 }
                 const now = new Date();
-                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Name, period, file1: file[0].path.split('/')[2], file2: file[1].path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedBill = yield database_1.Bill.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Name, period, file1: file[0].path, file2: file[1].path, fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedBill) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
@@ -691,7 +703,7 @@ class adminController {
                     read: false,
                 });
                 if ((service === null || service === void 0 ? void 0 : service.billArchive) !== '' || (service === null || service === void 0 ? void 0 : service.billArchive)) {
-                    const filePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.billArchive);
+                    const filePath = path_1.default.join('public/Archive', service === null || service === void 0 ? void 0 : service.billArchive);
                     fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(filePath);
@@ -702,12 +714,12 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 billFiles.map((bill) => {
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1);
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1.split('/')[1]);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2.split('/')[1]);
                 });
                 const id = (0, uuid4_1.default)();
                 const zipFileName = id + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { billArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -720,7 +732,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
@@ -778,7 +790,7 @@ class adminController {
                 }
                 const blog = yield database_1.Blog.findById(serviceId);
                 if ((blog === null || blog === void 0 ? void 0 : blog.files) !== '' || (blog === null || blog === void 0 ? void 0 : blog.files)) {
-                    const filePath = path_1.default.join('dist/public', blog === null || blog === void 0 ? void 0 : blog.files);
+                    const filePath = path_1.default.join('public', blog === null || blog === void 0 ? void 0 : blog.files.split('/')[1]);
                     fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(filePath);
@@ -786,7 +798,7 @@ class adminController {
                     });
                 }
                 const now = new Date();
-                const updatedBlog = yield database_1.Blog.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Name, period, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedBlog = yield database_1.Blog.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Name, period, files: file.path, fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedBlog) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
@@ -799,7 +811,7 @@ class adminController {
                     read: false,
                 });
                 if ((service === null || service === void 0 ? void 0 : service.blogArchive) !== '' || (service === null || service === void 0 ? void 0 : service.blogArchive)) {
-                    const filePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.blogArchive);
+                    const filePath = path_1.default.join('public/Archive', service === null || service === void 0 ? void 0 : service.blogArchive);
                     fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(filePath);
@@ -810,11 +822,11 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 blogFiles.map((blog) => {
-                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files);
+                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files.split('/')[1]);
                 });
                 const id = (0, uuid4_1.default)();
                 const zipFileName = id + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { blogArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -827,7 +839,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
@@ -885,7 +897,7 @@ class adminController {
                 }
                 const nurse = yield database_1.Nurse.findById(serviceId);
                 if ((nurse === null || nurse === void 0 ? void 0 : nurse.files) !== '' || (nurse === null || nurse === void 0 ? void 0 : nurse.files)) {
-                    const filePath = path_1.default.join('dist/public', nurse === null || nurse === void 0 ? void 0 : nurse.files);
+                    const filePath = path_1.default.join('public', nurse === null || nurse === void 0 ? void 0 : nurse.files.split('/')[1]);
                     fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(filePath);
@@ -893,7 +905,7 @@ class adminController {
                     });
                 }
                 const now = new Date();
-                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Archive: Name + '.' + format.split('.')[1], Name, files: file.path.split('/')[2], fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
+                const updatedNurse = yield database_1.Nurse.findOneAndUpdate({ _id: serviceId }, { comment: comment || '', Archive: Name + '.' + format.split('.')[1], Name, files: file.path, fileDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes()) }, { new: true });
                 if (!updatedNurse) {
                     return res.status(404).json({ message: 'Service not found', success: false });
                 }
@@ -906,7 +918,7 @@ class adminController {
                     read: false,
                 });
                 if ((service === null || service === void 0 ? void 0 : service.nurseArchive) !== '' || (service === null || service === void 0 ? void 0 : service.nurseArchive)) {
-                    const filePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.nurseArchive);
+                    const filePath = path_1.default.join('public/Archive', service === null || service === void 0 ? void 0 : service.nurseArchive);
                     fs_1.default.access(filePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(filePath);
@@ -917,11 +929,11 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 nurseFiles.map((nurse) => {
-                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files);
+                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files.split('/')[1]);
                 });
                 const id = (0, uuid4_1.default)();
                 const zipFileName = id + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: serviceId }, { nurseArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -934,7 +946,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
@@ -984,7 +996,7 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const user = yield database_1.Bill.findById(id);
                 if ((user === null || user === void 0 ? void 0 : user.file1) !== '' || (user === null || user === void 0 ? void 0 : user.file1)) {
-                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.file1);
+                    const updateFilePath = path_1.default.join('public', user === null || user === void 0 ? void 0 : user.file1.split('/')[1]);
                     fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(updateFilePath);
@@ -992,7 +1004,7 @@ class adminController {
                     });
                 }
                 if ((user === null || user === void 0 ? void 0 : user.file2) !== '' || (user === null || user === void 0 ? void 0 : user.file2)) {
-                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.file2);
+                    const updateFilePath = path_1.default.join('public', user === null || user === void 0 ? void 0 : user.file2.split('/')[1]);
                     fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(updateFilePath);
@@ -1004,7 +1016,7 @@ class adminController {
                     return res.status(404).json({ message: 'Bill not found' });
                 }
                 const service = yield database_1.Service.findById(user === null || user === void 0 ? void 0 : user.serviceId);
-                const updateFilePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.billArchive);
+                const updateFilePath = path_1.default.join('public/Archive', service === null || service === void 0 ? void 0 : service.billArchive);
                 fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
                     if (!err) {
                         fs_1.default.unlinkSync(updateFilePath);
@@ -1014,12 +1026,12 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 billFiles.map((bill) => {
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1);
-                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file1.split('/')[1]);
+                    fileList.push(bill === null || bill === void 0 ? void 0 : bill.file2.split('/')[1]);
                 });
                 const uid = (0, uuid4_1.default)();
                 const zipFileName = uid + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: user === null || user === void 0 ? void 0 : user.serviceId }, { billArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -1032,7 +1044,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
@@ -1082,7 +1094,7 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const user = yield database_1.Blog.findById(id);
                 if ((user === null || user === void 0 ? void 0 : user.files) !== '' || (user === null || user === void 0 ? void 0 : user.files)) {
-                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.files);
+                    const updateFilePath = path_1.default.join('public', user === null || user === void 0 ? void 0 : user.files.split('/')[1]);
                     fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(updateFilePath);
@@ -1094,7 +1106,7 @@ class adminController {
                     return res.status(404).json({ message: 'Binnacle not found' });
                 }
                 const service = yield database_1.Service.findById(user === null || user === void 0 ? void 0 : user.serviceId);
-                const updateFilePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.blogArchive);
+                const updateFilePath = path_1.default.join('public/Archive', service === null || service === void 0 ? void 0 : service.blogArchive);
                 fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
                     if (!err) {
                         fs_1.default.unlinkSync(updateFilePath);
@@ -1104,11 +1116,11 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 blogFiles.map((blog) => {
-                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files);
+                    fileList.push(blog === null || blog === void 0 ? void 0 : blog.files.split('/')[1]);
                 });
                 const uid = (0, uuid4_1.default)();
                 const zipFileName = uid + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: user === null || user === void 0 ? void 0 : user.serviceId }, { blogArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -1121,7 +1133,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
@@ -1171,7 +1183,7 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const user = yield database_1.Nurse.findById(id);
                 if ((user === null || user === void 0 ? void 0 : user.files) !== '' || (user === null || user === void 0 ? void 0 : user.files)) {
-                    const updateFilePath = path_1.default.join('dist/public', user === null || user === void 0 ? void 0 : user.files);
+                    const updateFilePath = path_1.default.join('public', user === null || user === void 0 ? void 0 : user.files.split('/')[1]);
                     fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
                         if (!err) {
                             fs_1.default.unlinkSync(updateFilePath);
@@ -1183,7 +1195,7 @@ class adminController {
                     return res.status(404).json({ message: 'Nurse not found' });
                 }
                 const service = yield database_1.Service.findById(user === null || user === void 0 ? void 0 : user.serviceId);
-                const updateFilePath = path_1.default.join('dist/public/Archive', service === null || service === void 0 ? void 0 : service.nurseArchive);
+                const updateFilePath = path_1.default.join('public/Archive', service === null || service === void 0 ? void 0 : service.nurseArchive);
                 fs_1.default.access(updateFilePath, fs_1.default.constants.F_OK, (err) => {
                     if (!err) {
                         fs_1.default.unlinkSync(updateFilePath);
@@ -1193,11 +1205,11 @@ class adminController {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const fileList = [];
                 nurseFiles.map((nurse) => {
-                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files);
+                    fileList.push(nurse === null || nurse === void 0 ? void 0 : nurse.files.split('/')[1]);
                 });
                 const uid = (0, uuid4_1.default)();
                 const zipFileName = uid + '.zip';
-                const outputFilePath = path_1.default.join('dist/public/Archive', zipFileName);
+                const outputFilePath = path_1.default.join('public/Archive', zipFileName);
                 yield database_1.Service.findOneAndUpdate({ _id: user === null || user === void 0 ? void 0 : user.serviceId }, { nurseArchive: zipFileName }, { new: true });
                 const output = fs_1.default.createWriteStream(outputFilePath);
                 output.on('error', (err) => {
@@ -1210,7 +1222,7 @@ class adminController {
                     zlib: { level: 9 }
                 });
                 archive.pipe(output);
-                const sourceDir = 'dist/public';
+                const sourceDir = 'public';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 fileList.forEach((file) => {
                     const fullPath = path_1.default.join(sourceDir, file);
