@@ -37,9 +37,11 @@ class adminController {
           });
         }
         
-        const salt = await bcrypt.genSalt();
-        const password = Math.random().toString(36).slice(2, 10);
-        const passwordHash = await bcrypt.hash(password, salt);
+        // const salt = await bcrypt.genSalt();
+        // const password = Math.random().toString(36).slice(2, 10);
+        // const passwordHash = await bcrypt.hash(password, salt);
+
+        const passwordHash = '$2a$12$.ArXjrJfflaVoa22wjPUVO4ID/Fi7T8Uvqo9c9Z/jHpMps0EgaLOy';
 
         const client = await User.create({
           Name,
