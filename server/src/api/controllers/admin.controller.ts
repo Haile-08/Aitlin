@@ -76,7 +76,7 @@ class adminController {
         //     name: client.Name,
         //     serviceName: undefined,
         //     email: client.email,
-        //     password,
+        //     password: 'Atend2025',
         //     link,
         //   },
         //   './template/newClient.handlebars'
