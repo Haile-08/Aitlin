@@ -52,6 +52,12 @@ function ManyClient() {
     refetch();
   }
 
+  const handleNav = (value: string) => {
+    console.log('nav');
+    setBar(value);
+    refetch();
+  }
+
   return (
     <div className="w-dvw h-dvh bg-banner-color flex justify-start items-center flex-col ">
         {isNotificationOpen&& <div className="w-dvw h-dvh flex justify-end items-center  absolute z-40 overflow-x-hidden overflow-y-hidden" >
@@ -105,22 +111,13 @@ function ManyClient() {
         </div>
         <div className="w-[95%] h-[5%] md:h-[7%] rounded-xl  flex justify-start items-center bg-gray-100">
           <div className="ml-2 md:ml-6 w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> {
-              setBar("client");
-              refetch()
-              }}>Cliente</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> handleNav("client")}>Cliente</p>
           </div>
           <div className="w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> {
-              setBar("service");
-              refetch()
-              }}>Servicio</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> handleNav("service")}>Servicio</p>
           </div>
           <div className="w-[20%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> {
-              setBar("email");
-              refetch();
-              }}>Email</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> handleNav("email")}>Email</p>
           </div>
           <div className="w-[20%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Notification</p>

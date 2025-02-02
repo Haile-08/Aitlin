@@ -50,6 +50,12 @@ function AdminDashboard() {
     refetch();
   }
 
+  const handleNav = (value: string) => {
+    console.log('nav');
+    setBar(value);
+    refetch();
+  }
+
   return (
     <div className="w-dvw h-dvh bg-banner-color flex justify-start items-center flex-col ">
         <div className="w-10/12 h-[10%] flex justify-between items-center">
@@ -89,22 +95,13 @@ function AdminDashboard() {
             <p className="text-xs font-light md:text-xl">identificación del servicio</p>
           </div>
           <div className="ml-1 md:ml-4 w-[25%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> {
-              setBar("client");
-              refetch();
-              }}>Cliente</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> handleNav("client")}>Cliente</p>
           </div>
           <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> {
-              setBar("service");
-              refetch();
-              }}>Servicio</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> handleNav("service")}>Servicio</p>
           </div>
           <div className="hidden md:flex w-[25%] h-[90%] justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> {
-              setBar("email");
-              refetch();
-              }}>Email</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> handleNav("email")}>Email</p>
           </div>
           <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Estatus</p>
