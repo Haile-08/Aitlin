@@ -15,9 +15,27 @@ class clientController {
       const searchTerm: any = req.query.search || '.*';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const clientId: any = req.query.clientId || '';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const bar: any = req.query.bar || 'client';
   
       const servicePerPage: number = 9;
-      const services = await Service.find({ email: { $regex: searchTerm, $options: 'i' },clientId: clientId });
+      const query: any = {
+        $or: [
+          { email: { $regex: searchTerm, $options: 'i' } },
+          { serviceName: { $regex: searchTerm, $options: 'i' } },
+          { clientName: { $regex: searchTerm, $options: 'i' } }
+        ]
+      };
+
+      // Include clientId in the query if it's provided
+      if (clientId) {
+        query.clientId = clientId;
+      }
+
+      // Determine sorting field
+      const sortField = bar === 'client' ? 'clientName' : bar === 'service' ? 'serviceName' : 'email';
+
+      const services = await Service.find(query).sort({ [sortField]: 1 }).skip(pageNum * servicePerPage).limit(servicePerPage);
   
       const startIndex = pageNum * servicePerPage;
       const endIndex = startIndex + servicePerPage;

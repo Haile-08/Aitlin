@@ -1,8 +1,8 @@
 import axiosBaseURL from "../config/axios";
 
-export const retrieveClientServices = async ({page, clientId, search, token}: {page: number, clientId: string, search: string, token: string}) => {
+export const retrieveClientServices = async ({page, clientId, search, token, bar}: {page: number, clientId: string, search: string, token: string, bar: string}) => {
     const client = await axiosBaseURL
-      .get(`/v1/client/service/?search=${search}&page=${page}&clientId=${clientId}`, {
+      .get(`/v1/client/service/?search=${search}&page=${page}&clientId=${clientId}&bar=${bar}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

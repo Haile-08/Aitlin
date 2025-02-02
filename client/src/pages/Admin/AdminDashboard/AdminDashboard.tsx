@@ -16,12 +16,13 @@ function AdminDashboard() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = useSelector((state: any) => state.auth.token);
   const [page, setPage] = useState(0);
+  const [bar, setBar] = useState("client");
   const array = Array.from({ length: 9 });
   const queryClient = useQueryClient();
 
   const { data, isPreviousData, refetch, isLoading } = useQuery({
     queryKey: ["client", page],
-    queryFn: () => retrieveClients({page, search, token}),
+    queryFn: () => retrieveClients({page, search, token, bar}),
     keepPreviousData: false,
   });
 
@@ -88,13 +89,13 @@ function AdminDashboard() {
             <p className="text-xs font-light md:text-xl">identificación del servicio</p>
           </div>
           <div className="ml-1 md:ml-4 w-[25%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl">Cliente</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("client")}>Cliente</p>
           </div>
           <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl">Servicio</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("service")}>Servicio</p>
           </div>
           <div className="hidden md:flex w-[25%] h-[90%] justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl">Email</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("email")}>Email</p>
           </div>
           <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Estatus</p>

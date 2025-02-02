@@ -17,13 +17,14 @@ function ManyClient() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
+  const [bar, setBar] = useState("client");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const array = Array.from({ length: 9 });
   const queryClient = useQueryClient();
 
   const { data, isPreviousData, refetch, isLoading } = useQuery({
     queryKey: ["service", page],
-    queryFn: () => retrieveClientServices({page, clientId: user._id, search, token}),
+    queryFn: () => retrieveClientServices({page, clientId: user._id, search, token, bar}),
     keepPreviousData: true,
   });
   const notification = useQuery({
@@ -104,13 +105,13 @@ function ManyClient() {
         </div>
         <div className="w-[95%] h-[5%] md:h-[7%] rounded-xl  flex justify-start items-center bg-gray-100">
           <div className="ml-2 md:ml-6 w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl">Cliente</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("client")}>Cliente</p>
           </div>
           <div className="w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl">Servicio</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("service")}>Servicio</p>
           </div>
           <div className="w-[20%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl">Email</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("email")}>Email</p>
           </div>
           <div className="w-[20%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Notification</p>

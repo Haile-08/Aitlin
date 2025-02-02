@@ -130,9 +130,22 @@ class adminController {
       const pageNum: number = Number(req.query.page) || 0;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const searchTerm: any = req.query.search || '.*';
+      const bar: any = req.query.bar || 'client';
   
       const servicePerPage: number = 9;
-      const services = await Service.find({ email: { $regex: searchTerm, $options: 'i' } });
+
+      const query: any = {
+        $or: [
+          { email: { $regex: searchTerm, $options: 'i' } },
+          { serviceName: { $regex: searchTerm, $options: 'i' } }, 
+          { clientName: { $regex: searchTerm, $options: 'i' } }
+        ]
+      };
+
+      // Determine sorting field
+      const sortField = bar === 'client' ? 'clientName' : bar === 'service' ? 'serviceName' : 'email';
+
+      const services = await Service.find(query).sort({ [sortField]: 1 });
   
       const startIndex = pageNum * servicePerPage;
       const endIndex = startIndex + servicePerPage;

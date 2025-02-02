@@ -22,9 +22,9 @@ export const addClient = async ({ data, token }:any) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const retrieveClients = async ({page, search, token}: any) => {
+export const retrieveClients = async ({page, search, token, bar}: any) => {
   const client = await axiosBaseURL
-    .get(`/v1/admin/service/?search=${search}&page=${page}`, {
+    .get(`/v1/admin/service/?search=${search}&page=${page}&bar=${bar}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
