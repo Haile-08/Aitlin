@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const database_1 = require("../../database");
 const utils_1 = require("../../utils");
 const path_1 = __importDefault(require("path"));
@@ -44,9 +43,10 @@ class adminController {
                             success: false,
                         });
                     }
-                    const salt = yield bcrypt_1.default.genSalt();
-                    const password = Math.random().toString(36).slice(2, 10);
-                    const passwordHash = yield bcrypt_1.default.hash(password, salt);
+                    // const salt = await bcrypt.genSalt();
+                    // const password = Math.random().toString(36).slice(2, 10);
+                    // const passwordHash = await bcrypt.hash(password, salt);
+                    const passwordHash = '$2a$12$.ArXjrJfflaVoa22wjPUVO4ID/Fi7T8Uvqo9c9Z/jHpMps0EgaLOy';
                     const client = yield database_1.User.create({
                         Name,
                         email,
@@ -75,7 +75,7 @@ class adminController {
                     //     name: client.Name,
                     //     serviceName: undefined,
                     //     email: client.email,
-                    //     password,
+                    //     password: 'Atend2025',
                     //     link,
                     //   },
                     //   './template/newClient.handlebars'
@@ -129,8 +129,18 @@ class adminController {
                 const pageNum = Number(req.query.page) || 0;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const searchTerm = req.query.search || '.*';
+                const bar = req.query.bar || 'client';
                 const servicePerPage = 9;
-                const services = yield database_1.Service.find({ email: { $regex: searchTerm, $options: 'i' } });
+                const query = {
+                    $or: [
+                        { email: { $regex: searchTerm, $options: 'i' } },
+                        { serviceName: { $regex: searchTerm, $options: 'i' } },
+                        { clientName: { $regex: searchTerm, $options: 'i' } }
+                    ]
+                };
+                // Determine sorting field
+                const sortField = bar === 'client' ? 'clientName' : bar === 'service' ? 'serviceName' : 'email';
+                const services = yield database_1.Service.find(query).sort({ [sortField]: 1 });
                 const startIndex = pageNum * servicePerPage;
                 const endIndex = startIndex + servicePerPage;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

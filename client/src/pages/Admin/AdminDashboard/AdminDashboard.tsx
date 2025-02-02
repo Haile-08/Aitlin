@@ -89,13 +89,22 @@ function AdminDashboard() {
             <p className="text-xs font-light md:text-xl">identificación del servicio</p>
           </div>
           <div className="ml-1 md:ml-4 w-[25%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("client")}>Cliente</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> {
+              setBar("client");
+              refetch();
+              }}>Cliente</p>
           </div>
           <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("service")}>Servicio</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> {
+              setBar("service");
+              refetch();
+              }}>Servicio</p>
           </div>
           <div className="hidden md:flex w-[25%] h-[90%] justify-start items-center font-roboto font-semibold">
-            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("email")}>Email</p>
+            <p className="text-xs font-light md:text-xl hover:underline cursor-pointer" onClick={()=> {
+              setBar("email");
+              refetch();
+              }}>Email</p>
           </div>
           <div className="w-[20%] md:w-[10%] h-[90%] flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs font-light md:text-xl">Estatus</p>

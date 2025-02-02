@@ -25,8 +25,23 @@ class clientController {
                 const searchTerm = req.query.search || '.*';
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const clientId = req.query.clientId || '';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const bar = req.query.bar || 'client';
                 const servicePerPage = 9;
-                const services = yield database_1.Service.find({ email: { $regex: searchTerm, $options: 'i' }, clientId: clientId });
+                const query = {
+                    $or: [
+                        { email: { $regex: searchTerm, $options: 'i' } },
+                        { serviceName: { $regex: searchTerm, $options: 'i' } },
+                        { clientName: { $regex: searchTerm, $options: 'i' } }
+                    ]
+                };
+                // Include clientId in the query if it's provided
+                if (clientId) {
+                    query.clientId = clientId;
+                }
+                // Determine sorting field
+                const sortField = bar === 'client' ? 'clientName' : bar === 'service' ? 'serviceName' : 'email';
+                const services = yield database_1.Service.find(query).sort({ [sortField]: 1 }).skip(pageNum * servicePerPage).limit(servicePerPage);
                 const startIndex = pageNum * servicePerPage;
                 const endIndex = startIndex + servicePerPage;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

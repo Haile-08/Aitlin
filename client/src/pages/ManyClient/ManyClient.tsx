@@ -105,13 +105,22 @@ function ManyClient() {
         </div>
         <div className="w-[95%] h-[5%] md:h-[7%] rounded-xl  flex justify-start items-center bg-gray-100">
           <div className="ml-2 md:ml-6 w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("client")}>Cliente</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> {
+              setBar("client");
+              refetch()
+              }}>Cliente</p>
           </div>
           <div className="w-[30%] md:w-[20%] h-[90%] flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("service")}>Servicio</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> {
+              setBar("service");
+              refetch()
+              }}>Servicio</p>
           </div>
           <div className="w-[20%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
-            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> setBar("email")}>Email</p>
+            <p className="text-xs md:text-xl hover:underline cursor-pointer" onClick={()=> {
+              setBar("email");
+              refetch();
+              }}>Email</p>
           </div>
           <div className="w-[20%] h-[90%] hidden md:flex justify-start items-center font-roboto font-semibold">
             <p className="text-xs md:text-xl">Notification</p>
