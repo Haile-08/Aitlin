@@ -59,6 +59,7 @@ function ServiceData() {
         const data = new Uint8Array(event?.target.result);
 
         if (data.length === 0 || !data) {
+          console.log("File is empty or null")
           setReaderError("File is empty or null")
           return;
         }
@@ -224,6 +225,8 @@ function ServiceData() {
       <div className='w-[40%] h-10 flex justify-center items-center my-5'>
         {doc.length !== 0 && <img src={xmlIcon} alt="xml" className='h-10'/>}
         <p className='text-2xl font-roboto font-light h-10 ml-5 flex justify-center items-center'>{doc[0]?.name}</p>
+      </div>
+      <div className='w-[40%] h-10 flex justify-center items-center my-5'>
         {readerError && <p className="text-red-500 text-sm mt-2">{readerError}</p>}
       </div>
       <div className="w-[90%] h-[20%] flex justify-end items-center">
