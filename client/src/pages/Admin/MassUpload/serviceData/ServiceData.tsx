@@ -18,18 +18,20 @@ function ServiceData() {
   const [doc, setDoc] : any = useState([]);
   const [documentsInfoList, setDocumentsInfoList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [readerError, setReaderError] = useState("");
+
   const navigate = useNavigate();
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    const token = useSelector((state: any) => state.auth.token);
 
    const { mutateAsync } = useMutation(addServiceData, {
-     onSuccess: () => {
-     },
-     onError: () => {
-       console.log("error")
-     },
-     retry: 3,
-   });
+    onError: (error: any) => {
+      console.error("Upload error:", error);
+      setReaderError("Failed to upload data. Please try again.");
+    },
+    retry: 3,
+  });
+
   const { getRootProps, getInputProps } = useDropzone({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onDrop: (acceptedFiles: any) => {
@@ -51,12 +53,13 @@ function ServiceData() {
     const handleFile = () => {
       const file = doc[0];
       const reader = new FileReader();
+      console.log('Service data started analyzing');
+      
       reader.onload = (event: any) => {
         const data = new Uint8Array(event?.target.result);
-  
-        // Check if the file is empty or null
+
         if (data.length === 0 || !data) {
-          console.error("File is empty or null");
+          setReaderError("File is empty or null")
           return;
         }
   
@@ -66,7 +69,7 @@ function ServiceData() {
           // Check if workbook is empty
           if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
             console.error("Workbook is empty");
-            return;
+            throw new Error("Workbook is empty");
           }
   
           const sheetName = workbook.SheetNames[0];
@@ -83,10 +86,22 @@ function ServiceData() {
                   obj["type"] = cell;
                 } else if (cellIndex === 2) {
                   const fileIndex = uploadedFiles.findIndex((fileObject: any) => fileObject.name == cell);
-                  obj["file1"] = uploadedFiles[fileIndex];
+                  
+                  if (fileIndex !== -1) {
+                    obj["file1"] = uploadedFiles[fileIndex];
+                  } else {
+                    console.error(`File not found: ${cell}`);
+                    throw new Error(`File not found: ${cell}`);
+                  }
                 } else if (cellIndex === 3) {
                   const fileIndex = uploadedFiles.findIndex((fileObject: any) => fileObject.name == cell);
-                  obj["file2"] = uploadedFiles[fileIndex];
+
+                  if (fileIndex !== -1) {
+                    obj["file2"] = uploadedFiles[fileIndex];
+                  } else {
+                    console.error(`File not found: ${cell}`);
+                    throw new Error(`File not found: ${cell}`);
+                  }
                 }else if (cellIndex === 4) {
                   obj["comment"] = cell;
                 } else if (cellIndex === 5) {
@@ -99,8 +114,9 @@ function ServiceData() {
           }, []);
   
           setDocumentsInfoList(newDocumentsInfoList);
-        } catch (error) {
-          console.error("Error parsing Excel file:", error);
+        } catch (error: any) {
+          console.error("Error parsing Excel file:", error.message);
+          setReaderError(error.message);
         }
       };
   
@@ -108,6 +124,7 @@ function ServiceData() {
         reader.readAsArrayBuffer(file);
       } else {
         console.error("No file selected");
+        setReaderError("No file selected")
       }
     };
   
@@ -175,9 +192,15 @@ function ServiceData() {
         // Once all mutations are done, navigate to the desired location
         navigate('/Admin/Dashboard');
       });
-    } catch (error) {
+    } catch (error: any) {
+      if (!(error instanceof Error)) {
+        error = new Error(error);
+      }
       console.error("Error during handleSubmit:", error);
-      // Handle error if needed
+      setLoading(false);
+      setReaderError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -201,6 +224,7 @@ function ServiceData() {
       <div className='w-[40%] h-10 flex justify-center items-center my-5'>
         {doc.length !== 0 && <img src={xmlIcon} alt="xml" className='h-10'/>}
         <p className='text-2xl font-roboto font-light h-10 ml-5 flex justify-center items-center'>{doc[0]?.name}</p>
+        {readerError && <p className="text-red-500 text-sm mt-2">{readerError}</p>}
       </div>
       <div className="w-[90%] h-[20%] flex justify-end items-center">
         <button onClick={handleNavBack} className="flex bg-primary-color font-roboto text-white justify-center items-center px-8 py-3 md:px-8 md:py-3 text-xs md:text-lg m-2 rounded-2xl">
