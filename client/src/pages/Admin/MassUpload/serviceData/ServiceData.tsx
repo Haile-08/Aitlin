@@ -184,8 +184,10 @@ function ServiceData() {
           page = "Nurses";
         }
     
-        // Await the mutate() call
-        return await mutateAsync({ data, token, page });
+        if(page !== ""){
+          // Await the mutate() call
+          return await mutateAsync({ data, token, page });
+        }
       });
     
       // Wait for all promises to resolve
