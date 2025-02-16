@@ -175,14 +175,13 @@ function ServiceData() {
 
         data.append("serviceId", res?.serviceId);
     
-        let page = "";
-        if (res?.type === "Invoice") {
-          page = "bill";
-        } else if (res?.type === "Binnacle") {
-          page = "binnacle";
-        } else if (res?.type === "Nurse Document") {
-          page = "Nurses";
-        }
+        let pageMap: any = {
+          "invoice": "bill",
+          "binnacle": "binnacle",
+          "nurse document": "Nurses",
+        };
+        
+        let page = pageMap[res?.type?.toString().trim().toLowerCase()] || "";
     
         if(page !== ""){
           // Await the mutate() call
