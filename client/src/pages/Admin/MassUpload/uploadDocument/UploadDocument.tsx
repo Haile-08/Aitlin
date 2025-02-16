@@ -3,20 +3,28 @@ import { useDropzone } from 'react-dropzone';
 import upload from '../../../../assets/upload.png';
 import { DocumentsList } from '../../../../components';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useMemo } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type OutletContextType = [any, any];
 
 function UploadDocument() {
+  const MAX_FILES = 100; // Set a limit to prevent memory overload
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [uploadedFiles, setUploadedFiles] = useOutletContext() as OutletContextType;
   const navigate = useNavigate();
   const { getRootProps, getInputProps } = useDropzone({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onDrop: (acceptedFiles: any) => {
-      setUploadedFiles(acceptedFiles);
-      // Call your backend API endpoint to upload files
-    },
+
+onDrop: (acceptedFiles: any) => {
+  setUploadedFiles((prevFiles: any) => {
+    if (prevFiles.length + acceptedFiles.length > MAX_FILES) {
+      alert(`You can upload a maximum of ${MAX_FILES} files.`);
+      return prevFiles;
+    }
+    return [...prevFiles, ...acceptedFiles];
+  });
+},
     accept: {
         "text/xml": [".xml"],
         "application/xml": [".xml"],
@@ -35,6 +43,13 @@ function UploadDocument() {
     navigate('/Admin/Dashboard/Mass/document');
   }
 
+  const fileList = useMemo(() => (
+    uploadedFiles.map((file: any) => (
+      <DocumentsList key={file.name} format={file?.type} name={file?.name} setUploadedFiles={setUploadedFiles} />
+    ))
+  ), [uploadedFiles]);
+  
+
 
   return (
     <div className="w-full h-full flex justify-center items-center flex-col">
@@ -48,9 +63,7 @@ function UploadDocument() {
       <div className='w-full md:w-[40%] h-3/4 ml-5 flex justify-start items-start flex-col'>
         <p className='text-2xl font-roboto font-light mb-10'>Uploaded Files</p>
         <div className="w-full h-[85%] overflow-y-auto scrollbar-track-white scrollbar-thin scrollbar-thumb-primary-color">
-            {uploadedFiles.map((file: any) => (
-                <DocumentsList format={file?.type} name={file?.name}  setUploadedFiles={setUploadedFiles} />
-            ))}
+            {fileList}
         </div>
       </div>
     </div>
