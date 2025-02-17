@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 type OutletContextType = [any, any];
 
 function UploadDocument() {
-  const MAX_FILES = 100; // Set a limit to prevent memory overload
+  const MAX_FILES = 200; // Set a limit to prevent memory overload
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [uploadedFiles, setUploadedFiles] = useOutletContext() as OutletContextType;
   const navigate = useNavigate();
